@@ -9,7 +9,7 @@
       <title>{% block title %}A website for NASA Stuff{% endblock %} </title>
   </head>
 <body>
- <header id="nav-menu" aria-label="navigation bar"> {% block header %}
+ <header id="nav-menu" aria-label="navigation bar">
       <div class="container">
         <div class="nav-start">
           <a class="logo" href="/">
@@ -153,10 +153,10 @@
           </button>
         </div>
       </div>
-   {% endblock %}
  </header>
     <script src="../static/script.js"></script>
       <div id="container">
+        {% block content %}
         <div id="main">
             <h1>{{ title }}</h1>
             <img src="{{ hd_url }}" alt="Astronomy Picture of the Day">
@@ -165,7 +165,7 @@
         <div id="description">
             <p>{{ explanation }}</p>
         </div>
+        {% endblock %}
       </div>
-
 </body>
 </html>
