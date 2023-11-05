@@ -72,16 +72,18 @@ button {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  max-width: 1600px;
+  max-width: 100%;
   margin: 0 auto;
   column-gap: 2rem;
   height: 90px;
   padding: 1.2rem 3rem;
+  background: #000;
+  color: white;
 }
 
 .menu {
   position: relative;
-  background: var(--white);
+  background: #000;
 }
 
 .menu-bar li:first-child .dropdown {
@@ -189,7 +191,7 @@ button {
 }
 
 .search input {
-  background-color: var(--ash);
+  background-color: #000;
   border: none;
   border-radius: 6px;
   padding: 0.7rem;
@@ -220,6 +222,20 @@ button {
     max-width: 1600px;
     margin: 0 auto;
 }
+
+#description {
+    padding: 2rem 3rem;
+    max-width: 100%;
+    margin: 0 auto;
+    background: #000 !important;
+    color: #fff;
+}
+#description p {
+    font-size: 1.2rem;
+    margin-bottom: 1rem;
+}
+
+
 
 #main img {
     width: 100%;

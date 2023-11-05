@@ -6,10 +6,10 @@
       <meta name="viewport" content="width=device-width, initial-scale=1.0" />
       <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
      <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet" />
-      <title>{% block title %}{% endblock %} A website for NASA Stuff</title>
+      <title>{% block title %}A website for NASA Stuff{% endblock %} </title>
   </head>
 <body>
- <header id="nav-menu" aria-label="navigation bar">
+ <header id="nav-menu" aria-label="navigation bar"> {% block header %}
       <div class="container">
         <div class="nav-start">
           <a class="logo" href="/">
@@ -68,14 +68,14 @@
                     </li>
                     <li role="menuitem">
                       <a class="dropdown-link" href="#adobe-xd">
-                        <img src="../static/assets/xd.svg" />
-                        Adobe XD
+                        <img src="../static/assets/tick.svg" />
+                        PlaceHolder
                       </a>
                     </li>
                     <li role="menuitem">
                       <a class="dropdown-link" href="#after-effect">
-                        <img src="../static/assets/ae.svg" />
-                        After Effect
+                        <img src="../static/assets/tick.svg" />
+                        PlaceHolder
                       </a>
                     </li>
                     <li role="menuitem">
@@ -144,7 +144,8 @@
               <input type="search" name="search" placeholder="Search" />
               <i class="bx bx-search" aria-hidden="true"></i>
             </form>
-            <button class="btn btn-primary">Create</button>
+            <button class="btn btn-primary">Sign In</button>
+            <button class="btn btn-primary">Sign Up</button>
           </div>
 
           <button id="hamburger" aria-label="hamburger" aria-haspopup="true" aria-expanded="false">
@@ -152,13 +153,16 @@
           </button>
         </div>
       </div>
+   {% endblock %}
  </header>
     <script src="../static/script.js"></script>
       <div id="container">
         <div id="main">
             <h1>{{ title }}</h1>
             <img src="{{ hd_url }}" alt="Astronomy Picture of the Day">
-            <span id="spacer"></span>
+
+        </div>
+        <div id="description">
             <p>{{ explanation }}</p>
         </div>
       </div>
