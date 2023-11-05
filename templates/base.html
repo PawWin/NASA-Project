@@ -5,7 +5,7 @@
       <meta http-equiv="X-UA-Compatibile" content="IE=edge" />
       <meta name="viewport" content="width=device-width, initial-scale=1.0" />
       <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
-     <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet" />
+       <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet" />
       <title>{% block title %}A website for NASA Stuff{% endblock %} </title>
   </head>
 <body>
@@ -144,8 +144,8 @@
               <input type="search" name="search" placeholder="Search" />
               <i class="bx bx-search" aria-hidden="true"></i>
             </form>
-            <button class="btn btn-primary">Sign In</button>
-            <button class="btn btn-primary">Sign Up</button>
+            <a href="{{ url_for('login')}}"><button class="btn btn-primary">Sign In</button></a>
+            <a href="{{ url_for('register')}}"><button class="btn btn-primary">Sign Up</button></a>
           </div>
 
           <button id="hamburger" aria-label="hamburger" aria-haspopup="true" aria-expanded="false">

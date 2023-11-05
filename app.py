@@ -209,21 +209,24 @@ def planet_masses():
 
     return planet_masses_data
 
-
 @app.route('/')
+def base():
+    return render_template('base.html')
+
+@app.route('/apod')
 def display_apod():
     apod_data = get_apod_data()
     title = apod_data['title']
     explanation = apod_data['explanation']
     hd_url = apod_data['hdurl']
-    return render_template('base.html', title=title, explanation=explanation, hd_url=hd_url)
+    return render_template('apod.html', title=title, explanation=explanation, hd_url=hd_url)
 
 @app.route('/register')
-def display_register():
+def register():
     return render_template('register.html')
 
 @app.route('/login')
-def display_login():
+def login():
     return render_template('login.html')
 
 @app.route('/diagrams')
