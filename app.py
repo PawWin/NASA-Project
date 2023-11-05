@@ -216,7 +216,7 @@ def display_apod():
     title = apod_data['title']
     explanation = apod_data['explanation']
     hd_url = apod_data['hdurl']
-    return render_template('apod.html', title=title, explanation=explanation, hd_url=hd_url)
+    return render_template('base.html', title=title, explanation=explanation, hd_url=hd_url)
 
 
 @app.route('/diagrams')

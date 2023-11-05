@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html>
+  <head>
+      <meta charset="UTF-8" />
+      <meta http-equiv="X-UA-Compatibile" content="IE=edge" />
+      <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+      <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+     <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet" />
+      <title>{% block title %}A website for NASA Stuff{% endblock %} </title>
+  </head>
+<body>
+ <header id="nav-menu" aria-label="navigation bar"> {% block header %}
+      <div class="container">
+        <div class="nav-start">
+          <a class="logo" href="/">
+            <img src="{{ url_for('static', filename='assets/NASA.svg') }}" width="35" height="35" alt="NASA Logo" />
+          </a>
+          <nav class="menu">
+            <ul class="menu-bar">
+              <li>
+                <button class="nav-link dropdown-btn" data-dropdown="dropdown1" aria-haspopup="true" aria-expanded="false" aria-label="browse" >
+                  Browse
+                  <i class="bx bx-chevron-down" aria-hidden="true"></i>
+                </button>
+                <div id="dropdown1" class="dropdown">
+                  <ul role="menu">
+                    <li role="menuitem">
+                      <a class="dropdown-link" href="#best-of-the-day">
+                        <img src="../static/assets/tick.svg" class="icon" />
+                        <div>
+                          <span class="dropdown-link-title">Daily Fun Fact</span>
+                          <p>Fun Fact That Changes Daily</p>
+                        </div>
+                      </a>
+                    </li>
+                    <li role="menuitem">
+                      <a class="dropdown-link" href="#featured-streams">
+                        <img src="../static/assets/tick.svg" class="icon" />
+                        <div>
+                          <span class="dropdown-link-title">PlaceHolder</span>
+                          <p>PlaceHolder</p>
+                        </div>
+                      </a>
+                    </li>
+                    <li role="menuitem">
+                      <a class="dropdown-link" href="#subscriptions">
+                        <img src="../static/assets/tick.svg" class="icon" />
+                        <div>
+                          <span class="dropdown-link-title">PlaceHolder</span>
+                          <p>PlaceHolder</p>
+                        </div>
+                      </a>
+                    </li>
+                    <li role="menuitem">
+                      <a class="dropdown-link" href="#creative-feed">
+                        <img src="../static/assets/tick.svg" class="icon" />
+                        <div>
+                          <span class="dropdown-link-title">PlaceHolder</span>
+                          <p>PlaceHolders</p>
+                        </div>
+                      </a>
+                    </li>
+                  </ul>
+
+                  <ul role="menu">
+                    <li class="dropdown-title">
+                      <span class="dropdown-link-title">Browse by apps</span>
+                    </li>
+                    <li role="menuitem">
+                      <a class="dropdown-link" href="#adobe-xd">
+                        <img src="../static/assets/tick.svg" />
+                        PlaceHolder
+                      </a>
+                    </li>
+                    <li role="menuitem">
+                      <a class="dropdown-link" href="#after-effect">
+                        <img src="../static/assets/tick.svg" />
+                        PlaceHolder
+                      </a>
+                    </li>
+                    <li role="menuitem">
+                      <a class="dropdown-link" href="#sketch">
+                        <img src="../static/assets/tick.svg" />
+                        Sketch
+                      </a>
+                    </li>
+                    <li role="menuitem">
+                      <a class="dropdown-link" href="#indesign">
+                        <img src="../static/assets/tick.svg" />
+                        Indesign
+                      </a>
+                    </li>
+                    <li role="menuitem">
+                      <a class="dropdown-link" href="#figma">
+                        <img src="../static/assets/tick.svg" />
+                        Figma
+                      </a>
+                    </li>
+                  </ul>
+                </div>
+              </li>
+              <li>
+                <button class="nav-link dropdown-btn" data-dropdown="dropdown2" aria-haspopup="true" aria-expanded="false" aria-label="discover">
+                  Discover
+                  <i class="bx bx-chevron-down" aria-hidden="true"></i>
+                </button>
+                <div id="dropdown2" class="dropdown">
+                  <ul role="menu">
+                    <li>
+                      <span class="dropdown-link-title">Browse Categories</span>
+                    </li>
+                    <li role="menuitem">
+                      <a class="dropdown-link" href="#mercury">Mercury</a>
+                    </li>
+                    <li role="menuitem">
+                      <a class="dropdown-link" href="#venus">Venus</a>
+                    </li>
+                    <li role="menuitem">
+                      <a class="dropdown-link" href="#earth">Earth</a>
+                    </li>
+                    <li role="menuitem">
+                      <a class="dropdown-link" href="#mars">Mars</a>
+                    </li>
+                    <li role="menuitem">
+                      <a class="dropdown-link" href="#jupiter">Jupiter</a>
+                    </li>
+                    <li role="menuitem">
+                      <a class="dropdown-link" href="#saturn">Saturn</a>
+                    </li>
+                    <li role="menuitem">
+                      <a class="dropdown-link" href="#uranus">Uranus</a>
+                    </li>
+                  </ul>
+                </div>
+              </li>
+              <li><a class="nav-link" href="/">Gallery</a></li>
+              <li><a class="nav-link" href="/">About</a></li>
+            </ul>
+          </nav>
+        </div>
+        <div class="nav-end">
+          <div class="right-container">
+            <form class="search" role="search">
+              <input type="search" name="search" placeholder="Search" />
+              <i class="bx bx-search" aria-hidden="true"></i>
+            </form>
+            <button class="btn btn-primary">Sign In</button>
+            <button class="btn btn-primary">Sign Up</button>
+          </div>
+
+          <button id="hamburger" aria-label="hamburger" aria-haspopup="true" aria-expanded="false">
+            <i class="bx bx-menu" aria-hidden="true"></i>
+          </button>
+        </div>
+      </div>
+   {% endblock %}
+ </header>
+    <script src="../static/script.js"></script>
+      <div id="container">
+        <div id="main">
+            <h1>{{ title }}</h1>
+            <img src="{{ hd_url }}" alt="Astronomy Picture of the Day">
+
+        </div>
+        <div id="description">
+            <p>{{ explanation }}</p>
+        </div>
+      </div>
+
+</body>
+</html>
