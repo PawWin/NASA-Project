@@ -155,13 +155,17 @@
       </div>
  </header>
     <script src="../static/script.js"></script>
-      <div id="container">
+      <div id="container" >
         {% block content %}
-        <div id="main">
+        <div id="base_main">
+          <div id="main_left">
             <h1>Nasa Project</h1>
-          <p>A little project to showcase NASA data in a nice way in one place. We also offer a variety of other options ranging from making a collection of your faverite data to daily fun  facts about space.  </p>
-
+            <p>A little project to showcase NASA data in a nice way in one place. We also offer a variety of other options ranging from making a collection of your faverite data to daily fun  facts about space.  </p>
+          </div>
+          <div id="main_right"></div>
         </div>
+        <div id="base_content"></div>
+        <div id="base_footer"></div>
         {% endblock %}
       </div>
 </body>
