@@ -6,6 +6,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 from io import BytesIO
 import base64
+import folium
 
 app = Flask(__name__)
 
@@ -209,9 +210,38 @@ def planet_masses():
 
     return planet_masses_data
 
+
+def active_natural_events(map):
+    categories_icons = {'Volcanoes': ['red', 'volcano'], 'Sea and Lake Ice': ['blue', 'icicles'],
+                        'Severe Storms': ['purple', 'tornado'], 'Wildfires': ['orange', 'fire'],
+                        'Dust and Haze': ['yellow', 'smog'], 'Temperature Extremes': ['pink', 'temperature-high'],
+                        'Floods': ['darkblue', 'house-flood-water'], 'Earthquakes': ['brown', 'house-crack'],
+                        'Manmade': ['black', 'industry'], 'Drought': ['beige', 'sun'],
+                        'Snow': ['lightblue', 'snowflake'], 'Landslides': ['lightred', 'hill=rockslide'],
+                        'Water Color': ['green', 'water']}
+    url = "https://eonet.gsfc.nasa.gov/api/v2.1/events?status=open"
+
+    response = requests.get(url)
+    data = response.json()
+
+    for event in data['events']:
+        if event['geometries'][0]['type'] == 'Point':
+            latitude = event['geometries'][0]['coordinates'][1]
+            longitude = event['geometries'][0]['coordinates'][0]
+            event_name = event['title']
+            event_date = event['geometries'][0]['date']
+            folium.Marker(location=[latitude, longitude], popup=f"{event_name} ({event_date}),",
+                          icon=folium.Icon(color=categories_icons[event['categories'][0]['title']][0],
+                                           icon=categories_icons[event['categories'][0]['title']][1],
+                                           prefix='fa')).add_to(map)
+
+    return map
+
+
 @app.route('/')
 def base():
     return render_template('base.html')
+
 
 @app.route('/apod')
 def display_apod():
@@ -221,13 +251,16 @@ def display_apod():
     hd_url = apod_data['hdurl']
     return render_template('apod.html', title=title, explanation=explanation, hd_url=hd_url)
 
+
 @app.route('/register')
 def register():
     return render_template('register.html')
 
+
 @app.route('/login')
 def login():
     return render_template('login.html')
+
 
 @app.route('/diagrams')
 def display_diagram_main():
@@ -262,6 +295,45 @@ def display_asteroid_diagram():
 def display_planet_masses():
     planets_masses_data = planet_masses()
     return render_template('planet-masses.html', planets_masses_data=planets_masses_data)
+
+
+@app.route('/world-map')
+def world_map():
+    categories_icons = {'Volcanoes': ['red', 'volcano', 0], 'Sea and Lake Ice': ['blue', 'icicles', 0],
+                        'Severe Storms': ['purple', 'tornado', 0], 'Wildfires': ['orange', 'fire', 0],
+                        'Dust and Haze': ['yellow', 'smog', 0], 'Temperature Extremes': ['pink', 'temperature-high', 0],
+                        'Floods': ['darkblue', 'house-flood-water', 0], 'Earthquakes': ['brown', 'house-crack', 0],
+                        'Manmade': ['black', 'industry', 0], 'Drought': ['beige', 'sun', 0],
+                        'Snow': ['lightblue', 'snowflake', 0], 'Landslides': ['lightred', 'hill-rockslide', 0],
+                        'Water Color': ['green', 'water', 0]}
+
+    url = "https://eonet.gsfc.nasa.gov/api/v2.1/events?status=open"
+
+    mymap = folium.Map(location=[0, 0], zoom_start=2)
+
+    response = requests.get(url)
+    data = response.json()
+
+    for event in data['events']:
+        if event['geometries'][0]['type'] == 'Point':
+            latitude = event['geometries'][0]['coordinates'][1]
+            longitude = event['geometries'][0]['coordinates'][0]
+            event_name = event['title']
+            event_date = event['geometries'][0]['date']
+            folium.Marker(location=[latitude, longitude], popup=f"{event_name} ({event_date}),",
+                          icon=folium.Icon(color=categories_icons[event['categories'][0]['title']][0],
+                                           icon=categories_icons[event['categories'][0]['title']][1],
+                                           prefix='fa')).add_to(mymap)
+
+    map_html = mymap.get_root().render()
+
+    for cat in data['events']:
+        if cat['categories'][0]['title'] in categories_icons:
+            categories_icons[cat['categories'][0]['title']][2] += 1
+
+
+    return render_template('world_map.html', map_html=map_html,
+                           icons_data=categories_icons)
 
 
 if __name__ == "__main__":
