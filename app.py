@@ -210,34 +210,6 @@ def planet_masses():
 
     return planet_masses_data
 
-
-def active_natural_events(map):
-    categories_icons = {'Volcanoes': ['red', 'volcano'], 'Sea and Lake Ice': ['blue', 'icicles'],
-                        'Severe Storms': ['purple', 'tornado'], 'Wildfires': ['orange', 'fire'],
-                        'Dust and Haze': ['yellow', 'smog'], 'Temperature Extremes': ['pink', 'temperature-high'],
-                        'Floods': ['darkblue', 'house-flood-water'], 'Earthquakes': ['brown', 'house-crack'],
-                        'Manmade': ['black', 'industry'], 'Drought': ['beige', 'sun'],
-                        'Snow': ['lightblue', 'snowflake'], 'Landslides': ['lightred', 'hill=rockslide'],
-                        'Water Color': ['green', 'water']}
-    url = "https://eonet.gsfc.nasa.gov/api/v2.1/events?status=open"
-
-    response = requests.get(url)
-    data = response.json()
-
-    for event in data['events']:
-        if event['geometries'][0]['type'] == 'Point':
-            latitude = event['geometries'][0]['coordinates'][1]
-            longitude = event['geometries'][0]['coordinates'][0]
-            event_name = event['title']
-            event_date = event['geometries'][0]['date']
-            folium.Marker(location=[latitude, longitude], popup=f"{event_name} ({event_date}),",
-                          icon=folium.Icon(color=categories_icons[event['categories'][0]['title']][0],
-                                           icon=categories_icons[event['categories'][0]['title']][1],
-                                           prefix='fa')).add_to(map)
-
-    return map
-
-
 @app.route('/')
 def base():
     return render_template('base.html')
@@ -334,6 +306,32 @@ def world_map():
 
     return render_template('world_map.html', map_html=map_html,
                            icons_data=categories_icons)
+
+
+@app.route('/near-earth-asteroids')
+def near_earth():
+    start_date = "2015-01-01"
+
+    start_date_obj = datetime.strptime(start_date, '%Y-%m-%d')
+    end_date_obj = start_date_obj + timedelta(days=7)
+    end_date = end_date_obj.strftime('%Y-%m-%d')
+
+    url = f"https://api.nasa.gov/neo/rest/v1/feed?start_date={start_date}&end_date={end_date}&api_key={api_key}"
+    response = requests.get(url)
+
+    largest_hazardous_neo = None
+    max_diameter = 0
+
+    for date, neo_list in neo_data.items():
+        for neo in neo_list:
+            if "is_potentially_hazardous_asteroid" in neo and neo["is_potentially_hazardous_asteroid"]:
+                if "estimated_diameter" in neo and "kilometers" in neo["estimated_diameter"]:
+                    diameter = neo["estimated_diameter"]["kilometers"]["estimated_diameter_max"]
+                    if diameter > max_diameter:
+                        max_diameter = diameter
+                        largest_hazardous_neo = neo
+
+    return render_template('near-earth-asteroids.html')
 
 
 if __name__ == "__main__":
