@@ -1,7 +1,7 @@
 import requests
 import random
 from datetime import datetime, timedelta
-from flask import Flask, render_template
+from flask import Flask, render_template, request
 import matplotlib.pyplot as plt
 import numpy as np
 from io import BytesIO
@@ -13,6 +13,7 @@ from flask_wtf import FlaskForm, CSRFProtect
 from wtforms import StringField, PasswordField, SubmitField, BooleanField
 from wtforms.validators import DataRequired, Length, EqualTo
 import os
+
 
 app = Flask(__name__)
 
@@ -44,7 +45,7 @@ class LoginForm(FlaskForm):
     submit = SubmitField('Login')
 
 class User(db.Model, UserMixin):
-    id = db.Column(db.Integer, primary_key=True)
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     username = db.Column(db.String(20), unique=True, nullable=False)
     password = db.Column(db.String(20), nullable=False)
 
@@ -259,6 +260,15 @@ def display_apod():
 
 @app.route('/register', methods=['GET', 'POST'])
 def register():
+    if RegisterForm().validate_on_submit():
+        with app.app_context():
+            db.create_all()
+        register_form = RegisterForm()
+        usrnm = register_form.username.data
+        passwd = register_form.password.data
+        pozdro = User(username=usrnm, password=passwd)
+        db.session.add(pozdro)
+        db.session.commit()
     return render_template('register.html',register_form = RegisterForm())
 
 @app.route('/login', methods=['GET', 'POST'])
