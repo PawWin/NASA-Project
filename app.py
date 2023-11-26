@@ -6,11 +6,13 @@ import matplotlib.pyplot as plt
 import numpy as np
 from io import BytesIO
 import base64
+from
 
 app = Flask(__name__)
 
 api_key = "FDlAcufYBrWHbobPQfofRn7Tm79SeoJotLOcpnjy"
 
+#create a user database in SQLAlchemy
 
 def get_apod_data():
     # Choosing random date from beginning of apod to today
@@ -221,11 +223,11 @@ def display_apod():
     hd_url = apod_data['hdurl']
     return render_template('apod.html', title=title, explanation=explanation, hd_url=hd_url)
 
-@app.route('/register')
+@app.route('/register', methods=['GET', 'POST'])
 def register():
     return render_template('register.html')
 
-@app.route('/login')
+@app.route('/login', methods=['GET', 'POST'])
 def login():
     return render_template('login.html')
 
