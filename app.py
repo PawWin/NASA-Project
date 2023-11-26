@@ -6,13 +6,47 @@ import matplotlib.pyplot as plt
 import numpy as np
 from io import BytesIO
 import base64
-from
+from flask_sqlalchemy import SQLAlchemy
+from flask_login import UserMixin, LoginManager, login_user, login_required, logout_user, current_user
+from werkzeug.security import generate_password_hash, check_password_hash
+from flask_wtf import FlaskForm, CSRFProtect
+from wtforms import StringField, PasswordField, SubmitField, BooleanField
+from wtforms.validators import DataRequired, Length, EqualTo
+import os
 
 app = Flask(__name__)
 
 api_key = "FDlAcufYBrWHbobPQfofRn7Tm79SeoJotLOcpnjy"
 
-#create a user database in SQLAlchemy
+login_manager = LoginManager(app)
+login_manager.login_view = 'login'
+login_manager.login_message_category = 'info'
+@login_manager.user_loader
+def load_user(user_id):
+    return User.query.get(int(user_id))
+
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///site.db'
+db = SQLAlchemy(app)
+
+SECRET_KEY = os.urandom(32)
+app.config['SECRET_KEY'] = SECRET_KEY
+csrf = CSRFProtect(app)
+
+class RegisterForm(FlaskForm):
+    username = StringField(label='Username', validators=[DataRequired(), Length(min=8, max=20)])
+    password = PasswordField(label='Password', validators=[DataRequired(), Length(min=8, max=20)])
+    confirm_password = PasswordField(label='Confirm Password', validators=[DataRequired(), EqualTo('password')])
+    submit = SubmitField('Sign Up')
+
+class LoginForm(FlaskForm):
+    username = StringField(label='Username', validators=[DataRequired()])
+    password = PasswordField(label='Password', validators=[DataRequired()])
+    submit = SubmitField('Login')
+
+class User(db.Model, UserMixin):
+    id = db.Column(db.Integer, primary_key=True)
+    username = db.Column(db.String(20), unique=True, nullable=False)
+    password = db.Column(db.String(20), nullable=False)
 
 def get_apod_data():
     # Choosing random date from beginning of apod to today
@@ -225,11 +259,11 @@ def display_apod():
 
 @app.route('/register', methods=['GET', 'POST'])
 def register():
-    return render_template('register.html')
+    return render_template('register.html',register_form = RegisterForm())
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
-    return render_template('login.html')
+    return render_template('login.html',login_form = LoginForm())
 
 @app.route('/diagrams')
 def display_diagram_main():

@@ -6,11 +6,9 @@
 
 {% block content %}
   <form method="post" class="register">
-    <label for="username">Username</label>
-    <input name="username" id="username" required>
-    <label for="password">Password</label>
-    <input type="password" name="password" id="password" required>
-    <label for="login">Confirm</label>
-    <input type="submit" value="Log In" id="login">
+    {{ login_form.hidden_tag() }}
+      {{ login_form.username( placeholder = "Username") }}
+      {{ login_form.password( placeholder = "Password") }}
+      {{ login_form.submit() }}
   </form>
 {% endblock %}

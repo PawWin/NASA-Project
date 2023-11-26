@@ -6,11 +6,10 @@
 
 {% block content %}
   <form method="post" class="register">
-    <label for="username">Username</label>
-    <input name="username" id="username" required>
-    <label for="password">Password</label>
-    <input type="password" name="password" id="password" required>
-    <label for="submit">Confirm</label>
-    <input type="submit" value="Register" id="submit">
+    {{ register_form.hidden_tag() }}
+      {{ register_form.username( placeholder = "Username") }}
+      {{ register_form.password( placeholder = "Password") }}
+      {{ register_form.confirm_password( placeholder = "Confirm Password")}}
+      {{ register_form.submit() }}
   </form>
 {% endblock %}
