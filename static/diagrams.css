@@ -30,3 +30,22 @@
     width: 50%;
     height: 100%;
 }
+
+#diagrams_container_left h2{
+    font-size: 2rem;
+    color: var(--dark-grey);
+    margin: 0.5rem;
+    font-weight: bold;
+    flex: 0 0 120px;
+}
+
+#diagrams_container_left p{
+    font-size: 1.1rem;
+    font-weight: 500;
+    color: var(--dark-grey);
+    margin: 0.5rem;
+    width: 800px;
+    height: 530px;
+    flex: 0 0 120px;
+    text-align: center;
+}
