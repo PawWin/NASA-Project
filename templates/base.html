@@ -9,6 +9,7 @@
       <title>{% block title %}A website for NASA Stuff{% endblock %} </title>
       <script src="https://kit.fontawesome.com/47980699af.js" crossorigin="anonymous"></script>
       <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css">
+      {%block icon %}<link rel="icon" type="image/x-icon" href="../static/assets/NASA.svg">{% endblock %}
   </head>
 <body>
  <header id="nav-menu" aria-label="navigation bar">
@@ -27,8 +28,8 @@
                 <div id="dropdown1" class="dropdown">
                   <ul role="menu">
                     <li role="menuitem">
-                      <a class="dropdown-link" href="#best-of-the-day">
-                        <img src="../static/assets/tick.svg" class="icon" />
+                      <a class="dropdown-link" href="{{ url_for('apod')}}">
+                        <img src="../static/assets/daily_fact.svg" class="icon" />
                         <div>
                           <span class="dropdown-link-title">Daily Fun Fact</span>
                           <p>Fun Fact That Changes Daily</p>
@@ -36,11 +37,11 @@
                       </a>
                     </li>
                     <li role="menuitem">
-                      <a class="dropdown-link" href="#featured-streams">
-                        <img src="../static/assets/tick.svg" class="icon" />
+                      <a class="dropdown-link" href="{{ url_for('world_map')}}">
+                        <img src="../static/assets/planet.svg" class="icon" />
                         <div>
-                          <span class="dropdown-link-title">PlaceHolder</span>
-                          <p>PlaceHolder</p>
+                          <span class="dropdown-link-title">World Map of Cataclysm</span>
+                          <p>Live interactive world map showing ongoing cataclysms </p>
                         </div>
                       </a>
                     </li>
@@ -66,36 +67,36 @@
 
                   <ul role="menu">
                     <li class="dropdown-title">
-                      <span class="dropdown-link-title">Browse by apps</span>
+                      <span class="dropdown-link-title">Browse by Charts</span>
                     </li>
                     <li role="menuitem">
-                      <a class="dropdown-link" href="#adobe-xd">
-                        <img src="../static/assets/tick.svg" />
-                        PlaceHolder
+                      <a class="dropdown-link" href="{{ url_for('display_planetary_candidates')}}">
+                        <img src="../static/assets/chart_icon.svg" />
+                        Planetary Candidates
                       </a>
                     </li>
                     <li role="menuitem">
-                      <a class="dropdown-link" href="#after-effect">
-                        <img src="../static/assets/tick.svg" />
-                        PlaceHolder
+                      <a class="dropdown-link" href="{{ url_for('display_near_earth_objects')}}">
+                        <img src="../static/assets/chart_icon.svg" />
+                        Near Earth Objects
                       </a>
                     </li>
                     <li role="menuitem">
-                      <a class="dropdown-link" href="#sketch">
-                        <img src="../static/assets/tick.svg" />
-                        Sketch
+                      <a class="dropdown-link" href="{{ url_for('display_asteroid_diagram')}}">
+                        <img src="../static/assets/chart_icon.svg" />
+                        Diagram of Asteroids
                       </a>
                     </li>
                     <li role="menuitem">
-                      <a class="dropdown-link" href="#indesign">
-                        <img src="../static/assets/tick.svg" />
-                        Indesign
+                      <a class="dropdown-link" href="{{ url_for('display_planet_masses')}}">
+                        <img src="../static/assets/chart_icon.svg" />
+                        Planet Masses
                       </a>
                     </li>
                     <li role="menuitem">
-                      <a class="dropdown-link" href="#figma">
-                        <img src="../static/assets/tick.svg" />
-                        Figma
+                     <a class="dropdown-link" href="{{ url_for('display_cameras_diagrams')}}">
+                        <img src="../static/assets/chart_icon.svg" />
+                        Diagram of Cameras
                       </a>
                     </li>
                   </ul>
@@ -200,15 +201,18 @@
                 </div>
           </div>
         </div>
+        </div>
+          {% endblock %}
+      </div>
 
-  <footer>
-<div class="footer">
-<div class="row">
-<a href="#"><i class="fa fa-facebook"></i></a>
-<a href="#"><i class="fa fa-instagram"></i></a>
-<a href="#"><i class="fa fa-youtube"></i></a>
-<a href="#"><i class="fa fa-twitter"></i></a>
-</div>
+  <footer class="footer_base">
+    <div class="footer">
+        <div class="row">
+            <a href="#"><i class="fa fa-facebook"></i></a>
+            <a href="#"><i class="fa fa-instagram"></i></a>
+            <a href="#"><i class="fa fa-youtube"></i></a>
+            <a href="#"><i class="fa fa-twitter"></i></a>
+    </div>
 
 <div class="row">
 <ul>
@@ -221,11 +225,10 @@
 </div>
 
 <div class="row">
-INFERNO Copyright © 2021 Inferno - All rights reserved || Designed By: Mahesh
+Space School Project Copyright © 2023 UE Katowice - All rights reserved
 </div>
 </div>
 </footer>
-        {% endblock %}
       </div>
-</body>
+    </body>
 </html>
