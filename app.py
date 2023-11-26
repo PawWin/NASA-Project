@@ -216,7 +216,7 @@ def base():
 
 
 @app.route('/apod')
-def display_apod():
+def apod():
     apod_data = get_apod_data()
     title = apod_data['title']
     explanation = apod_data['explanation']
@@ -239,31 +239,31 @@ def display_diagram_main():
     return "Tu bedzie mozna wybrac konkretna strone z wykresami od Grzesia"
 
 
-@app.route('/diagrams/planetary-candidates')
-def display_planetary_candidates_diagrams():
+@app.route('/planetary-candidates')
+def display_planetary_candidates():
     planets_data = planetary_candidates()
     return render_template('planetary-candidates.html', planets_data=planets_data)
 
 
-@app.route('/diagrams/cameras')
+@app.route('/cameras')
 def display_cameras_diagrams():
     cameras_data = cameras_diagrams()
     return render_template('cameras-diagrams.html', cameras_data=cameras_data)
 
 
-@app.route('/diagrams/near-earth')
+@app.route('/near-earth')
 def display_near_earth_objects():
     near_earth_data = near_earth_object()
     return render_template('near-earth.html', near_earth_data=near_earth_data)
 
 
-@app.route('/diagrams/asteroids')
+@app.route('/asteroids')
 def display_asteroid_diagram():
     asteroids_data = asteroid()
     return render_template('asteroid.html', asteroids_data=asteroids_data)
 
 
-@app.route('/diagrams/planet-masses')
+@app.route('/planet-masses')
 def display_planet_masses():
     planets_masses_data = planet_masses()
     return render_template('planet-masses.html', planets_masses_data=planets_masses_data)
