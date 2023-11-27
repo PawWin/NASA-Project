@@ -331,6 +331,7 @@ def near_earth():
                         max_diameter = diameter
                         largest_hazardous_neo = neo
 
+
     return render_template('near-earth-asteroids.html')
 
 
