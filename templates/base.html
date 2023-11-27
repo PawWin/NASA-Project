@@ -10,10 +10,11 @@
       <script src="https://kit.fontawesome.com/47980699af.js" crossorigin="anonymous"></script>
       <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css">
       {%block icon %}<link rel="icon" type="image/x-icon" href="../static/assets/NASA.svg">{% endblock %}
+      {% block sript %}{% endblock %}
   </head>
 <body>
  <header id="nav-menu" aria-label="navigation bar">
-      <div class="container">
+      <div class="container_header">
         <div class="nav-start">
           <a class="logo" href="/">
             <img src="{{ url_for('static', filename='assets/NASA.svg') }}" width="35" height="35" alt="NASA Logo" />
@@ -37,7 +38,7 @@
                       </a>
                     </li>
                     <li role="menuitem">
-                      <a class="dropdown-link" href="{{ url_for('world_map')}}">
+                      <a class="dropdown-link" href="{{ url_for('world_map')}}" target="_blank">
                         <img src="../static/assets/planet.svg" class="icon" />
                         <div>
                           <span class="dropdown-link-title">World Map of Cataclysm</span>
@@ -158,7 +159,7 @@
       </div>
  </header>
     <script src="../static/script.js"></script>
-      <div id="container" >
+      <div class="container_content" >
         {% block content %}
         <div id="base_main">
           <div id="main_left">
