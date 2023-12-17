@@ -7,6 +7,12 @@ import numpy as np
 from io import BytesIO
 import base64
 import folium
+import matplotlib as mpl
+from matplotlib.ticker import MultipleLocator
+import astropy.units as u
+from astropy.coordinates import Longitude
+from sunpy.coordinates import HeliocentricEarthEcliptic, get_body_heliographic_stonyhurst, get_horizons_coord
+from sunpy.time import parse_time
 
 app = Flask(__name__)
 
@@ -259,7 +265,79 @@ def display_near_earth_objects():
 
 @app.route('/asteroids')
 def display_asteroid_diagram():
-    asteroids_data = asteroid()
+    obstime = parse_time('now')
+
+    hee_frame = HeliocentricEarthEcliptic(obstime=obstime)
+
+    def get_first_orbit(coord):
+        lon = coord.transform_to(hee_frame).spherical.lon
+        shifted = Longitude(lon - lon[0])
+        ends = np.flatnonzero(np.diff(shifted) < 0)
+        if ends.size > 0:
+            return coord[:ends[0]]
+        return coord
+
+    planets = ['mercury', 'venus', 'earth', 'mars']
+    times = obstime + np.arange(700) * u.day
+    planet_coords = {planet: get_first_orbit(get_body_heliographic_stonyhurst(planet, times)) for planet in planets}
+
+    def coord_to_heexy(coord):
+        coord = coord.transform_to(hee_frame)
+        coord.representation_type = 'cartesian'
+        return coord.y.to_value('AU'), coord.x.to_value('AU')
+
+    mpl.rcParams.update({'figure.facecolor': 'black',
+                         'axes.edgecolor': 'white',
+                         'axes.facecolor': 'black',
+                         'axes.labelcolor': 'white',
+                         'axes.titlecolor': 'white',
+                         'lines.linewidth': 1,
+                         'xtick.color': 'white',
+                         'xtick.direction': 'in',
+                         'xtick.top': True,
+                         'ytick.color': 'white',
+                         'ytick.direction': 'in',
+                         'ytick.right': True})
+
+    fig = plt.figure()
+    ax = fig.add_subplot()
+
+    ax.set_xlim(-2.15, 2.15)
+    ax.set_xlabel('Y (HEE)')
+    ax.xaxis.set_major_locator(MultipleLocator(1))
+    ax.xaxis.set_minor_locator(MultipleLocator(0.1))
+
+    ax.set_ylim(1.8, -1.8)
+    ax.set_ylabel('X (HEE)')
+    ax.yaxis.set_major_locator(MultipleLocator(1))
+    ax.yaxis.set_minor_locator(MultipleLocator(0.1))
+
+    ax.set_title(obstime.strftime('%d-%b-%Y %H:%M UT'))
+    ax.set_aspect('equal')
+
+    ax.plot([0, 0], [0, 2], linestyle='dotted', color='gray')
+
+    for planet, coord in planet_coords.items():
+        ax.plot(*coord_to_heexy(coord), linestyle='dashed', color='gray')
+
+        colors = {'mercury': 'brown', 'venus': 'orange', 'earth': 'blue', 'mars': 'red'}
+
+        x, y = coord_to_heexy(coord[0])
+        ax.plot(x, y, 'o', markersize=10, color=colors[planet])
+        ax.text(x + 0.1, y, planet, color=colors[planet])
+
+        ax.plot(0, 0, 'o', markersize=15, color='yellow')
+        ax.text(0.12, 0, 'Sun', color='yellow')
+
+    mpl.rcParams.update(mpl.rcParamsDefault)
+    mpl.rcParams.update({'axes.titlecolor': 'black'})
+
+    buffer = BytesIO()
+    plt.savefig(buffer, format="png")
+    buffer.seek(0)
+    asteroids_data = base64.b64encode(buffer.read()).decode()
+    buffer.close()
+
     return render_template('asteroid.html', asteroids_data=asteroids_data)
 
 
