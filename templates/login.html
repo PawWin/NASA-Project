@@ -5,10 +5,14 @@
 {% endblock %}
 
 {% block content %}
+
   <form method="post" class="register">
     {{ login_form.hidden_tag() }}
       {{ login_form.username( placeholder = "Username") }}
       {{ login_form.password( placeholder = "Password") }}
       {{ login_form.submit() }}
   </form>
+
+
+
 {% endblock %}

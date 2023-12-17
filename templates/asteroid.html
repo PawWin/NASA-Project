@@ -1,11 +1,20 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Asteroids</title>
-</head>
-<body>
-  <h1>Asteroidy</h1>
-  <img src="data:image/png;base64,{{ asteroids_data }}" alt="Matplotlib Plot">
-</body>
-</html>
+{% extends 'base.html' %}
+
+{% block header %}
+  <h1>{% block title %}Asteroids{% endblock %}</h1>
+{% endblock %}
+{% block icon %}
+  <link rel="icon" type="image/x-icon" href="../static/assets/chart_icon.svg">
+{% endblock %}
+
+{% block content %}
+    <div class="diagrams_container">
+        <div id="diagrams_container_left">
+            <h2>Asteroids</h2>
+        </div>
+        <div id="diagrams_container_right">
+            <img src="data:image/png;base64,{{ asteroids_data }}" alt="Planetary Candidates">
+        </div>
+    </div>
+{% endblock %}
+

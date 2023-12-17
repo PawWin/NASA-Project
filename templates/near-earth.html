@@ -1,11 +1,21 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Near Earth Objects</title>
-</head>
-<body>
-  <h1>Obiekty blisko ziemi</h1>
-  <img src="data:image/png;base64,{{ near_earth_data }}" alt="Matplotlib Plot">
-</body>
-</html>
+{% extends 'base.html' %}
+
+{% block header %}
+  <h1>{% block title %}Near Earth Objects{% endblock %}</h1>
+{% endblock %}
+{% block icon %}
+  <link rel="icon" type="image/x-icon" href="../static/assets/chart_icon.svg">
+{% endblock %}
+
+
+{% block content %}
+    <div class="diagrams_container">
+        <div id="diagrams_container_left">
+            <h2>Objects Near Earth</h2>
+        </div>
+        <div id="diagrams_container_right">
+            <img src="data:image/png;base64,{{ near_earth_data }}" alt="Planetary Candidates">
+        </div>
+    </div>
+{% endblock %}
+
