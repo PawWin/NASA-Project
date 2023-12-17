@@ -1,10 +1,27 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>$Title$</title>
-</head>
-<body>
-$END$
-</body>
-</html>
+{% extends 'base.html' %}
+
+{% block header %}
+  <h1>{% block title %}Daily Fun Fact{% endblock %}</h1>
+{% endblock %}
+{% block icon %}
+  <link rel="icon" type="image/x-icon" href="../static/assets/daily_fact.svg">
+{% endblock %}
+
+{% block content %}
+  <div id="header">
+        <h1>Scale of the nearest asteroid near the earth in: {{date}}</h1>
+  </div>
+  <div class="icons">
+      <div id="icon_left">
+          <i class="{{object_to_scale}}" style="font-size: 10em"></i>
+      </div>
+      <div id="icon_right">
+          <i class="fa solid fa-meteor fa-bounce" style="font-size: {{icon_size}}em"></i>
+      </div>
+  </div>
+
+  <div id="footer">
+      <p>{{ icon_size }}</p>
+        <!-- Dodaj dowolny tekst lub elementy HTML, które chcesz wyświetlić na dole -->
+  </div>
+{% endblock %}
