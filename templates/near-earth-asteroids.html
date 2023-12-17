@@ -9,19 +9,26 @@
 
 {% block content %}
   <div id="header">
-        <h1>Scale of the nearest asteroid near the earth in: {{date}}</h1>
+        <h1>Scale of the nearest asteroid near the earth in: {{ neo_info['close_approach_data'][0]['close_approach_date_full']}}</h1>
   </div>
   <div class="icons">
       <div id="icon_left">
           <i class="{{object_to_scale}}" style="font-size: 10em"></i>
       </div>
       <div id="icon_right">
-          <i class="fa solid fa-meteor fa-bounce" style="font-size: {{icon_size}}em"></i>
+          <i class="fa solid fa-meteor fa-bounce" style="color: crimson; font-size: {{icon_size}}em"></i>
       </div>
   </div>
-
-  <div id="footer">
-      <p>{{ icon_size }}</p>
-        <!-- Dodaj dowolny tekst lub elementy HTML, które chcesz wyświetlić na dole -->
+  <div class="object-info">
+      <strong>Object compared:</strong> {{compared_object_data[0]}}<br>
+      <strong>Size of object</strong> {{compared_object_data[1]}}<br>
+      <br>
+      <strong>Name of Asteroid:</strong> {{neo_info['name']}}<br>
+      <strong>Area of Asteroid:</strong> {{asteroid_area}} km2<br>
+      <strong>Max diameter of Asteroid:</strong> {{neo_info['estimated_diameter']['kilometers']['estimated_diameter_max']}} km<br>
+      <strong>Distance from earth:</strong> {{neo_info['close_approach_data'][0]['miss_distance']['kilometers']}} km<br>
+      <strong>Velocity:</strong>  {{neo_info['close_approach_data'][0]['relative_velocity']['kilometers_per_hour']}} km/h
   </div>
+
+
 {% endblock %}

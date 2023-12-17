@@ -388,7 +388,7 @@ def world_map():
 
 @app.route('/near-earth-asteroids')
 def near_earth():
-    start_date = "2015-01-01"
+    start_date = "2015-09-01"
 
     start_date_obj = datetime.strptime(start_date, '%Y-%m-%d')
     end_date_obj = start_date_obj + timedelta(days=7)
@@ -397,20 +397,40 @@ def near_earth():
     url = f"https://api.nasa.gov/neo/rest/v1/feed?start_date={start_date}&end_date={end_date}&api_key={api_key}"
     response = requests.get(url)
 
+    neo_data = response.json()["near_earth_objects"]
+
     largest_hazardous_neo = None
     max_diameter = 0
 
     for date, neo_list in neo_data.items():
         for neo in neo_list:
-            if "is_potentially_hazardous_asteroid" in neo and neo["is_potentially_hazardous_asteroid"]:
-                if "estimated_diameter" in neo and "kilometers" in neo["estimated_diameter"]:
-                    diameter = neo["estimated_diameter"]["kilometers"]["estimated_diameter_max"]
-                    if diameter > max_diameter:
-                        max_diameter = diameter
-                        largest_hazardous_neo = neo
+            if neo["is_potentially_hazardous_asteroid"]:
+                diameter = neo["estimated_diameter"]["kilometers"]["estimated_diameter_max"]
+                if diameter > max_diameter:
+                    max_diameter = diameter
+                    largest_hazardous_neo = neo
 
+    example_city_area = 25.0
+    burj_khalifa_height = 0.828
+    asteroid_area = np.pi * (max_diameter / 2.0) ** 2
 
-    return render_template('near-earth-asteroids.html')
+    if max_diameter <= 2:
+        object_to_scale = "fa solid fa-building fa-fade"
+        compared_object_data = ["Burj Khalifa", f"{burj_khalifa_height}km"]
+        scale = max_diameter / burj_khalifa_height
+        icon_size = round(scale * 10.0, 2)
+    else:
+        object_to_scale = "fa solid fa-city fa-fade"
+        compared_object_data = ["Averaged sized city: Siemianowice", f"{example_city_area}km2"]
+        scale = asteroid_area / example_city_area
+        icon_size = round(scale * 10.0, 2)
+
+    return render_template('near-earth-asteroids.html',
+                           icon_size=icon_size,
+                           object_to_scale=object_to_scale,
+                           neo_info=largest_hazardous_neo,
+                           compared_object_data=compared_object_data,
+                           asteroid_area = asteroid_area)
 
 
 if __name__ == "__main__":
