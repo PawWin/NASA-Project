@@ -266,8 +266,8 @@ def register():
         register_form = RegisterForm()
         usrnm = register_form.username.data
         passwd = register_form.password.data
-        pozdro = User(username=usrnm, password=passwd)
-        db.session.add(pozdro)
+        user = User(username=usrnm, password=passwd)
+        db.session.add(user)
         db.session.commit()
     return render_template('register.html',register_form = RegisterForm())
 
