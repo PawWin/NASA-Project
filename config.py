@@ -28,7 +28,7 @@ def load_user(user_id):
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///site.db'
 db = SQLAlchemy(app)
 
-# Data base object configuration
+# DataBase object configuration
 class User(db.Model, UserMixin):
 
     id = db.Column(db.Integer, primary_key = True)

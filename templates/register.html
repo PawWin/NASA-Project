@@ -5,11 +5,9 @@
 {% endblock %}
 
 {% block content %}
-  <form method="post" class="register">
-    {{ register_form.hidden_tag() }}
-      {{ register_form.username( placeholder = "Username") }}
-      {{ register_form.password( placeholder = "Password") }}
-      {{ register_form.confirm_password( placeholder = "Confirm Password")}}
-      {{ register_form.submit() }}
-  </form>
+      {% if current_user.is_authenticated %}
+        {% include 'views/authenticated.html' %}
+      {% else %}
+        {% include 'views/unauthenticated.html' %}
+      {% endif %}
 {% endblock %}

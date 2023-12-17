@@ -6,48 +6,15 @@ import matplotlib.pyplot as plt
 import numpy as np
 from io import BytesIO
 import base64
-from flask_sqlalchemy import SQLAlchemy
-from flask_login import UserMixin, LoginManager, login_user, login_required, logout_user, current_user
-from werkzeug.security import generate_password_hash, check_password_hash
-from flask_wtf import FlaskForm, CSRFProtect
-from wtforms import StringField, PasswordField, SubmitField, BooleanField
-from wtforms.validators import DataRequired, Length, EqualTo
-import os
+from config import app, db, bcrypt, User
+from flask import Flask, render_template, request, redirect, url_for
+from flask_login import login_user, current_user, logout_user, login_required
+import forms
 
 
 app = Flask(__name__)
 
 api_key = "FDlAcufYBrWHbobPQfofRn7Tm79SeoJotLOcpnjy"
-
-login_manager = LoginManager(app)
-login_manager.login_view = 'login'
-login_manager.login_message_category = 'info'
-@login_manager.user_loader
-def load_user(user_id):
-    return User.query.get(int(user_id))
-
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///site.db'
-db = SQLAlchemy(app)
-
-SECRET_KEY = os.urandom(32)
-app.config['SECRET_KEY'] = SECRET_KEY
-csrf = CSRFProtect(app)
-
-class RegisterForm(FlaskForm):
-    username = StringField(label='Username', validators=[DataRequired(), Length(min=8, max=20)])
-    password = PasswordField(label='Password', validators=[DataRequired(), Length(min=8, max=20)])
-    confirm_password = PasswordField(label='Confirm Password', validators=[DataRequired(), EqualTo('password')])
-    submit = SubmitField('Sign Up')
-
-class LoginForm(FlaskForm):
-    username = StringField(label='Username', validators=[DataRequired()])
-    password = PasswordField(label='Password', validators=[DataRequired()])
-    submit = SubmitField('Login')
-
-class User(db.Model, UserMixin):
-    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    username = db.Column(db.String(20), unique=True, nullable=False)
-    password = db.Column(db.String(20), nullable=False)
 
 def get_apod_data():
     # Choosing random date from beginning of apod to today
@@ -260,20 +227,38 @@ def display_apod():
 
 @app.route('/register', methods=['GET', 'POST'])
 def register():
-    if RegisterForm().validate_on_submit():
-        with app.app_context():
-            db.create_all()
-        register_form = RegisterForm()
-        usrnm = register_form.username.data
-        passwd = register_form.password.data
-        user = User(username=usrnm, password=passwd)
+    # Creating a new user when the register form validates
+    if forms.RegistrationForm().validate_on_submit():
+        # Creating a new user in the database
+        register_form = forms.RegistrationForm()
+        hashed_password = bcrypt.generate_password_hash(register_form.password.data).decode('utf-8')
+        user = User(username=register_form.username.data,
+                    email=register_form.email.data,
+                    password=hashed_password)
+
         db.session.add(user)
         db.session.commit()
-    return render_template('register.html',register_form = RegisterForm())
+        # Signing in the user after creating them
+        user = User.query.filter_by(email=forms.RegistrationForm().email.data).first()
+        if user and bcrypt.check_password_hash(user.password, forms.RegistrationForm().password.data):
+            login_user(user)
+            # Taking the user to the authenticated side of the site
+            return redirect(url_for('hello_world'))
 
-@app.route('/login', methods=['GET', 'POST'])
-def login():
-    return render_template('login.html',login_form = LoginForm())
+    if forms.LoginForm().validate_on_submit():
+        user = User.query.filter_by(email=forms.LoginForm().email.data).first()
+        if user and bcrypt.check_password_hash(user.password, forms.LoginForm().password.data):
+            login_user(user, remember=forms.LoginForm().remember.data)
+
+            return redirect(url_for('hello_world'))
+
+    if (request.method == "POST") & (request.form.get('post_header') == 'log out'):
+        logout_user()
+        return redirect(url_for('hello_world'))
+
+    return render_template('index.html',
+                           login_form=forms.LoginForm(),
+                           register_form=forms.RegistrationForm())
 
 @app.route('/diagrams')
 def display_diagram_main():
