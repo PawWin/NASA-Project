@@ -12,7 +12,7 @@ from flask_login import login_user, current_user, logout_user, login_required
 import forms
 
 
-app = Flask(__name__)
+#app = Flask(__name__)
 
 api_key = "FDlAcufYBrWHbobPQfofRn7Tm79SeoJotLOcpnjy"
 
@@ -243,20 +243,20 @@ def register():
         if user and bcrypt.check_password_hash(user.password, forms.RegistrationForm().password.data):
             login_user(user)
             # Taking the user to the authenticated side of the site
-            return redirect(url_for('hello_world'))
+            return redirect(url_for('register'))
 
     if forms.LoginForm().validate_on_submit():
         user = User.query.filter_by(email=forms.LoginForm().email.data).first()
         if user and bcrypt.check_password_hash(user.password, forms.LoginForm().password.data):
             login_user(user, remember=forms.LoginForm().remember.data)
 
-            return redirect(url_for('hello_world'))
+            return redirect(url_for('register'))
 
     if (request.method == "POST") & (request.form.get('post_header') == 'log out'):
         logout_user()
-        return redirect(url_for('hello_world'))
+        return redirect(url_for('register'))
 
-    return render_template('index.html',
+    return render_template('register.html',
                            login_form=forms.LoginForm(),
                            register_form=forms.RegistrationForm())
 

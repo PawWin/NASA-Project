@@ -7,7 +7,7 @@ from flask_wtf.csrf import CSRFProtect
 from flask_bcrypt import Bcrypt
 
 # Making an isntance of the Flask Class (THis will get passed to app.py)
-app = Flask(__name__,  template_folder='../templates')
+app = Flask(__name__,  template_folder='./templates')
 
 bcrypt = Bcrypt(app)
 

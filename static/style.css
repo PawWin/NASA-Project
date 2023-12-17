@@ -284,6 +284,27 @@ button {
   border: var(--border);
 }
 
+.login  {
+  position: absolute;
+  width:50%;
+  top:70%;
+  left:25%;
+  font-size: 1.3rem;
+  transform: translateY(-50%);
+  opacity: 0.6;
+}
+
+.login input {
+  background-color: #ffffff;
+  border-color: black;
+  border-radius: 6px;
+  padding: 0.7rem;
+  padding-left: 2.4rem;
+  font-size: 16px;
+  width: 100%;
+  border: var(--border);
+}
+
 #container{
   width:100%;
   height:1600px;
