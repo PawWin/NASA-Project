@@ -6,6 +6,7 @@
 @import "diagrams.css";
 @import "forms.css";
 @import "header.css";
+@import "normalize.css";
 
 /* Koniec hedera i start CSS do contentu */
 
@@ -25,19 +26,16 @@ body{
   background-image: url("../static/assets/base_background_img.jpg") ;
   background-size: 100%;
   letter-spacing: normal;
+  display: flex;
+  flex-direction: row;
 
 }
 #main_left{
-  max-width: 50%;
-  max-height: 100%;
+  width: 100%;
+  height: 100%;
   float: left;
   text-align: left;
-  padding: 3rem;
-}
-#main_right{
-  max-width: 50%;
-  max-height: 100%;
-  float: left;
+  padding: 1rem;
 }
 
 #base_main h1{
@@ -67,3 +65,162 @@ body{
   flex: 1 0 auto;
 }
 
+@media (max-width:720px){
+    #base_main{
+      display: flex;
+      flex-direction: column;
+      height: 25%;
+      width: 100%;
+      justify-content: center;
+      align-items: center;
+
+    }
+    #main_left{
+        min-width: 100%;
+        height: 100%;
+        float: left;
+        text-align: left;
+        padding: 1rem;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+    }
+    #main_left h1{
+        font-size: 1.5rem;
+        font-weight: 600;
+        margin-bottom: 1rem;
+        text-align: left;
+        color: white;
+        flex: 1;
+    }
+    #main_left p{
+        font-size: 0.8rem;
+        font-weight: bold;
+        color: white;
+        text-align: left;
+        line-height: 2rem;
+        flex: 1;
+    }
+    .container_content{
+        margin: 0 auto;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        width: 100%;
+        height: 100%;
+    }
+    #base_content{
+        margin: 0 auto;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        width: 100%;
+        height: 75%;
+        flex: 1 0 auto;
+        overflow: auto;
+    }
+}
+
+@media (max-width: 1100px) {
+  #base_main{
+    display: flex;
+    flex-direction: column;
+    height: 25%;
+    width: 100%;
+    justify-content: center;
+    align-items: center;
+
+  }
+  #main_left{
+      min-width: 100%;
+      height: 100%;
+      float: left;
+      text-align: left;
+      padding: 0.5rem;
+      font-size: 1rem;
+  }
+  #main_left h1{
+      font-size: 1.5rem;
+      font-weight: 600;
+      margin-bottom: 1rem;
+      text-align: left;
+      color: white;
+  }
+  #main_left p{
+      font-size: 0.8rem;
+      font-weight: bold;
+      color: white;
+      text-align: left;
+      line-height: 2rem;
+  }
+  .container_content{
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      width: 100%;
+      height: 100%;
+  }
+  #base_content{
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      width: 100%;
+      height: 75%;
+      flex: 1 0 auto;
+      overflow: auto;
+  }
+}
+
+@media (max-width: 1400px) {
+  #base_main{
+    display: flex;
+    flex-direction: column;
+    height: 25%;
+    width: 100%;
+    justify-content: center;
+    align-items: center;
+
+  }
+  #main_left{
+      min-width: 100%;
+      height: 100%;
+      float: left;
+      text-align: left;
+      padding: 1rem;
+  }
+  #main_left h1{
+      font-size: 1.5rem;
+      font-weight: 600;
+      margin-bottom: 1rem;
+      text-align: left;
+      color: white;
+  }
+  #main_left p{
+      font-size: 0.8rem;
+      font-weight: bold;
+      color: white;
+      text-align: left;
+      line-height: 2rem;
+  }
+  .container_content{
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      width: 100%;
+      height: 100%;
+  }
+  #base_content{
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      width: 100%;
+      height: 75%;
+      flex: 1 0 auto;
+      overflow: auto;
+  }
+}
