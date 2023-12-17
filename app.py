@@ -1,14 +1,19 @@
 import requests
 import random
-from datetime import datetime, timedelta
-from flask import Flask, render_template
-import matplotlib.pyplot as plt
 import numpy as np
-from io import BytesIO
-import base64
-import folium
+from datetime import datetime, timedelta
+
+from flask import Flask, render_template
+
+import matplotlib.pyplot as plt
 import matplotlib as mpl
 from matplotlib.ticker import MultipleLocator
+
+from io import BytesIO
+import base64
+
+import folium
+
 import astropy.units as u
 from astropy.coordinates import Longitude
 from sunpy.coordinates import HeliocentricEarthEcliptic, get_body_heliographic_stonyhurst, get_horizons_coord
@@ -19,22 +24,46 @@ app = Flask(__name__)
 api_key = "FDlAcufYBrWHbobPQfofRn7Tm79SeoJotLOcpnjy"
 
 
-def get_apod_data():
-    # Choosing random date from beginning of apod to today
-    start_day = datetime(1995, 6, 16)  # Date of the first date of apod
+@app.route('/')
+def base():
+    return render_template('base.html')
+
+
+@app.route('/apod')
+def apod():
+    start_day = datetime(1995, 6, 16)
     end_day = datetime.now()
 
-    range_of_days = random.randint(0, (end_day - start_day).days)  # Range of the days I can add to start date
+    range_of_days = random.randint(0, (end_day - start_day).days)
 
-    random_date = start_day + timedelta(days=range_of_days)  # Random date
+    random_date = start_day + timedelta(days=range_of_days)
 
-    # Getting requests from apod api
     response = requests.get(f"https://api.nasa.gov/planetary/apod?api_key={api_key}&date={random_date.date()}")
 
-    return response.json()
+    apod_data = response.json()
+    title = apod_data['title']
+    explanation = apod_data['explanation']
+    hd_url = apod_data['hdurl']
+    return render_template('apod.html', title=title, explanation=explanation, hd_url=hd_url)
 
 
-def planetary_candidates():
+@app.route('/register')
+def register():
+    return render_template('register.html')
+
+
+@app.route('/login')
+def login():
+    return render_template('login-sprint.html')
+
+
+@app.route('/diagrams')
+def display_diagram_main():
+    return "Tu bedzie mozna wybrac konkretna strone z wykresami od Grzesia"
+
+
+@app.route('/planetary-candidates')
+def display_planetary_candidates():
     api_url = "https://exoplanetarchive.ipac.caltech.edu/cgi-bin/nstedAPI/nph-nstedAPI"
 
     query_params = {
@@ -66,10 +95,11 @@ def planetary_candidates():
     planets_data = base64.b64encode(buffer.read()).decode()
     buffer.close()
 
-    return planets_data
+    return render_template('planetary-candidates.html', planets_data=planets_data)
 
 
-def cameras_diagrams():
+@app.route('/cameras')
+def display_cameras_diagrams():
     max_sol = 3650
     # random_sol = random.randint(1, max_sol)
     random_sol = 2745
@@ -113,10 +143,11 @@ def cameras_diagrams():
     cameras_data = base64.b64encode(buffer.read()).decode()
     buffer.close()
 
-    return cameras_data
+    return render_template('cameras-diagrams.html', cameras_data=cameras_data)
 
 
-def near_earth_object():
+@app.route('/near-earth')
+def display_near_earth_objects():
     start_date = datetime(random.randint(2015, 2022), random.randint(1, 12), random.randint(1, 30))
     end_date = start_date + timedelta(days=7)  # Data 7 dni później
 
@@ -152,114 +183,6 @@ def near_earth_object():
     near_earth_data = base64.b64encode(buffer.read()).decode()
     buffer.close()
 
-    return near_earth_data
-
-
-def asteroid():
-    start_date = "2015-01-01"
-    end_date = "2023-11-01"
-
-    start_datetime = datetime.strptime(start_date, "%Y-%m-%d")
-    end_datetime = datetime.strptime(end_date, "%Y-%m-%d")
-
-    random_datetime = start_datetime + timedelta(
-        days=random.randint(0, (end_datetime - start_datetime).days))
-
-    random_date = random_datetime.strftime("%Y-%m-%d")
-    url = f"https://api.nasa.gov/neo/rest/v1/feed?start_date={random_date}&end_date={random_date}&api_key={api_key}"
-
-    response = requests.get(url)
-
-    data = response.json()
-    near_earth_objects = data['near_earth_objects']
-
-    date_counts = {}
-    for date, asteroids in near_earth_objects.items():
-        date_counts[date] = len(asteroids)
-
-    dates = list(date_counts.keys())
-    asteroid_counts = list(date_counts.values())
-
-    plt.figure(figsize=(12, 6))
-    plt.bar(dates, asteroid_counts)
-    plt.ylabel("Liczba asteroid")
-    plt.title(f"Liczba bliskich podejść asteroid w dniu {random_date}")
-    plt.xticks(rotation=45)
-    plt.tight_layout()
-
-    buffer = BytesIO()
-    plt.savefig(buffer, format="png")
-    buffer.seek(0)
-    asteroids_data = base64.b64encode(buffer.read()).decode()
-    buffer.close()
-
-    return asteroids_data
-
-
-def planet_masses():
-    planet_names = ["Mercury", "Venus", "Earth", "Mars", "Jupiter", "Saturn", "Uranus", "Neptune"]
-    planet_masses = [0.055, 0.815, 1, 0.107, 317.8, 95.2, 14.5, 17.1]
-
-    plt.figure(figsize=(10, 6))
-    plt.bar(planet_names, planet_masses, color='green')
-    plt.xlabel('Planet')
-    plt.ylabel('Relative Mass (Earth = 1)')
-    plt.title('Relative Mass of Planets in the Solar System')
-    plt.xticks(rotation=45, ha='right')
-    plt.tight_layout()
-
-    buffer = BytesIO()
-    plt.savefig(buffer, format="png")
-    buffer.seek(0)
-    planet_masses_data = base64.b64encode(buffer.read()).decode()
-    buffer.close()
-
-    return planet_masses_data
-
-@app.route('/')
-def base():
-    return render_template('base.html')
-
-
-@app.route('/apod')
-def apod():
-    apod_data = get_apod_data()
-    title = apod_data['title']
-    explanation = apod_data['explanation']
-    hd_url = apod_data['hdurl']
-    return render_template('apod.html', title=title, explanation=explanation, hd_url=hd_url)
-
-
-@app.route('/register')
-def register():
-    return render_template('register.html')
-
-
-@app.route('/login')
-def login():
-    return render_template('login-sprint.html')
-
-
-@app.route('/diagrams')
-def display_diagram_main():
-    return "Tu bedzie mozna wybrac konkretna strone z wykresami od Grzesia"
-
-
-@app.route('/planetary-candidates')
-def display_planetary_candidates():
-    planets_data = planetary_candidates()
-    return render_template('planetary-candidates.html', planets_data=planets_data)
-
-
-@app.route('/cameras')
-def display_cameras_diagrams():
-    cameras_data = cameras_diagrams()
-    return render_template('cameras-diagrams.html', cameras_data=cameras_data)
-
-
-@app.route('/near-earth')
-def display_near_earth_objects():
-    near_earth_data = near_earth_object()
     return render_template('near-earth.html', near_earth_data=near_earth_data)
 
 
@@ -343,7 +266,23 @@ def display_asteroid_diagram():
 
 @app.route('/planet-masses')
 def display_planet_masses():
-    planets_masses_data = planet_masses()
+    planet_names = ["Mercury", "Venus", "Earth", "Mars", "Jupiter", "Saturn", "Uranus", "Neptune"]
+    planet_masses = [0.055, 0.815, 1, 0.107, 317.8, 95.2, 14.5, 17.1]
+
+    plt.figure(figsize=(10, 6))
+    plt.bar(planet_names, planet_masses, color='green')
+    plt.xlabel('Planet')
+    plt.ylabel('Relative Mass (Earth = 1)')
+    plt.title('Relative Mass of Planets in the Solar System')
+    plt.xticks(rotation=45, ha='right')
+    plt.tight_layout()
+
+    buffer = BytesIO()
+    plt.savefig(buffer, format="png")
+    buffer.seek(0)
+    planets_masses_data = base64.b64encode(buffer.read()).decode()
+    buffer.close()
+
     return render_template('planet-masses.html', planets_masses_data=planets_masses_data)
 
 
@@ -425,12 +364,17 @@ def near_earth():
         scale = asteroid_area / example_city_area
         icon_size = round(scale * 10.0, 2)
 
+    neo_postprocess_data = {'name': largest_hazardous_neo['name'], 'area': asteroid_area,
+                            'diameter': max_diameter,
+                            'distance': largest_hazardous_neo['close_approach_data'][0]['miss_distance']['kilometers'],
+                            'velocity': largest_hazardous_neo['close_approach_data'][0]['relative_velocity']['kilometers_per_hour'],
+                            'date': largest_hazardous_neo['close_approach_data'][0]['close_approach_date_full']}
+
     return render_template('near-earth-asteroids.html',
                            icon_size=icon_size,
                            object_to_scale=object_to_scale,
-                           neo_info=largest_hazardous_neo,
-                           compared_object_data=compared_object_data,
-                           asteroid_area = asteroid_area)
+                           neo_postprocess_data=neo_postprocess_data,
+                           compared_object_data=compared_object_data,)
 
 
 if __name__ == "__main__":
