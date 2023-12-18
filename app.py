@@ -179,7 +179,7 @@ def display_near_earth_objects():
 
 @app.route('/asteroids')
 def display_asteroid_diagram():
-    obstime = parse_time('now')
+    obstime = parse_time('2021-07-07')
 
     hee_frame = HeliocentricEarthEcliptic(obstime=obstime)
 
