@@ -1,0 +1,48 @@
+{% extends 'base.html' %}
+
+{% block header %}
+  <h1>{% block title %}Daily Fun Fact{% endblock %}</h1>
+{% endblock %}
+{% block icon %}
+  <link rel="icon" type="image/x-icon" href="../static/assets/daily_fact.svg">
+{% endblock %}
+
+{% block content %}
+  <div id="header">
+        <h1>Scale of the nearest asteroid near the earth in: {{ neo_postprocess_data['date'] }}</h1>
+  </div>
+  <div class="icons">
+      <div id="icon_left">
+          <i class="{{object_to_scale}}" style="font-size: 10em"></i>
+          <br>
+          <strong>{{compared_object_data[0]}}</strong>
+          {% if compared_object_data[0] == "Burj Khalifa" %}
+            <p>Height: {{ compared_object_data[1] }}</p>
+          {% else %}
+            <p>Area: {{ compared_object_data[1] }}</p>
+          {% endif %}
+      </div>
+      <div id="icon_right">
+          <i class="fa solid fa-meteor fa-bounce" style="color: crimson; font-size: {{ icon_size }}em"></i>
+          <br>
+          <strong>Asteroid: {{ neo_postprocess_data['name'] }}</strong>
+          {% if compared_object_data[0] == "Burj Khalifa" %}
+            <p>Height: {{ neo_postprocess_data['diameter'] }} km</p>
+          {% else %}
+            <p>Area: {{ neo_postprocess_data['area'] }}</p>
+          {% endif %}
+      </div>
+  </div>
+  <div class="object-info">
+      <strong>Object compared:</strong> {{ compared_object_data[0] }}<br>
+      <strong>Size of object</strong> {{ compared_object_data[1] }}<br>
+      <br>
+      <strong>Name of Asteroid:</strong> {{ neo_postprocess_data['name'] }}<br>
+      <strong>Area of Asteroid:</strong> {{ neo_postprocess_data['area'] }} km2<br>
+      <strong>Max diameter of Asteroid:</strong> {{ neo_postprocess_data['diameter'] }} km<br>
+      <strong>Distance from earth:</strong> {{ neo_postprocess_data['distance'] }} km<br>
+      <strong>Velocity:</strong>  {{ neo_postprocess_data['velocity'] }} km/h
+  </div>
+
+
+{% endblock %}

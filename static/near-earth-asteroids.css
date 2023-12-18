@@ -1,0 +1,34 @@
+.icons {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    width: 90%;
+    height: 70%;
+}
+#icon_left{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    border-radius: 10px;
+    width: 50%;
+    height: 100%;
+    float: left;
+}
+
+#icon_right{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    border-radius: 10px;
+    width: 50%;
+    height: 100%;
+}
+
+.object-info {
+    margin-bottom: 20px;
+}
+
+
