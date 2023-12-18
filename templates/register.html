@@ -5,12 +5,9 @@
 {% endblock %}
 
 {% block content %}
-  <form method="post" class="register">
-    <label for="username">Username</label>
-    <input name="username" id="username" required>
-    <label for="password">Password</label>
-    <input type="password" name="password" id="password" required>
-    <label for="submit">Confirm</label>
-    <input type="submit" value="Register" id="submit">
-  </form>
+      {% if current_user.is_authenticated %}
+        {% include 'views/authenticated.html' %}
+      {% else %}
+        {% include 'views/unauthenticated.html' %}
+      {% endif %}
 {% endblock %}

@@ -5,19 +5,14 @@
 {% endblock %}
 
 {% block content %}
-  <div class="forms">
-    <div class="forms_left">
-      <form method="post" class="register">
-      <label for="username" class="label">Username</label>
-      <input name="username" id="username" required>
-      <label for="password" class="label">Password</label>
-      <input type="password" name="password" id="password" required>
-      <label for="login" class="label">Confirm</label>
-      <input type="submit" value="Log In" id="login">
-    </form>
-    </div>
-    <div class="forms_right">
 
-    </div>
-  </div>
+  <form method="post" class="register">
+    {{ login_form.hidden_tag() }}
+      {{ login_form.username( placeholder = "Username") }}
+      {{ login_form.password( placeholder = "Password") }}
+      {{ login_form.submit() }}
+  </form>
+
+
+
 {% endblock %}

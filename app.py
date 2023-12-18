@@ -2,16 +2,18 @@ import requests
 import random
 import numpy as np
 from datetime import datetime, timedelta
-
+from flask import Flask, render_template, request
 from flask import Flask, render_template
-
 import matplotlib.pyplot as plt
 import matplotlib as mpl
 from matplotlib.ticker import MultipleLocator
 
 from io import BytesIO
 import base64
-
+from config import app, db, bcrypt, User
+from flask import Flask, render_template, request, redirect, url_for
+from flask_login import login_user, current_user, logout_user, login_required
+import forms
 import folium
 
 import astropy.units as u
@@ -19,7 +21,6 @@ from astropy.coordinates import Longitude
 from sunpy.coordinates import HeliocentricEarthEcliptic, get_body_heliographic_stonyhurst, get_horizons_coord
 from sunpy.time import parse_time
 
-app = Flask(__name__)
 
 api_key = "FDlAcufYBrWHbobPQfofRn7Tm79SeoJotLOcpnjy"
 
@@ -45,16 +46,6 @@ def apod():
     explanation = apod_data['explanation']
     hd_url = apod_data['hdurl']
     return render_template('apod.html', title=title, explanation=explanation, hd_url=hd_url)
-
-
-@app.route('/register')
-def register():
-    return render_template('register.html')
-
-
-@app.route('/login')
-def login():
-    return render_template('login-sprint.html')
 
 
 @app.route('/diagrams')
@@ -282,8 +273,46 @@ def display_planet_masses():
     buffer.seek(0)
     planets_masses_data = base64.b64encode(buffer.read()).decode()
     buffer.close()
-
     return render_template('planet-masses.html', planets_masses_data=planets_masses_data)
+
+  
+@app.route('/register', methods=['GET', 'POST'])
+def register():
+    # Creating a new user when the register form validates
+    if forms.RegistrationForm().validate_on_submit():
+        # Creating a new user in the database
+        register_form = forms.RegistrationForm()
+        hashed_password = bcrypt.generate_password_hash(register_form.password.data).decode('utf-8')
+        user = User(username=register_form.username.data,
+                    email=register_form.email.data,
+                    password=hashed_password)
+
+        db.session.add(user)
+        db.session.commit()
+        # Signing in the user after creating them
+        user = User.query.filter_by(email=forms.RegistrationForm().email.data).first()
+        if user and bcrypt.check_password_hash(user.password, forms.RegistrationForm().password.data):
+            login_user(user)
+            # Taking the user to the authenticated side of the site
+            return redirect(url_for('register'))
+
+    if forms.LoginForm().validate_on_submit():
+        user = User.query.filter_by(email=forms.LoginForm().email.data).first()
+        if user and bcrypt.check_password_hash(user.password, forms.LoginForm().password.data):
+            login_user(user, remember=forms.LoginForm().remember.data)
+
+            return redirect(url_for('register'))
+
+    if (request.method == "POST") & (request.form.get('post_header') == 'log out'):
+        logout_user()
+        return redirect(url_for('register'))
+
+    return render_template('register.html',
+                           login_form=forms.LoginForm(),
+                           register_form=forms.RegistrationForm())
+
+
+
 
 
 @app.route('/world-map')
@@ -378,6 +407,8 @@ def near_earth():
 
 
 if __name__ == "__main__":
+    with app.app_context():
+        db.create_all()
     app.run(debug=True)
 
 
