@@ -393,14 +393,14 @@ def near_earth():
         plt.title(f"Comparing the asteroid's diameter to Burj Khalifa's height")
         plt.axis('equal')
     else:
-        object_to_scale = "fa solid fa-city fa-fade"
+       """ object_to_scale = "fa solid fa-city fa-fade"
         compared_object_data = ["Averaged sized city: Siemianowice", f"{example_city_area} km2"]
         scale = asteroid_area / example_city_area
         icon_size = round(scale * 10.0, 2)
         plt.figure(figsize=(6, 6))
         plt.pie(sizes, labels=labels, autopct='%1.1f%%', startangle=140)
         plt.title(f"Comparing the asteroid's area to Averaged sized city: Siemianowice area")
-        plt.axis('equal')
+        plt.axis('equal')"""
 
 
     neo_postprocess_data = {'name': largest_hazardous_neo['name'], 'area': round(asteroid_area,2),
