@@ -23,7 +23,6 @@ from astropy.coordinates import Longitude
 from sunpy.coordinates import HeliocentricEarthEcliptic, get_body_heliographic_stonyhurst, get_horizons_coord
 from sunpy.time import parse_time
 
-
 api_key = "FDlAcufYBrWHbobPQfofRn7Tm79SeoJotLOcpnjy"
 
 @app.route('/')
