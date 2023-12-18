@@ -24,9 +24,6 @@ from sunpy.coordinates import HeliocentricEarthEcliptic, get_body_heliographic_s
 from sunpy.time import parse_time
 
 
-api_key = "FDlAcufYBrWHbobPQfofRn7Tm79SeoJotLOcpnjy"
-
-
 @app.route('/')
 def base():
     return render_template('base.html')
@@ -350,7 +347,7 @@ def world_map():
 
 @app.route('/near-earth-asteroids')
 def near_earth():
-    start_date = "2015-09-01"
+    start_date = "2015-01-01"
 
     start_date_obj = datetime.strptime(start_date, '%Y-%m-%d')
     end_date_obj = start_date_obj + timedelta(days=7)
@@ -378,14 +375,30 @@ def near_earth():
 
     if max_diameter <= 2:
         object_to_scale = "fa solid fa-building fa-fade"
-        compared_object_data = ["Burj Khalifa", f"{burj_khalifa_height}km"]
+        compared_object_data = ["Burj Khalifa", f"{burj_khalifa_height} km"]
         scale = max_diameter / burj_khalifa_height
         icon_size = round(scale * 10.0, 2)
+        plt.figure(figsize=(6, 6))
+        plt.pie([burj_khalifa_height, max_diameter],
+                labels=['Burj Khalifa', largest_hazardous_neo['name']],
+                autopct='%1.1f%%', startangle=140)
+        plt.title(f"Comparing the asteroid's diameter to Burj Khalifa's height")
+        plt.axis('equal')
     else:
         object_to_scale = "fa solid fa-city fa-fade"
-        compared_object_data = ["Averaged sized city: Siemianowice", f"{example_city_area}km2"]
+        compared_object_data = ["Averaged sized city: Siemianowice", f"{example_city_area} km2"]
         scale = asteroid_area / example_city_area
         icon_size = round(scale * 10.0, 2)
+        plt.figure(figsize=(6, 6))
+        plt.pie(sizes, labels=labels, autopct='%1.1f%%', startangle=140)
+        plt.title(f"Comparing the asteroid's area to Averaged sized city: Siemianowice area")
+        plt.axis('equal')
+
+    buffer = BytesIO()
+    plt.savefig(buffer, format="png")
+    buffer.seek(0)
+    near_earth_data = base64.b64encode(buffer.read()).decode()
+    buffer.close()
 
     neo_postprocess_data = {'name': largest_hazardous_neo['name'], 'area': round(asteroid_area,2),
                             'diameter': round(max_diameter,2),
