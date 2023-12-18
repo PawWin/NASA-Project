@@ -24,6 +24,8 @@ from sunpy.coordinates import HeliocentricEarthEcliptic, get_body_heliographic_s
 from sunpy.time import parse_time
 
 
+api_key = "FDlAcufYBrWHbobPQfofRn7Tm79SeoJotLOcpnjy"
+
 @app.route('/')
 def base():
     return render_template('base.html')
@@ -400,11 +402,6 @@ def near_earth():
         plt.title(f"Comparing the asteroid's area to Averaged sized city: Siemianowice area")
         plt.axis('equal')
 
-    buffer = BytesIO()
-    plt.savefig(buffer, format="png")
-    buffer.seek(0)
-    near_earth_data = base64.b64encode(buffer.read()).decode()
-    buffer.close()
 
     neo_postprocess_data = {'name': largest_hazardous_neo['name'], 'area': round(asteroid_area,2),
                             'diameter': round(max_diameter,2),
