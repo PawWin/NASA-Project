@@ -50,13 +50,8 @@ def apod():
     return render_template('apod.html', title=title, explanation=explanation, hd_url=hd_url)
 
 
-@app.route('/diagrams')
-def display_diagram_main():
-    return "Tu bedzie mozna wybrac konkretna strone z wykresami od Grzesia"
-
-
 @app.route('/planetary-candidates')
-def display_planetary_candidates():
+def planetary_candidates_chart():
     api_url = "https://exoplanetarchive.ipac.caltech.edu/cgi-bin/nstedAPI/nph-nstedAPI"
 
     query_params = {
@@ -77,9 +72,9 @@ def display_planetary_candidates():
 
     plt.figure(figsize=(10, 6))
     plt.scatter(equilibrium_temperatures, radii, alpha=0.5)
-    plt.xlabel('Temperatura równowagi (K)')
-    plt.ylabel('Promień planety (R_earth)')
-    plt.title('Promień planety względem Temperatury Równowagi')
+    plt.xlabel('Equilibrium temperature (K)')
+    plt.ylabel('Radius of the planet (R_earth)')
+    plt.title('Radius of the planet relative to the Equilibrium Temperature')
     plt.grid(True)
 
     buffer = BytesIO()
@@ -92,7 +87,7 @@ def display_planetary_candidates():
 
 
 @app.route('/cameras')
-def display_cameras_diagrams():
+def cameras_diagrams_chart():
     max_sol = 3650
     # random_sol = random.randint(1, max_sol)
     random_sol = 2745
@@ -124,9 +119,9 @@ def display_cameras_diagrams():
 
     plt.figure(figsize=(12, 6))
     plt.bar(camera_names, photo_counts)
-    plt.xlabel("Nazwa aparatu")
-    plt.ylabel("Liczba zdjęć")
-    plt.title(f"Liczba zdjęć z różnych aparatów Mars Rover Curiosity (sol {random_sol}, data: {earth_date})")
+    plt.xlabel("Camera name")
+    plt.ylabel("Number of photos")
+    plt.title(f"Number of photos from different Mars Rover Curiosity cameras(sol {random_sol}, date: {earth_date})")
     plt.xticks(rotation=45)
     plt.tight_layout()
 
@@ -140,7 +135,7 @@ def display_cameras_diagrams():
 
 
 @app.route('/near-earth')
-def display_near_earth_objects():
+def near_earth_objects_chart():
     start_date = datetime(random.randint(2015, 2022), random.randint(1, 12), random.randint(1, 30))
     end_date = start_date + timedelta(days=7)  # Data 7 dni później
 
@@ -167,7 +162,7 @@ def display_near_earth_objects():
 
     plt.figure(figsize=(8, 8))
     plt.pie(sizes, labels=labels, autopct='%1.1f%%', startangle=140)
-    plt.title(f"Rodzaje obiektów Near Earth Object (NEO) od {start_date_str} do {end_date_str}")
+    plt.title(f"Dangerous and not dangerous Near Earth Object (NEO) from {start_date_str} to {end_date_str}")
     plt.axis('equal')
 
     buffer = BytesIO()
@@ -179,8 +174,8 @@ def display_near_earth_objects():
     return render_template('near-earth.html', near_earth_data=near_earth_data)
 
 
-@app.route('/asteroids')
-def display_asteroid_diagram():
+@app.route('/planet-position')
+def planets_position_chart():
     obstime = parse_time('now')
 
     hee_frame = HeliocentricEarthEcliptic(obstime=obstime)
@@ -254,11 +249,11 @@ def display_asteroid_diagram():
     asteroids_data = base64.b64encode(buffer.read()).decode()
     buffer.close()
 
-    return render_template('asteroid.html', asteroids_data=asteroids_data)
+    return render_template('planet-position.html', asteroids_data=asteroids_data)
 
 
 @app.route('/planet-masses')
-def display_planet_masses():
+def planet_masses_chart():
     planet_names = ["Mercury", "Venus", "Earth", "Mars", "Jupiter", "Saturn", "Uranus", "Neptune"]
     planet_masses = [0.055, 0.815, 1, 0.107, 317.8, 95.2, 14.5, 17.1]
 
