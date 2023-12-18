@@ -2,17 +2,19 @@ import requests
 import random
 import numpy as np
 from datetime import datetime, timedelta
+
 from flask import Flask, render_template, request
 from flask import Flask, render_template
+from config import app, db, bcrypt, User
+from flask import Flask, render_template, request, redirect, url_for
+from flask_login import login_user, current_user, logout_user, login_required
+
 import matplotlib.pyplot as plt
 import matplotlib as mpl
 from matplotlib.ticker import MultipleLocator
 
 from io import BytesIO
 import base64
-from config import app, db, bcrypt, User
-from flask import Flask, render_template, request, redirect, url_for
-from flask_login import login_user, current_user, logout_user, login_required
 import forms
 import folium
 
@@ -20,9 +22,6 @@ import astropy.units as u
 from astropy.coordinates import Longitude
 from sunpy.coordinates import HeliocentricEarthEcliptic, get_body_heliographic_stonyhurst, get_horizons_coord
 from sunpy.time import parse_time
-
-
-api_key = "FDlAcufYBrWHbobPQfofRn7Tm79SeoJotLOcpnjy"
 
 
 @app.route('/')
@@ -48,13 +47,8 @@ def apod():
     return render_template('apod.html', title=title, explanation=explanation, hd_url=hd_url)
 
 
-@app.route('/diagrams')
-def display_diagram_main():
-    return "Tu bedzie mozna wybrac konkretna strone z wykresami od Grzesia"
-
-
 @app.route('/planetary-candidates')
-def display_planetary_candidates():
+def planetary_candidates_chart():
     api_url = "https://exoplanetarchive.ipac.caltech.edu/cgi-bin/nstedAPI/nph-nstedAPI"
 
     query_params = {
@@ -75,9 +69,9 @@ def display_planetary_candidates():
 
     plt.figure(figsize=(10, 6))
     plt.scatter(equilibrium_temperatures, radii, alpha=0.5)
-    plt.xlabel('Temperatura równowagi (K)')
-    plt.ylabel('Promień planety (R_earth)')
-    plt.title('Promień planety względem Temperatury Równowagi')
+    plt.xlabel('Equilibrium temperature (K)')
+    plt.ylabel('Radius of the planet (R_earth)')
+    plt.title('Radius of the planet relative to the Equilibrium Temperature')
     plt.grid(True)
 
     buffer = BytesIO()
@@ -90,7 +84,7 @@ def display_planetary_candidates():
 
 
 @app.route('/cameras')
-def display_cameras_diagrams():
+def cameras_diagrams_chart():
     max_sol = 3650
     # random_sol = random.randint(1, max_sol)
     random_sol = 2745
@@ -122,9 +116,9 @@ def display_cameras_diagrams():
 
     plt.figure(figsize=(12, 6))
     plt.bar(camera_names, photo_counts)
-    plt.xlabel("Nazwa aparatu")
-    plt.ylabel("Liczba zdjęć")
-    plt.title(f"Liczba zdjęć z różnych aparatów Mars Rover Curiosity (sol {random_sol}, data: {earth_date})")
+    plt.xlabel("Camera name")
+    plt.ylabel("Number of photos")
+    plt.title(f"Number of photos from different Mars Rover Curiosity cameras(sol {random_sol}, date: {earth_date})")
     plt.xticks(rotation=45)
     plt.tight_layout()
 
@@ -138,7 +132,7 @@ def display_cameras_diagrams():
 
 
 @app.route('/near-earth')
-def display_near_earth_objects():
+def near_earth_objects_chart():
     start_date = datetime(random.randint(2015, 2022), random.randint(1, 12), random.randint(1, 30))
     end_date = start_date + timedelta(days=7)  # Data 7 dni później
 
@@ -165,7 +159,7 @@ def display_near_earth_objects():
 
     plt.figure(figsize=(8, 8))
     plt.pie(sizes, labels=labels, autopct='%1.1f%%', startangle=140)
-    plt.title(f"Rodzaje obiektów Near Earth Object (NEO) od {start_date_str} do {end_date_str}")
+    plt.title(f"Dangerous and not dangerous Near Earth Object (NEO) from {start_date_str} to {end_date_str}")
     plt.axis('equal')
 
     buffer = BytesIO()
@@ -177,9 +171,15 @@ def display_near_earth_objects():
     return render_template('near-earth.html', near_earth_data=near_earth_data)
 
 
+
 @app.route('/asteroids')
 def display_asteroid_diagram():
     obstime = parse_time('2021-07-07')
+
+@app.route('/planet-position')
+def planets_position_chart():
+    obstime = parse_time('now')
+
 
     hee_frame = HeliocentricEarthEcliptic(obstime=obstime)
 
@@ -252,11 +252,11 @@ def display_asteroid_diagram():
     asteroids_data = base64.b64encode(buffer.read()).decode()
     buffer.close()
 
-    return render_template('asteroid.html', asteroids_data=asteroids_data)
+    return render_template('planet-position.html', asteroids_data=asteroids_data)
 
 
 @app.route('/planet-masses')
-def display_planet_masses():
+def planet_masses_chart():
     planet_names = ["Mercury", "Venus", "Earth", "Mars", "Jupiter", "Saturn", "Uranus", "Neptune"]
     planet_masses = [0.055, 0.815, 1, 0.107, 317.8, 95.2, 14.5, 17.1]
 
@@ -312,9 +312,6 @@ def register():
                            register_form=forms.RegistrationForm())
 
 
-
-
-
 @app.route('/world-map')
 def world_map():
     categories_icons = {'Volcanoes': ['red', 'volcano', 0], 'Sea and Lake Ice': ['blue', 'icicles', 0],
@@ -356,7 +353,7 @@ def world_map():
 
 @app.route('/near-earth-asteroids')
 def near_earth():
-    start_date = "2015-09-01"
+    start_date = "2015-01-01"
 
     start_date_obj = datetime.strptime(start_date, '%Y-%m-%d')
     end_date_obj = start_date_obj + timedelta(days=7)
@@ -384,19 +381,35 @@ def near_earth():
 
     if max_diameter <= 2:
         object_to_scale = "fa solid fa-building fa-fade"
-        compared_object_data = ["Burj Khalifa", f"{burj_khalifa_height}km"]
+        compared_object_data = ["Burj Khalifa", f"{burj_khalifa_height} km"]
         scale = max_diameter / burj_khalifa_height
         icon_size = round(scale * 10.0, 2)
+        plt.figure(figsize=(6, 6))
+        plt.pie([burj_khalifa_height, max_diameter],
+                labels=['Burj Khalifa', largest_hazardous_neo['name']],
+                autopct='%1.1f%%', startangle=140)
+        plt.title(f"Comparing the asteroid's diameter to Burj Khalifa's height")
+        plt.axis('equal')
     else:
         object_to_scale = "fa solid fa-city fa-fade"
-        compared_object_data = ["Averaged sized city: Siemianowice", f"{example_city_area}km2"]
+        compared_object_data = ["Averaged sized city: Siemianowice", f"{example_city_area} km2"]
         scale = asteroid_area / example_city_area
         icon_size = round(scale * 10.0, 2)
+        plt.figure(figsize=(6, 6))
+        plt.pie(sizes, labels=labels, autopct='%1.1f%%', startangle=140)
+        plt.title(f"Comparing the asteroid's area to Averaged sized city: Siemianowice area")
+        plt.axis('equal')
 
-    neo_postprocess_data = {'name': largest_hazardous_neo['name'], 'area': asteroid_area,
-                            'diameter': max_diameter,
-                            'distance': largest_hazardous_neo['close_approach_data'][0]['miss_distance']['kilometers'],
-                            'velocity': largest_hazardous_neo['close_approach_data'][0]['relative_velocity']['kilometers_per_hour'],
+    buffer = BytesIO()
+    plt.savefig(buffer, format="png")
+    buffer.seek(0)
+    near_earth_data = base64.b64encode(buffer.read()).decode()
+    buffer.close()
+
+    neo_postprocess_data = {'name': largest_hazardous_neo['name'], 'area': round(asteroid_area,2),
+                            'diameter': round(max_diameter,2),
+                            'distance': round(float(largest_hazardous_neo['close_approach_data'][0]['miss_distance']['kilometers']),2),
+                            'velocity': round(float(largest_hazardous_neo['close_approach_data'][0]['relative_velocity']['kilometers_per_hour']),2),
                             'date': largest_hazardous_neo['close_approach_data'][0]['close_approach_date_full']}
 
     return render_template('near-earth-asteroids.html',
