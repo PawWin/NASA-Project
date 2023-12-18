@@ -2,17 +2,19 @@ import requests
 import random
 import numpy as np
 from datetime import datetime, timedelta
+
 from flask import Flask, render_template, request
 from flask import Flask, render_template
+from config import app, db, bcrypt, User
+from flask import Flask, render_template, request, redirect, url_for
+from flask_login import login_user, current_user, logout_user, login_required
+
 import matplotlib.pyplot as plt
 import matplotlib as mpl
 from matplotlib.ticker import MultipleLocator
 
 from io import BytesIO
 import base64
-from config import app, db, bcrypt, User
-from flask import Flask, render_template, request, redirect, url_for
-from flask_login import login_user, current_user, logout_user, login_required
 import forms
 import folium
 
@@ -312,9 +314,6 @@ def register():
                            register_form=forms.RegistrationForm())
 
 
-
-
-
 @app.route('/world-map')
 def world_map():
     categories_icons = {'Volcanoes': ['red', 'volcano', 0], 'Sea and Lake Ice': ['blue', 'icicles', 0],
@@ -393,10 +392,10 @@ def near_earth():
         scale = asteroid_area / example_city_area
         icon_size = round(scale * 10.0, 2)
 
-    neo_postprocess_data = {'name': largest_hazardous_neo['name'], 'area': asteroid_area,
-                            'diameter': max_diameter,
-                            'distance': largest_hazardous_neo['close_approach_data'][0]['miss_distance']['kilometers'],
-                            'velocity': largest_hazardous_neo['close_approach_data'][0]['relative_velocity']['kilometers_per_hour'],
+    neo_postprocess_data = {'name': largest_hazardous_neo['name'], 'area': round(asteroid_area,2),
+                            'diameter': round(max_diameter,2),
+                            'distance': round(float(largest_hazardous_neo['close_approach_data'][0]['miss_distance']['kilometers']),2),
+                            'velocity': round(float(largest_hazardous_neo['close_approach_data'][0]['relative_velocity']['kilometers_per_hour']),2),
                             'date': largest_hazardous_neo['close_approach_data'][0]['close_approach_date_full']}
 
     return render_template('near-earth-asteroids.html',
