@@ -312,9 +312,6 @@ def register():
                            register_form=forms.RegistrationForm())
 
 
-
-
-
 @app.route('/world-map')
 def world_map():
     categories_icons = {'Volcanoes': ['red', 'volcano', 0], 'Sea and Lake Ice': ['blue', 'icicles', 0],
@@ -356,7 +353,7 @@ def world_map():
 
 @app.route('/near-earth-asteroids')
 def near_earth():
-    start_date = "2015-09-01"
+    start_date = "2015-01-01"
 
     start_date_obj = datetime.strptime(start_date, '%Y-%m-%d')
     end_date_obj = start_date_obj + timedelta(days=7)
@@ -393,10 +390,10 @@ def near_earth():
         scale = asteroid_area / example_city_area
         icon_size = round(scale * 10.0, 2)
 
-    neo_postprocess_data = {'name': largest_hazardous_neo['name'], 'area': asteroid_area,
-                            'diameter': max_diameter,
-                            'distance': largest_hazardous_neo['close_approach_data'][0]['miss_distance']['kilometers'],
-                            'velocity': largest_hazardous_neo['close_approach_data'][0]['relative_velocity']['kilometers_per_hour'],
+    neo_postprocess_data = {'name': largest_hazardous_neo['name'], 'area': round(asteroid_area,2),
+                            'diameter': round(max_diameter,2),
+                            'distance': round(float(largest_hazardous_neo['close_approach_data'][0]['miss_distance']['kilometers']),2),
+                            'velocity': round(float(largest_hazardous_neo['close_approach_data'][0]['relative_velocity']['kilometers_per_hour']),2),
                             'date': largest_hazardous_neo['close_approach_data'][0]['close_approach_date_full']}
 
     return render_template('near-earth-asteroids.html',
