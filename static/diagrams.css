@@ -48,10 +48,12 @@
     font-weight: 500;
     color: var(--dark-grey);
     margin: 0.5rem;
+    margin-left: 6%;
+    margin-right: 8%;
     width: 100%;
     height: 80%;
     flex: 0 0 120px;
-    text-align: center;
+    text-align: left;
 
 }
 

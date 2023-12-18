@@ -172,9 +172,15 @@ def near_earth_objects_chart():
     return render_template('near-earth.html', near_earth_data=near_earth_data)
 
 
+
+@app.route('/asteroids')
+def display_asteroid_diagram():
+    obstime = parse_time('2021-07-07')
+
 @app.route('/planet-position')
 def planets_position_chart():
     obstime = parse_time('now')
+
 
     hee_frame = HeliocentricEarthEcliptic(obstime=obstime)
 
