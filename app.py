@@ -427,13 +427,15 @@ def near_earth():
 
 @app.route('/pick-constelation', methods=['GET', 'POST'])
 def pick_constellation():
+    form = forms.PickConstellationForm()
     if request.method == 'POST':
-        constellation = request.form.get('constellation')
+        if form.validate_on_submit():
+            constellation = request.form.get('constellation')
         return redirect(url_for('constellations', constellation=constellation))
-    return render_template('pick-constellation.html')
+    return render_template('pick-constellation.html', form=form)
 
 
-@app.route('/constellations')
+@app.route('/constellations/<constellation>')
 def constellations(constellation):
     constellation_description = {'Andromeda': 'Andromeda is a constellation rich in Greek mythology and can be best observed during autumn nights. The name Andromeda refers to the princess from Greek mythology, known for her beauty. According to the myth, Andromeda was chained to a rock as a sacrifice to a sea monster, but was eventually saved by the hero Perseus. The constellation is often depicted as a woman with outstretched arms, seemingly in a pose of distress. Its most notable feature is the Andromeda Galaxy, the closest spiral galaxy to the Milky Way, visible to the naked eye in dark sky conditions. To locate the Andromeda Galaxy, look for a faint, elongated smudge near the constellations',
                                  'Aquila': 'Aquila was the eagle that in Greek mythology actually bore Ganymede (Aquarius) up to Mt. Olympus. The eagle was also the thunderbolt carrier for Zeus. This constellation lies in the Milky Way band, and its most prominent star is Altair, which is actually one of the closest naked eye stars to the earth. The top portion of Aquila forms a shallow inverted “V,” with Altair nearly the point. This represents the head and wings of the eagle. A line then descends from Altair, which forms the body of the eagle',

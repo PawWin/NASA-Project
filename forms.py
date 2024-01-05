@@ -1,6 +1,7 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, PasswordField, SubmitField, BooleanField
+from wtforms import StringField, PasswordField, SubmitField, BooleanField, SelectField
 from wtforms.validators import DataRequired, Length, Email, EqualTo
+
 
 class RegistrationForm(FlaskForm):
     username = StringField('Username',validators=[DataRequired(), Length(min=2, max=300)])
@@ -14,3 +15,7 @@ class LoginForm(FlaskForm):
     password = PasswordField('Password', validators = [DataRequired()])
     remember = BooleanField('Remember Me')
     submit = SubmitField('Login')
+
+class PickConstellationForm(FlaskForm):
+    constellation = SelectField(u'Reports', choices=[('test1', 'test')])
+    submit = SubmitField('Submit')
