@@ -514,6 +514,9 @@ def saturn():
 @app.route('/uranus')
 def uranus():
     return render_template('uranus.html')
+@app.route('/neptune')
+def neptune():
+    return render_template('Neptune.html')
 
 if __name__ == "__main__":
     with app.app_context():
