@@ -172,11 +172,6 @@ def near_earth_objects_chart():
     return render_template('near-earth.html', near_earth_data=near_earth_data)
 
 
-
-@app.route('/asteroids')
-def display_asteroid_diagram():
-    obstime = parse_time('2021-07-07')
-
 @app.route('/planet-position')
 def planets_position_chart():
     obstime = parse_time('now')
@@ -354,7 +349,7 @@ def world_map():
 
 @app.route('/near-earth-asteroids')
 def near_earth():
-    start_date = "2015-01-01"
+    start_date = "2015-09-01"
 
     start_date_obj = datetime.strptime(start_date, '%Y-%m-%d')
     end_date_obj = start_date_obj + timedelta(days=7)
@@ -391,15 +386,27 @@ def near_earth():
                 autopct='%1.1f%%', startangle=140)
         plt.title(f"Comparing the asteroid's diameter to Burj Khalifa's height")
         plt.axis('equal')
+        buffer = BytesIO()
+        plt.savefig(buffer, format="png")
+        buffer.seek(0)
+        comparison_diagram = base64.b64encode(buffer.read()).decode()
+        buffer.close()
     else:
-       """ object_to_scale = "fa solid fa-city fa-fade"
+        object_to_scale = "fa solid fa-city fa-fade"
         compared_object_data = ["Averaged sized city: Siemianowice", f"{example_city_area} km2"]
         scale = asteroid_area / example_city_area
         icon_size = round(scale * 10.0, 2)
         plt.figure(figsize=(6, 6))
-        plt.pie(sizes, labels=labels, autopct='%1.1f%%', startangle=140)
+        plt.pie([example_city_area, asteroid_area],
+                labels=['Siemianowice Slaskie', largest_hazardous_neo['name']],
+                autopct='%1.1f%%', startangle=140)
         plt.title(f"Comparing the asteroid's area to Averaged sized city: Siemianowice area")
-        plt.axis('equal')"""
+        plt.axis('equal')
+        buffer = BytesIO()
+        plt.savefig(buffer, format="png")
+        buffer.seek(0)
+        comparison_diagram = base64.b64encode(buffer.read()).decode()
+        buffer.close()
 
 
     neo_postprocess_data = {'name': largest_hazardous_neo['name'], 'area': round(asteroid_area,2),
@@ -412,7 +419,8 @@ def near_earth():
                            icon_size=icon_size,
                            object_to_scale=object_to_scale,
                            neo_postprocess_data=neo_postprocess_data,
-                           compared_object_data=compared_object_data,)
+                           compared_object_data=compared_object_data,
+                           comparison_diagram=comparison_diagram)
 
 
 if __name__ == "__main__":
