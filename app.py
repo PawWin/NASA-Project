@@ -11,8 +11,8 @@ from flask import Flask, render_template, request
 from flask import Flask, render_template
 from config import app, db, bcrypt, User
 from flask import Flask, render_template, request, redirect, url_for, session
-from flask_login import login_user, current_user, logout_user, login_required
-
+from flask_login import login_user, current_user, logout_user
+from urllib.parse import urlsplit
 import matplotlib.pyplot as plt
 import matplotlib as mpl
 from matplotlib.ticker import MultipleLocator
@@ -522,10 +522,12 @@ def login_required(f):
     def decorated_function(*args, **kwargs):
         if session.get('username') is None or session.get('if_logged') is None:
             return redirect('/register',code=302)
-        return f(*args, **kwargs)
+        next_page = request.args.get('next')
+        if not next_page or urlsplit(next_page).netloc != '':
+            next_page = url_for('index')
+        return redirect(next_page)
     return decorated_function
-@app.route('/gallery')
-@login_required
+@app.route('/gallery' , methods=['GET', 'POST'])
 def gallery():
     return render_template('gallery.html')
 if __name__ == "__main__":
