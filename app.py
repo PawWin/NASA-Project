@@ -3,6 +3,7 @@ import random
 import numpy as np
 import json
 from datetime import datetime, timedelta
+import json
 
 from flask import Flask, render_template, request
 from flask import Flask, render_template
@@ -93,7 +94,7 @@ def planetary_candidates_chart():
 def cameras_diagrams_chart():
     max_sol = 3650
     # random_sol = random.randint(1, max_sol)
-    random_sol = 2745
+    random_sol = 120
 
     url = f"https://api.nasa.gov/mars-photos/api/v1/rovers/curiosity/photos?sol={random_sol}&api_key={api_key}"
 
@@ -497,6 +498,28 @@ def constellations(constellation):
 
     return render_template('constellations.html', constellation=constellation)
 
+# strony planet
+@app.route('/mercury')
+def mercury():
+    return render_template('mercury.html')
+@app.route('/venus')
+def venus():
+    return render_template('venus.html')
+@app.route('/earth')
+def earth():
+    return render_template('Earth.html')
+@app.route('/mars')
+def mars():
+    return render_template('mars.html')
+@app.route('/jupiter')
+def jupiter():
+    return render_template('jupiter.html')
+@app.route('/saturn')
+def saturn():
+    return render_template('saturn.html')
+@app.route('/uranus')
+def uranus():
+    return render_template('uranus.html')
 
 if __name__ == "__main__":
     with app.app_context():
