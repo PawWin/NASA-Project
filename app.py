@@ -32,7 +32,7 @@ def base():
     return render_template('base.html')
 
 
-@app.route('/apod')
+@app.route('/apod', methods=['GET', 'POST'])
 def apod():
     start_day = datetime(1995, 6, 16)
     end_day = datetime.now()
