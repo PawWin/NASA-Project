@@ -516,6 +516,9 @@ def saturn():
 @app.route('/uranus')
 def uranus():
     return render_template('uranus.html')
+@app.route('/neptune')
+def neptune():
+    return render_template('Neptune.html')
 
 def login_required(f):
     @wraps(f)
