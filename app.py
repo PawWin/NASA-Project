@@ -423,6 +423,52 @@ def near_earth():
                            comparison_diagram=comparison_diagram)
 
 
+@app.route('/pick-constelation', methods=['GET', 'POST'])
+def pick_constellation():
+    constelation_id = {'Andromeda': 'and', 'Aquila': 'aql',
+                       'Aries': 'ari', 'Aquarius': 'aqr',
+                       'Canis Major': 'cmi', 'Cancer': 'cnc',
+                       'Capricorn': 'cap', 'Cassiopeia': 'cas',
+                       'Cygnus': 'cyg', 'Gemini': 'gem', 'Leo': 'leo',
+                       'Libra': 'lib', 'Lyra': 'lyr',
+                       'Orion': 'ori', 'Pisces': 'psc',
+                       'Sagittarius': 'sgr', 'Scorpion': 'sco',
+                       'Taurus': 'tau', 'Ursa Major': 'uma',
+                       'Ursa Minor': 'umi', 'Virgo': 'vir'}
+    if request.method == 'POST':
+        constellation = request.form.get('constellation')
+        return redirect(url_for('constellations', constellation=constellation_id[constellation]))
+    return render_template('pick-constellation.html')
+
+
+@app.route('/constellations')
+def constellations(constellation):
+    userpass = "b281ad5e-c956-4711-8ac6-0bbfb76a8b2b:847b1b172cbe4d8cd8829a449ad070291b7ae02c8f758f9336126428cf41c030f1229b0da20ef11e18705de4a80839ddd0f4f413f379ed63c2d3b908758b49c4a89254efe5e66a75b74f634f70f0ae0aefee602cd0e56adc41cbccad5746ccc0149119580909962d9eb143965e99c488"
+    authString = base64.b64encode(userpass.encode()).decode()
+
+    headers = {
+        'Authorization': f'Basic {authString}',
+        'Content-Type': 'application/json'
+    }
+    payload = json.dumps({
+        'style': 'navy',
+        'observer': {
+            'latitude': 12.775867,
+            'longitude': 23.39733,
+            'date': '2021-01-01',
+        },
+        'view': {
+            'type': 'constellation',
+            'parameters': {
+                'constellation': 'leo'
+            }
+        }
+    })
+    response = requests.post('https://api.astronomyapi.com/api/v2/studio/star-chart', headers=headers, data=payload)
+
+    return render_template('constellations.html', constellation=constellation)
+
+
 if __name__ == "__main__":
     with app.app_context():
         db.create_all()
