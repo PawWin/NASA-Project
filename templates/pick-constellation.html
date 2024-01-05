@@ -9,30 +9,9 @@
 
 {% block content %}
   <h2>Pick constealltion to display:</h2>
-    <form method="post">
-        <select name="constellation">
-            <option value="Andromeda">Andromeda</option>
-            <option value="Aquarius">Aquarius</option>
-            <option value="Aquila">Aquila</option>
-            <option value="Aries">Aries</option>
-            <option value="Cancer">Cancer</option>
-            <option value="Canis Major">Canis Major</option>
-            <option value="Cassiopeia">Cassiopeia</option>
-            <option value="Capricorn">Capricorn</option>
-            <option value="Cygnus">Cygnus</option>
-            <option value="Gemini">Gemini</option>
-            <option value="Leo">Leo</option>
-            <option value="libra">Libra</option>
-            <option value="Lyra">Lyra</option>
-            <option value="Orion">Orion</option>
-            <option value="Pisces">Pisces</option>
-            <option value="Sagittarius">Sagittarius</option>
-            <option value="Scorpius">Scorpius</option>
-            <option value="Taurus">Taurus</option>
-            <option value="Ursa major">Ursa Major</option>
-            <option value="Ursa minor">Ursa Minor</option>
-            <option value="Virgo">Virgo</option>
-        </select>
-        <input type="submit" value="Show constellation">
+    <form method=post name="test">
+        {{ form.hidden_tag()}}
+        {{ form.constellation(placeholder = "Constellation") }}
+        {{ form.submit()}}
     </form>
 {% endblock %}
