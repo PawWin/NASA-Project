@@ -12,6 +12,7 @@ from sqlalchemy.exc import IntegrityError
 from config import app, db, bcrypt, User
 from flask import Flask, render_template, request, redirect, url_for
 from flask_login import login_user, current_user, logout_user, login_required
+import sqlite3
 from sqlite3 import IntegrityError
 from sqlalchemy.exc import IntegrityError
 
@@ -523,7 +524,13 @@ def uranus():
 
 if __name__ == "__main__":
     with app.app_context():
-        db.create_all()
+        try:
+            sqlite3.connect('site', uri=True)
+            print('Database already exists')
+        except:
+            db.create_all()
+            print('Database created')
+
     app.run(debug=True)
 
 
