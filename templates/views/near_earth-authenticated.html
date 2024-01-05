@@ -1,0 +1,26 @@
+{% extends 'views/base-authenticated.html' %}
+
+{% block header %}
+  <h1>{% block title %}Near Earth Objects{% endblock %}</h1>
+{% endblock %}
+{% block icon %}
+  <link rel="icon" type="image/x-icon" href="../static/assets/chart_icon.svg">
+{% endblock %}
+
+
+{% block content %}
+    <div class="diagrams_container">
+        <div id="diagrams_container_left">
+            <h2>Objects Near Earth</h2>
+            <p><b>Potentially Hazardous Asteroids</b> (PHAs) are a group of asteroids that may pose some risk to Earth due to their orbits and proximity to our planet. The main criteria that define potentially hazardous asteroids include:
+<br><br>
+<b>Size</b>: Potentially hazardous asteroids typically have a diameter greater than 140 meters. Their greater mass may cause greater damage in the event of a collision with Earth.
+<br><br>
+<b>Orbit</b>: These asteroids have orbits that exceed certain values, which means they come close enough to Earth's orbit to pose a potential collision hazard.</p>
+        </div>
+        <div id="diagrams_container_right">
+            <img src="data:image/png;base64,{{ near_earth_data }}" alt="Planetary Candidates">
+        </div>
+    </div>
+{% endblock %}
+

@@ -1,0 +1,21 @@
+{% extends 'views/base-unauthenticated.html' %}
+
+{% block header %}
+  <h1>{% block title %}Asteroids{% endblock %}</h1>
+{% endblock %}
+{% block icon %}
+  <link rel="icon" type="image/x-icon" href="../static/assets/chart_icon.svg">
+{% endblock %}
+
+{% block content %}
+    <div class="diagrams_container">
+        <div id="diagrams_container_left">
+            <h2>Position of the planets</h2>
+            <p>In this diagram, we can observe the representation of the first four planets of our solar system. Each planet is depicted with its respective orbit, showcasing their positions in relation to the Sun and Earth. This visual representation provides a glimpse into the dynamic arrangement of Mercury, Venus, Earth, and Mars as they orbit our central star, the Sun</p>
+        </div>
+        <div id="diagrams_container_right">
+            <img src="data:image/png;base64,{{ asteroids_data }}" alt="Planetary Candidates">
+        </div>
+    </div>
+{% endblock %}
+
