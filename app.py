@@ -1,6 +1,7 @@
 import requests
 import random
 import numpy as np
+import json
 from datetime import datetime, timedelta
 
 from flask import Flask, render_template, request
@@ -171,11 +172,6 @@ def near_earth_objects_chart():
 
     return render_template('near-earth.html', near_earth_data=near_earth_data)
 
-
-
-@app.route('/asteroids')
-def display_asteroid_diagram():
-    obstime = parse_time('2021-07-07')
 
 @app.route('/planet-position')
 def planets_position_chart():
@@ -354,7 +350,7 @@ def world_map():
 
 @app.route('/near-earth-asteroids')
 def near_earth():
-    start_date = "2015-01-01"
+    start_date = "2015-09-01"
 
     start_date_obj = datetime.strptime(start_date, '%Y-%m-%d')
     end_date_obj = start_date_obj + timedelta(days=7)
@@ -391,15 +387,27 @@ def near_earth():
                 autopct='%1.1f%%', startangle=140)
         plt.title(f"Comparing the asteroid's diameter to Burj Khalifa's height")
         plt.axis('equal')
+        buffer = BytesIO()
+        plt.savefig(buffer, format="png")
+        buffer.seek(0)
+        comparison_diagram = base64.b64encode(buffer.read()).decode()
+        buffer.close()
     else:
-       """ object_to_scale = "fa solid fa-city fa-fade"
+        object_to_scale = "fa solid fa-city fa-fade"
         compared_object_data = ["Averaged sized city: Siemianowice", f"{example_city_area} km2"]
         scale = asteroid_area / example_city_area
         icon_size = round(scale * 10.0, 2)
         plt.figure(figsize=(6, 6))
-        plt.pie(sizes, labels=labels, autopct='%1.1f%%', startangle=140)
+        plt.pie([example_city_area, asteroid_area],
+                labels=['Siemianowice Slaskie', largest_hazardous_neo['name']],
+                autopct='%1.1f%%', startangle=140)
         plt.title(f"Comparing the asteroid's area to Averaged sized city: Siemianowice area")
-        plt.axis('equal')"""
+        plt.axis('equal')
+        buffer = BytesIO()
+        plt.savefig(buffer, format="png")
+        buffer.seek(0)
+        comparison_diagram = base64.b64encode(buffer.read()).decode()
+        buffer.close()
 
 
     neo_postprocess_data = {'name': largest_hazardous_neo['name'], 'area': round(asteroid_area,2),
@@ -412,7 +420,76 @@ def near_earth():
                            icon_size=icon_size,
                            object_to_scale=object_to_scale,
                            neo_postprocess_data=neo_postprocess_data,
-                           compared_object_data=compared_object_data,)
+                           compared_object_data=compared_object_data,
+                           comparison_diagram=comparison_diagram)
+
+
+@app.route('/pick-constelation', methods=['GET', 'POST'])
+def pick_constellation():
+    constellation_id = {'Andromeda': 'and', 'Aquila': 'aql',
+                       'Aries': 'ari', 'Aquarius': 'aqr',
+                       'Canis Major': 'cmi', 'Cancer': 'cnc',
+                       'Capricorn': 'cap', 'Cassiopeia': 'cas',
+                       'Cygnus': 'cyg', 'Gemini': 'gem', 'Leo': 'leo',
+                       'Libra': 'lib', 'Lyra': 'lyr',
+                       'Orion': 'ori', 'Pisces': 'psc',
+                       'Sagittarius': 'sgr', 'Scorpius': 'sco',
+                       'Taurus': 'tau', 'Ursa Major': 'uma',
+                       'Ursa Minor': 'umi', 'Virgo': 'vir'}
+    if request.method == 'POST':
+        constellation = request.form.get('constellation')
+        return redirect(url_for('constellations', constellation=constellation_id[constellation]))
+    return render_template('pick-constellation.html')
+
+
+@app.route('/constellations')
+def constellations(constellation):
+    constellation_description = {'Andromeda': 'Andromeda is a constellation rich in Greek mythology and can be best observed during autumn nights. The name Andromeda refers to the princess from Greek mythology, known for her beauty. According to the myth, Andromeda was chained to a rock as a sacrifice to a sea monster, but was eventually saved by the hero Perseus. The constellation is often depicted as a woman with outstretched arms, seemingly in a pose of distress. Its most notable feature is the Andromeda Galaxy, the closest spiral galaxy to the Milky Way, visible to the naked eye in dark sky conditions. To locate the Andromeda Galaxy, look for a faint, elongated smudge near the constellations',
+                                 'Aquila': 'Aquila was the eagle that in Greek mythology actually bore Ganymede (Aquarius) up to Mt. Olympus. The eagle was also the thunderbolt carrier for Zeus. This constellation lies in the Milky Way band, and its most prominent star is Altair, which is actually one of the closest naked eye stars to the earth. The top portion of Aquila forms a shallow inverted “V,” with Altair nearly the point. This represents the head and wings of the eagle. A line then descends from Altair, which forms the body of the eagle',
+                                 'Aries': 'While many constellations have gone through various iterations of mythological stories, Aries has always been the ram. This constellation is one of 12 constellations that form the zodiac — the constellations that straddle the sun’s path across the sky (known in scienctific terms as the ecliptic). In ancient times, that gave the constellations of the zodiac special significance. In Greek mythology, Aries is the ram whose fleece became the Golden Fleece. The Golden Fleece is a symbol of kingship and authority, and plays a significant role in the tale of Jason and the Argonauts. Jason is sent to find the fleece in order to rightfully claim his throne as king, and with some help from Medea (his future wife), finds his prize. It’s one of the oldest stories in antiquity, and was current in Homer’s time.',
+                                 'Aquarius': 'While one of the biggest, most famous, and oldest named constellations, Aquarius is faint and often hard to find/see. In Greek mythology, Aquarius represented Ganymede, a very handsome young man. Zeus recognized the lad’s good looks, and invited Ganymede to Mt. Olympus to be the cupbearer of the gods. For his service he was granted eternal youth, as well as a place in the night sky.',
+                                 'Canis Major': 'Canis Major represents the famed Greek dog Laelaps. There are a few origin stories, but the common theme is that he was so fast he was elevated to the skies by Zeus. Laelaps is also considered to be one of Orion’s hunting dogs, trailing behind him in the night sky in pursuit of Taurus the bull. Canis Major is notable because it contains the brightest star in the night sky, Sirius. Tradition notes that the first appearance of Canis Major in the dawn sky comes in late summer, ushering in the dog days of the season. In the night sky, it almost looks a stick figure, with Sirius at the head, and another bright star, Adhara, at its rear end',
+                                 'Cancer': 'Cancer, the Crab, is a small and faint constellation located between Gemini and Leo. In Greek mythology, Cancer is associated with the crab that Hera sent to distract Hercules during his battle with the Hydra. Despite its modest appearance, Cancer is home to a rich cluster of stars known as the Beehive Cluster, or Messier 44. This cluster is a group of young stars surrounded by a faint nebula, best observed through binoculars or a small telescope. Cancer is best seen during late winter and early spring, when it climbs high in the night sky.',
+                                 'Capricorn': 'Capricornus, often simply referred to as Capricorn, is one of the oldest recognized constellations, dating back to ancient Mesopotamia. In Greek mythology, Capricorn is associated with the god Pan, who transformed into a fish-tailed goat to escape the monster Typhon. Capricorn is depicted as a creature with the upper body of a goat and the tail of a fish. Its brightest star, Deneb Algedi, marks the goats tail. Capricorn is best viewed in late summer and early autumn, when it appears low on the southern horizon.',
+                                 'Cassiopeia': 'Cassiopeia, in Greek mythology, was a vain queen who often boasted about her beauty. She was the mother of Princess Andromeda, and in contrast to other figures being placed in the sky in honor, Cassiopeia was forced to the heavenly realms as punishment. As the story goes, she boasted that her beauty (or her daughter’s, depending on the story) was greater than that of the sea nymphs. This was quite an offense, and she was banned to the sky for all to gawk at.',
+                                 'Cygnus': 'Multiple personas take on the form of the swan in Greek mythology. At one point Zeus morphed into a swan to seduce Leda, mother of both Gemini and Helen of Troy. Another tale says that Orpheus was murdered and then placed into the sky as a swan next to his lyre (the constellation Lyra, also in the drawing above). The constellation may also have gotten its name from the tale of Phaethon and Cycnus. Phaethon was the son of Helios (the sun god), and took his father’s sun chariot for a ride one day. Phaethon couldn’t control the reins, however, and Zeus had to shoot down the chariot with Phaethon in it, killing him. Phaethon’s brother, Cycnus (now spelled Cygnus), spent many days grieving and collecting the bones, which so touched the gods that they turned him into a swan and gave him a place in the sky.',
+                                 'Gemini': 'Gemini represents the twins Castor and Pollux. While the twins’ mother was Leda, Castor’s father was the mortal king of Sparta, while Pollux’s father was King Zeus (He seduced Leda in the form of a swan, remember? These stories tend to all tie together!). When Castor was killed, the immortal Pollux begged Zeus to give Castor immortality, which he did by placing the brothers in the night sky for all time. Castor and Pollux also happen to be the names of the brightest stars in the constellation, and represent the heads of the twins. Each star then has a line forming their bodies, giving the constellation a rough “U” shape. The twins sit next to Orion, making them fairly easy to find in winter.',
+                                 'Leo': 'Leo has been a great lion in the night sky across almost all mythological traditions. In Greek lore, Leo is the monstrous lion that was killed by Hercules as part of his twelve labors. The lion could not be killed by mortal weapons, as its fur was impervious to attack, and its claws sharper than any human sword. Eventually Hercules tracked him down and strangled the great beast, albeit losing a finger in the process. Because Leo actually looks somewhat like its namesake, it is the easiest constellation in the zodiac to find. A distinctive backwards question mark forms the head and chest, then moves to the left to form a triangle and the lion’s rear end. Regulus is Leo’s brightest star, and sits in the bottom right of the constellation, representing the lion’s front right leg.',
+                                 'Libra': 'Libra, the Scales, is a relatively faint constellation located between Virgo and Scorpius. In Greek mythology, Libra is associated with the goddess Themis, who is often depicted holding the scales of justice. Libra is best viewed in the evening sky during late spring and early summer. Its most recognizable feature is the nearby bright star Spica in the constellation Virgo. Libras faint stars make it a challenging constellation to spot, but its association with themes of balance and justice add a layer of intrigue',
+                                 'Lyra': 'Lyra is associated with the myth of Orpheus the great musician. Orpheus was given the harp by Apollo, and it’s said that his music was more beautiful than that of any mortal man. His music could soothe anger and bring joy to weary hearts. Wandering the land in depression after his wife died, he was killed and his lyre (harp) was thrown into a river. Zeus sent an eagle to retrieve the lyre, and it was then placed in the night sky. Lyra sort of forms a lopsided square with a tail to its brightest star, Vega, which is one of the brightest stars in the sky. It is small, and almost directly overhead in the summer months, but the bright Vega makes it fairly easy to find.',
+                                 'Orion': 'Orion is one of the largest and most recognizable of the constellations. It is viewable around the world, and has been mentioned by Homer, Virgil, and even the Bible, making it perhaps the most famous constellation. Orion was a massive, supernaturally gifted hunter who was the son of Poseidon. It was said he regularly hunted with Artemis (Goddess of the Hunt) on the island of Crete, and that he was killed either by her bow, or by the sting of the great scorpion who later became the constellation Scorpius.',
+                                 'Pisces': 'The two fish of the sky represent Aphrodite and her son Eros, who turned themselves into fish and tied themselves together with rope in order to escape Typhon, the largest and most vile monster in all of Greek mythology.It’s not likely you’ll find Pisces in the middle of a city, as none of its individual stars are really worth noting or particularly bright. It forms a large “V” with the right fish forming a small “O” on the end, and the left fish forming a small triangle on the end',
+                                 'Sagittarius': 'Sagittarius, the Archer, is a prominent constellation in the southern sky, best viewed during the summer months. In Greek mythology, Sagittarius is associated with the centaur Chiron, known for his wisdom and skill in archery. The constellation is depicted as a centaur drawing a bow, aiming an arrow towards the heart of the nearby Scorpius constellation. Sagittarius is home to the center of our Milky Way galaxy, making it a region rich in star clusters, nebulae, and other celestial wonders. Its most notable feature is the Teapot asterism, a group of stars that resemble a teapot when connected by imaginary lines.',
+                                 'Scorpius': 'There are a variety of myths associated with the scorpion, almost all of them involving Orion the hunter. Orion once boasted that he could kill all the animals on the earth. He encountered the scorpion, and after a long, fierce fight, Orion was defeated. It was such a hard-fought battle that it caught the eye of Zeus, and the scorpion was raised to the night sky for all eternity. With many bright stars, Scorpius is fairly easy to find in the night sky. Antares, the brightest star in the constellation, is said to be the heart of the scorpion. That will be the easiest star to locate, but is sometimes confused with Mars because of its red-orange coloring. To the right of the heart are 3-5 stars that form the head. To the left are a long line of stars that curve into a sideways or upside-down question mark.',
+                                 'Taurus': 'Taurus is a large and prominent fixture in the winter sky. As one of the oldest recognized constellations, it has mythologies dating back to the early Bronze Age. There are several Greek myths involving Taurus. Two of them include Zeus, who either disguised himself as a bull or disguised his mistress as a bull in multiple escapades of infidelity. Another myth has the bull being the 7th labor of Hercules after the beast wreaked havoc in the countryside.',
+                                 'Ursa Major': 'The Big Dipper is popularly thought of as a constellation itself, but is in fact an asterism within the constellation of Ursa Major. It is said to be the most universally recognized star pattern, partially because it’s always visible in the northern hemisphere. It has great significance in the mythologies of multiple cultures around the world. The Greek myth of Ursa Major also tells the story of Ursa Minor (below). Zeus was smitten for a young nymph named Callisto. Hera, Zeus’s wife, was jealous, and transformed Callisto into a bear. While in animal form, Callisto encountered her son Arcas. Being the man that he was, he was inclined to shoot the bear, but Zeus wouldn’t let that happen, and so turned Arcas into a bear as well, and placed mother (Ursa Major) and son (Ursa Minor) permanently in the night sky.',
+                                 'Ursa Minor': 'Ursa Minor is famous for containing Polaris, the North Star. Many people erroneously think that the North Star is directly over their heads, but that’s only true at the North Pole. For most people in the Northern Hemisphere, it will be dipped into the night sky. Ursa Minor is better known as the Little Dipper. It’s visualized as a baby bear, with an unusually long tail. It can be distinguished from the Big Dipper not only by size, but by the emphasized curvature of the tail. When you’ve found the North Star at the end of the bear’s tail using the Big Dipper, it’s then easy to identify the rest of the constellation.',
+                                 'Virgo': 'Virgo, often referred to as the Maiden, is one of the largest constellations in the sky and is best viewed in the spring months. Its origins trace back to ancient Babylonian and Greek civilizations, where it was associated with various goddesses and figures. In Greek mythology, Virgo is often linked to the goddess of justice, Dike, or the harvest goddess, Demeter. One prominent myth tells the tale of Demeters daughter, Persephone, who was abducted by Hades. During her search for Persephone, Demeters grief caused crops to wither and die, leading to famine. As a result, Virgo is sometimes associated with the changing of the seasons and the cycle of growth and harvest. Virgo is distinguished by its bright star Spica, one of the brightest stars in the night sky. Spica is often referred to as the "ear of wheat" that the Maiden holds, symbolizing fertility and abundanc.'
+                                 }
+    userpass = "b281ad5e-c956-4711-8ac6-0bbfb76a8b2b:847b1b172cbe4d8cd8829a449ad070291b7ae02c8f758f9336126428cf41c030f1229b0da20ef11e18705de4a80839ddd0f4f413f379ed63c2d3b908758b49c4a89254efe5e66a75b74f634f70f0ae0aefee602cd0e56adc41cbccad5746ccc0149119580909962d9eb143965e99c488"
+    authString = base64.b64encode(userpass.encode()).decode()
+
+    headers = {
+        'Authorization': f'Basic {authString}',
+        'Content-Type': 'application/json'
+    }
+    payload = json.dumps({
+        'style': 'navy',
+        'observer': {
+            'latitude': 12.775867,
+            'longitude': 23.39733,
+            'date': '2021-01-01',
+        },
+        'view': {
+            'type': 'constellation',
+            'parameters': {
+                'constellation': 'leo'
+            }
+        }
+    })
+    response = requests.post('https://api.astronomyapi.com/api/v2/studio/star-chart', headers=headers, data=payload)
+
+    return render_template('constellations.html', constellation=constellation)
 
 
 if __name__ == "__main__":
