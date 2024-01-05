@@ -274,8 +274,8 @@ def planet_masses_chart():
     return render_template('planet-masses.html', planets_masses_data=planets_masses_data)
 
   
-@app.route('/register', methods=['GET', 'POST'])
-def register():
+@app.route('/login', methods=['GET', 'POST'])
+def login():
     # Creating a new user when the register form validates
     if forms.RegistrationForm().validate_on_submit():
         # Creating a new user in the database
@@ -292,20 +292,20 @@ def register():
         if user and bcrypt.check_password_hash(user.password, forms.RegistrationForm().password.data):
             login_user(user)
             # Taking the user to the authenticated side of the site
-            return redirect(url_for('register'))
+            return redirect(url_for('login'))
 
     if forms.LoginForm().validate_on_submit():
         user = User.query.filter_by(email=forms.LoginForm().email.data).first()
         if user and bcrypt.check_password_hash(user.password, forms.LoginForm().password.data):
             login_user(user, remember=forms.LoginForm().remember.data)
 
-            return redirect(url_for('register'))
+            return redirect(url_for('login'))
 
     if (request.method == "POST") & (request.form.get('post_header') == 'log out'):
         logout_user()
-        return redirect(url_for('register'))
+        return redirect(url_for('login'))
 
-    return render_template('register.html',
+    return render_template('login.html',
                            login_form=forms.LoginForm(),
                            register_form=forms.RegistrationForm())
 
@@ -514,6 +514,14 @@ def saturn():
 @app.route('/uranus')
 def uranus():
     return render_template('uranus.html')
+@app.route('/neptune')
+def neptune():
+    return render_template('neptune.html')
+
+@app.route('/gallery', methods=['GET', 'POST'])
+@login_required
+def gallery():
+    return render_template('gallery.html')
 
 if __name__ == "__main__":
     with app.app_context():
