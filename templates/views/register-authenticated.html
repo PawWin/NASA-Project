@@ -1,3 +1,10 @@
+{% extends 'views/base-authenticated.html' %}
+
+{% block header %}
+  <h1>{% block title %}Register{% endblock %}</h1>
+{% endblock %}
+
+{% block content %}
 <p>Hello, authenticated user!</p>
 
 <form method="post" class="register">
@@ -5,3 +12,5 @@
   <input type="hidden" name="post_header" value="log out">
   <input type="submit"  value="Logout">
 </form>
+
+{% endblock %}

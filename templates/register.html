@@ -1,9 +1,3 @@
-{% extends 'views/base-unauthenticated.html' %}
-
-{% block header %}
-  <h1>{% block title %}Register{% endblock %}</h1>
-{% endblock %}
-
 {% block content %}
       {% if current_user.is_authenticated %}
         {% include 'views/register-authenticated.html' %}
