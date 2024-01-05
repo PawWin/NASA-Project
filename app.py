@@ -88,7 +88,7 @@ def planetary_candidates_chart():
 def cameras_diagrams_chart():
     max_sol = 3650
     # random_sol = random.randint(1, max_sol)
-    random_sol = 2745
+    random_sol = 120
 
     url = f"https://api.nasa.gov/mars-photos/api/v1/rovers/curiosity/photos?sol={random_sol}&api_key={api_key}"
 
