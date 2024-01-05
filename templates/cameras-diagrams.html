@@ -1,34 +1,7 @@
-{% extends 'base.html' %}
-
-{% block header %}
-  <h1>{% block title %}Cameras Diagrams{% endblock %}</h1>
-{% endblock %}
-{% block icon %}
-  <link rel="icon" type="image/x-icon" href="../static/assets/chart_icon.svg">
-{% endblock %}
-
 {% block content %}
-    <div class="diagrams_container">
-        <div id="diagrams_container_left">
-            <h2>Cameras Diagrams</h2>
-            <p>Chart of the number of photos taken by cameras used by Mars rovers,
-                here are characteristics of some of them:
-<br><br>
-    1. <b>FHAZ (Front Hazard Avoidance Camera)</b>: is a pair of cameras positioned at the front of the rover, used for navigation and obstacle avoidance. These cameras aid in identifying potential hazards on the rover's path.
-<br><br>
-    2. <b>RHAZ (Rear Hazard Avoidance Camera)</b>: consists of cameras located at the back of the rover, serving a similar purpose to FHAZ but directed towards the rear of the rover. They assist in avoiding obstacles during rover reversals.
-<br><br>
-    3. <b>MAST (Mast Camera)</b>: is an advanced set of cameras mounted on the rover's mast, which can be rotated. These cameras provide high-quality landscape images and are used for scientific purposes as well as for rover movement planning.
-<br><br>
-    4. <b>MAHLI (Mars Hand Lens Imager)</b>: is a camera mounted on the rover's robotic arm, capable of approaching the surface and capturing very close-up images. It is used for the analysis of mineralogy and rock structure.
-<br><br>
-    5. <b>NAVCAM (Navigation Camera)</b>: is a set of cameras used for navigation and determining the rover's location on the surface of Mars. They assist in determining the position and orientation of the rover.
-                <br><br>
-</p>
-        </div>
-        <div id="diagrams_container_right">
-            <img src="data:image/png;base64,{{ cameras_data }}" alt="Planetary Candidates">
-        </div>
-    </div>
+      {% if current_user.is_authenticated %}
+        {% include 'views/cameras_diagram-authenticated.html' %}
+      {% else %}
+        {% include 'views/cameras_diagram-unauthenticated.html' %}
+      {% endif %}
 {% endblock %}
-

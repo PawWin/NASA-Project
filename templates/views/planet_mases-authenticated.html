@@ -1,0 +1,21 @@
+{% extends 'views/base-authenticated.html' %}
+
+{% block header %}
+  <h1>{% block title %}Planet Masses{% endblock %}</h1>
+{% endblock %}
+{% block icon %}
+  <link rel="icon" type="image/x-icon" href="../static/assets/chart_icon.svg">
+{% endblock %}
+
+{% block content %}
+    <div class="diagrams_container">
+        <div id="diagrams_container_left">
+            <h2>Planet Masses</h2>
+            <p>Looking at the planetary mass chart, we can see fascinating variations in the sizes of the planets in our solar system. From gigantic gas giants like Jupiter and Saturn, whose masses are tens of thousands of times greater than the mass of Earth, to smaller, rocky planets like Mars and Venus. It is the variations in mass that determine the differences in the structure, atmosphere and overall character of each planet. Additionally, the chart can highlight the uniqueness of Earth as the only planet known to support life, making the planet's mass a key element in understanding the diversity of the planetary world.</p>
+        </div>
+        <div id="diagrams_container_right">
+            <img src="data:image/png;base64,{{ planets_masses_data }}" alt="Planetary Candidates">
+        </div>
+    </div>
+{% endblock %}
+

@@ -1,22 +1,7 @@
-{% extends 'base.html' %}
-
-{% block header %}
-  <h1>{% block title %}Daily Fun Fact{% endblock %}</h1>
-{% endblock %}
-{% block icon %}
-  <link rel="icon" type="image/x-icon" href="../static/assets/daily_fact.svg">
-{% endblock %}
-
 {% block content %}
-    <div class="apod">
-        <div id="apod_left">
-            <img src="{{ hd_url }}" alt="Astronomy Picture of the Day">
-        </div>
-        <div id="apod_right">
-            <h2>{{ title }}</h2>
-            <p>{{ explanation }}</p>
-            <button onclick="window.location.href=`{{ url_for('apod')}}`" class="btn-refresh">Refresh</button>
-        </div>
-    </div>
+      {% if current_user.is_authenticated %}
+        {% include 'views/apod-authenticated.html' %}
+      {% else %}
+        {% include 'views/apod-unauthenticated.html' %}
+      {% endif %}
 {% endblock %}
-
