@@ -10,6 +10,7 @@ from flask import Flask, render_template
 from config import app, db, bcrypt, User, Image
 from flask import Flask, render_template, request, redirect, url_for
 from flask_login import login_user, current_user, logout_user, login_required
+from sqlalchemy.exc import IntegrityError
 
 import matplotlib.pyplot as plt
 import matplotlib as mpl
@@ -290,9 +291,11 @@ def login():
         user = User(username=register_form.username.data,
                     email=register_form.email.data,
                     password=hashed_password)
-
-        db.session.add(user)
-        db.session.commit()
+        try:
+            db.session.add(user)
+            db.session.commit()
+        except IntegrityError:
+            return redirect(url_for('login'))
         # Signing in the user after creating them
         user = User.query.filter_by(email=forms.RegistrationForm().email.data).first()
         if user and bcrypt.check_password_hash(user.password, forms.RegistrationForm().password.data):
