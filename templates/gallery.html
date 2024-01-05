@@ -1,10 +1,12 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
-kurwa
-</body>
-</html>
+{% extends 'views/base-authenticated.html' %}
+
+{% block header %}
+  <h1>{% block title %}Galeria{% endblock %}</h1>
+{% endblock %}
+
+{% block content %}
+<p><b>Tu Będzie galeria Zdjęć</b></p>
+
+
+
+{% endblock %}
