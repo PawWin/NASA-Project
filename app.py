@@ -494,6 +494,28 @@ def constellations(constellation):
 
     return render_template('constellations.html', constellation=constellation)
 
+# strony planet
+@app.route('/mercury')
+def mercury():
+    return render_template('mercury.html')
+@app.route('/venus')
+def venus():
+    return render_template('venus.html')
+@app.route('/earth')
+def earth():
+    return render_template('Earth.html')
+@app.route('/mars')
+def mars():
+    return render_template('mars.html')
+@app.route('/jupiter')
+def jupiter():
+    return render_template('jupiter.html')
+@app.route('/saturn')
+def saturn():
+    return render_template('saturn.html')
+@app.route('/uranus')
+def uranus():
+    return render_template('uranus.html')
 
 def login_required(f):
     @wraps(f)
