@@ -1,0 +1,52 @@
+body {
+    font-size: 20px;
+    line-height: 30px;
+}
+
+.planets-container{
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    margin: 0 auto;
+    width: 100%;
+    height: 100%;
+    flex: 1 0 auto;
+}
+.planets-container h1{
+    font-size: 40px;
+}
+.planets-container p, li{
+    font-size: 20px;
+}
+
+.planets-1{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin: 0 auto;
+    width: 50%;
+    height: 50%;
+    flex: 1 0 auto;
+}
+.planets-2{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin: 0 auto;
+    width: 50%;
+    height: 50%;
+    flex: 1 0 auto;
+}
+.planets-3{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin: 0 auto;
+    width: 100%;
+    height: 50%;
+    flex: 1 0 auto;
+}

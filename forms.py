@@ -16,6 +16,11 @@ class LoginForm(FlaskForm):
     remember = BooleanField('Remember Me')
     submit = SubmitField('Login')
 
+
 class PickConstellationForm(FlaskForm):
     constellation = SelectField(u'Reports', choices=[('test1', 'test')])
     submit = SubmitField('Submit')
+
+class ImageForm(FlaskForm):
+    submit = SubmitField('Submit')
+

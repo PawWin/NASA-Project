@@ -7,7 +7,7 @@ import json
 
 from flask import Flask, render_template, request
 from flask import Flask, render_template
-from config import app, db, bcrypt, User
+from config import app, db, bcrypt, User, Image
 from flask import Flask, render_template, request, redirect, url_for
 from flask_login import login_user, current_user, logout_user, login_required
 
@@ -32,7 +32,7 @@ def base():
     return render_template('base.html')
 
 
-@app.route('/apod')
+@app.route('/apod', methods=['GET', 'POST'])
 def apod():
     start_day = datetime(1995, 6, 16)
     end_day = datetime.now()
@@ -47,7 +47,13 @@ def apod():
     title = apod_data['title']
     explanation = apod_data['explanation']
     hd_url = apod_data['hdurl']
-    return render_template('apod.html', title=title, explanation=explanation, hd_url=hd_url)
+    if forms.ImageForm().validate_on_submit():
+        image_form = forms.ImageForm()
+        image_link = hd_url
+        image = Image(user_id=current_user.id, image_link=image_link)
+        db.session.add(image)
+        db.session.commit()
+    return render_template('apod.html', title=title, explanation=explanation, hd_url=hd_url, image_form=forms.ImageForm())
 
 
 @app.route('/planetary-candidates')
