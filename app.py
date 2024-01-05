@@ -524,13 +524,7 @@ def uranus():
 
 if __name__ == "__main__":
     with app.app_context():
-        try:
-            sqlite3.connect('site', uri=True)
-            print('Database already exists')
-        except:
-            db.create_all()
-            print('Database created')
-
+        db.create_all()
     app.run(debug=True)
 
 

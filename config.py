@@ -3,8 +3,12 @@ from flask_login import UserMixin, current_user, login_manager
 from flask_login import LoginManager
 from flask_sqlalchemy import SQLAlchemy
 import os
+import sqlite3
 from flask_wtf.csrf import CSRFProtect
 from flask_bcrypt import Bcrypt
+from sqlalchemy import create_engine
+from sqlalchemy import create_engine
+from sqlalchemy.exc import OperationalError
 
 # Making an isntance of the Flask Class (THis will get passed to app.py)
 app = Flask(__name__,  template_folder='./templates')
@@ -27,6 +31,7 @@ def load_user(user_id):
 # Database config
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///site.db'
 db = SQLAlchemy(app)
+
 
 # DataBase object configuration
 class User(db.Model, UserMixin):
