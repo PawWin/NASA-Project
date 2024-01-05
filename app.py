@@ -53,7 +53,7 @@ def apod():
         image = Image(user_id=current_user.id, image_link=image_link)
         db.session.add(image)
         db.session.commit()
-    return render_template('apod.html', title=title, explanation=explanation, hd_url=hd_url)
+    return render_template('apod.html', title=title, explanation=explanation, hd_url=hd_url, image_form=forms.ImageForm())
 
 
 @app.route('/planetary-candidates')
