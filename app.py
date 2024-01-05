@@ -1,3 +1,5 @@
+from functools import wraps
+
 import requests
 import random
 import numpy as np
@@ -8,7 +10,7 @@ import json
 from flask import Flask, render_template, request
 from flask import Flask, render_template
 from config import app, db, bcrypt, User
-from flask import Flask, render_template, request, redirect, url_for
+from flask import Flask, render_template, request, redirect, url_for, session
 from flask_login import login_user, current_user, logout_user, login_required
 
 import matplotlib.pyplot as plt
@@ -493,6 +495,17 @@ def constellations(constellation):
     return render_template('constellations.html', constellation=constellation)
 
 
+def login_required(f):
+    @wraps(f)
+    def decorated_function(*args, **kwargs):
+        if session.get('username') is None or session.get('if_logged') is None:
+            return redirect('/register',code=302)
+        return f(*args, **kwargs)
+    return decorated_function
+@app.route('/gallery')
+@login_required
+def gallery():
+    return render_template('gallery.html')
 if __name__ == "__main__":
     with app.app_context():
         db.create_all()
