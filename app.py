@@ -2,6 +2,7 @@ import requests
 import random
 import numpy as np
 from datetime import datetime, timedelta
+import json
 
 from flask import Flask, render_template, request
 from flask import Flask, render_template
@@ -425,7 +426,7 @@ def near_earth():
 
 @app.route('/pick-constelation', methods=['GET', 'POST'])
 def pick_constellation():
-    constelation_id = {'Andromeda': 'and', 'Aquila': 'aql',
+    constellation_id = {'Andromeda': 'and', 'Aquila': 'aql',
                        'Aries': 'ari', 'Aquarius': 'aqr',
                        'Canis Major': 'cmi', 'Cancer': 'cnc',
                        'Capricorn': 'cap', 'Cassiopeia': 'cas',
