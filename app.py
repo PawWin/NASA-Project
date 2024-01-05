@@ -3,6 +3,7 @@ import random
 import numpy as np
 import json
 from datetime import datetime, timedelta
+import json
 
 from flask import Flask, render_template, request
 from flask import Flask, render_template
@@ -89,7 +90,7 @@ def planetary_candidates_chart():
 def cameras_diagrams_chart():
     max_sol = 3650
     # random_sol = random.randint(1, max_sol)
-    random_sol = 2745
+    random_sol = 120
 
     url = f"https://api.nasa.gov/mars-photos/api/v1/rovers/curiosity/photos?sol={random_sol}&api_key={api_key}"
 
@@ -273,8 +274,8 @@ def planet_masses_chart():
     return render_template('planet-masses.html', planets_masses_data=planets_masses_data)
 
   
-@app.route('/register', methods=['GET', 'POST'])
-def register():
+@app.route('/login', methods=['GET', 'POST'])
+def login():
     # Creating a new user when the register form validates
     if forms.RegistrationForm().validate_on_submit():
         # Creating a new user in the database
@@ -291,20 +292,20 @@ def register():
         if user and bcrypt.check_password_hash(user.password, forms.RegistrationForm().password.data):
             login_user(user)
             # Taking the user to the authenticated side of the site
-            return redirect(url_for('register'))
+            return redirect(url_for('login'))
 
     if forms.LoginForm().validate_on_submit():
         user = User.query.filter_by(email=forms.LoginForm().email.data).first()
         if user and bcrypt.check_password_hash(user.password, forms.LoginForm().password.data):
             login_user(user, remember=forms.LoginForm().remember.data)
 
-            return redirect(url_for('register'))
+            return redirect(url_for('login'))
 
     if (request.method == "POST") & (request.form.get('post_header') == 'log out'):
         logout_user()
-        return redirect(url_for('register'))
+        return redirect(url_for('login'))
 
-    return render_template('register.html',
+    return render_template('login.html',
                            login_form=forms.LoginForm(),
                            register_form=forms.RegistrationForm())
 
@@ -491,6 +492,36 @@ def constellations(constellation):
 
     return render_template('constellations.html', constellation=constellation)
 
+# strony planet
+@app.route('/mercury')
+def mercury():
+    return render_template('mercury.html')
+@app.route('/venus')
+def venus():
+    return render_template('venus.html')
+@app.route('/earth')
+def earth():
+    return render_template('Earth.html')
+@app.route('/mars')
+def mars():
+    return render_template('mars.html')
+@app.route('/jupiter')
+def jupiter():
+    return render_template('jupiter.html')
+@app.route('/saturn')
+def saturn():
+    return render_template('saturn.html')
+@app.route('/uranus')
+def uranus():
+    return render_template('uranus.html')
+@app.route('/neptune')
+def neptune():
+    return render_template('neptune.html')
+
+@app.route('/gallery', methods=['GET', 'POST'])
+@login_required
+def gallery():
+    return render_template('gallery.html')
 
 if __name__ == "__main__":
     with app.app_context():

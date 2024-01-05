@@ -114,33 +114,33 @@
                       <span class="dropdown-link-title">Browse Categories</span>
                     </li>
                     <li role="menuitem">
-                      <a class="dropdown-link" href="#mercury">Mercury</a>
+                      <a class="dropdown-link" href="{{ url_for('mercury')}}">Mercury</a>
                     </li>
                     <li role="menuitem">
-                      <a class="dropdown-link" href="#venus">Venus</a>
+                      <a class="dropdown-link" href="{{ url_for('venus')}}">Venus</a>
                     </li>
                     <li role="menuitem">
-                      <a class="dropdown-link" href="#earth">Earth</a>
+                      <a class="dropdown-link" href="{{ url_for('earth')}}">Earth</a>
                     </li>
                     <li role="menuitem">
-                      <a class="dropdown-link" href="#mars">Mars</a>
+                      <a class="dropdown-link" href="{{ url_for('mars')}}">Mars</a>
                     </li>
                     <li role="menuitem">
-                      <a class="dropdown-link" href="#jupiter">Jupiter</a>
+                      <a class="dropdown-link" href="{{ url_for('jupiter')}}">Jupiter</a>
                     </li>
                     <li role="menuitem">
-                      <a class="dropdown-link" href="#saturn">Saturn</a>
+                      <a class="dropdown-link" href="{{ url_for('saturn')}}">Saturn</a>
                     </li>
                     <li role="menuitem">
-                      <a class="dropdown-link" href="#uranus">Uranus</a>
+                      <a class="dropdown-link" href="{{ url_for('uranus')}}">Uranus</a>
                     </li>
                     <li role="menuitem">
-                      <a class="dropdown-link" href="#neptune">Neptune</a>
+                      <a class="dropdown-link" href="{{ url_for('neptune')}}">Neptune</a>
                     </li>
                   </ul>
                 </div>
               </li>
-              <li><a class="nav-link" href="/">Gallery</a></li>
+              <li><a class="nav-link" href="{{ url_for('gallery')}}">Gallery</a></li>
               <li><a class="nav-link" href="/">About</a></li>
             </ul>
           </nav>
@@ -151,7 +151,7 @@
               <input type="search" name="search" placeholder="Search" />
               <i class="bx bx-search" aria-hidden="true"></i>
             </form>
-            <a href="{{ url_for('register')}}"><img src="../static/assets/user-circle.svg" /></a>
+            <a href="{{ url_for('login')}}"><img src="../static/assets/user-circle.svg" /></a>
           </div>
 
           <button id="hamburger" aria-label="hamburger" aria-haspopup="true" aria-expanded="false">

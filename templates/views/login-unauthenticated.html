@@ -1,3 +1,10 @@
+{% extends 'views/base-unauthenticated.html' %}
+
+{% block header %}
+  <h1>{% block title %}Login and Register{% endblock %}</h1>
+{% endblock %}
+
+{% block content %}
 <form method="POST" action="" class="register">
   {{ register_form.hidden_tag() }}
     {{ register_form.username( placeholder = "Username") }}
@@ -14,3 +21,7 @@
     {{ login_form.remember(placeholder = "Remember Me")}}
     {{ login_form.submit() }}
 </form>
+
+{% endblock %}
+
+
