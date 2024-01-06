@@ -10,6 +10,7 @@ from flask import Flask, render_template
 from config import app, db, bcrypt, User, Image
 from flask import Flask, render_template, request, redirect, url_for
 from flask_login import login_user, current_user, logout_user, login_required
+from sqlalchemy.exc import IntegrityError
 
 import matplotlib.pyplot as plt
 import matplotlib as mpl
@@ -290,9 +291,11 @@ def login():
         user = User(username=register_form.username.data,
                     email=register_form.email.data,
                     password=hashed_password)
-
-        db.session.add(user)
-        db.session.commit()
+        try:
+            db.session.add(user)
+            db.session.commit()
+        except IntegrityError:
+            return redirect(url_for('login'))
         # Signing in the user after creating them
         user = User.query.filter_by(email=forms.RegistrationForm().email.data).first()
         if user and bcrypt.check_password_hash(user.password, forms.RegistrationForm().password.data):
@@ -433,23 +436,15 @@ def near_earth():
 
 @app.route('/pick-constelation', methods=['GET', 'POST'])
 def pick_constellation():
-    constellation_id = {'Andromeda': 'and', 'Aquila': 'aql',
-                       'Aries': 'ari', 'Aquarius': 'aqr',
-                       'Canis Major': 'cmi', 'Cancer': 'cnc',
-                       'Capricorn': 'cap', 'Cassiopeia': 'cas',
-                       'Cygnus': 'cyg', 'Gemini': 'gem', 'Leo': 'leo',
-                       'Libra': 'lib', 'Lyra': 'lyr',
-                       'Orion': 'ori', 'Pisces': 'psc',
-                       'Sagittarius': 'sgr', 'Scorpius': 'sco',
-                       'Taurus': 'tau', 'Ursa Major': 'uma',
-                       'Ursa Minor': 'umi', 'Virgo': 'vir'}
+    form = forms.PickConstellationForm()
     if request.method == 'POST':
-        constellation = request.form.get('constellation')
-        return redirect(url_for('constellations', constellation=constellation_id[constellation]))
-    return render_template('pick-constellation.html')
+        if form.validate_on_submit():
+            constellation = request.form.get('constellation')
+        return redirect(url_for('constellations', constellation=constellation))
+    return render_template('pick-constellation.html', form=form)
 
 
-@app.route('/constellations')
+@app.route('/constellations/<constellation>')
 def constellations(constellation):
     constellation_description = {'Andromeda': 'Andromeda is a constellation rich in Greek mythology and can be best observed during autumn nights. The name Andromeda refers to the princess from Greek mythology, known for her beauty. According to the myth, Andromeda was chained to a rock as a sacrifice to a sea monster, but was eventually saved by the hero Perseus. The constellation is often depicted as a woman with outstretched arms, seemingly in a pose of distress. Its most notable feature is the Andromeda Galaxy, the closest spiral galaxy to the Milky Way, visible to the naked eye in dark sky conditions. To locate the Andromeda Galaxy, look for a faint, elongated smudge near the constellations',
                                  'Aquila': 'Aquila was the eagle that in Greek mythology actually bore Ganymede (Aquarius) up to Mt. Olympus. The eagle was also the thunderbolt carrier for Zeus. This constellation lies in the Milky Way band, and its most prominent star is Altair, which is actually one of the closest naked eye stars to the earth. The top portion of Aquila forms a shallow inverted “V,” with Altair nearly the point. This represents the head and wings of the eagle. A line then descends from Altair, which forms the body of the eagle',
@@ -473,6 +468,16 @@ def constellations(constellation):
                                  'Ursa Minor': 'Ursa Minor is famous for containing Polaris, the North Star. Many people erroneously think that the North Star is directly over their heads, but that’s only true at the North Pole. For most people in the Northern Hemisphere, it will be dipped into the night sky. Ursa Minor is better known as the Little Dipper. It’s visualized as a baby bear, with an unusually long tail. It can be distinguished from the Big Dipper not only by size, but by the emphasized curvature of the tail. When you’ve found the North Star at the end of the bear’s tail using the Big Dipper, it’s then easy to identify the rest of the constellation.',
                                  'Virgo': 'Virgo, often referred to as the Maiden, is one of the largest constellations in the sky and is best viewed in the spring months. Its origins trace back to ancient Babylonian and Greek civilizations, where it was associated with various goddesses and figures. In Greek mythology, Virgo is often linked to the goddess of justice, Dike, or the harvest goddess, Demeter. One prominent myth tells the tale of Demeters daughter, Persephone, who was abducted by Hades. During her search for Persephone, Demeters grief caused crops to wither and die, leading to famine. As a result, Virgo is sometimes associated with the changing of the seasons and the cycle of growth and harvest. Virgo is distinguished by its bright star Spica, one of the brightest stars in the night sky. Spica is often referred to as the "ear of wheat" that the Maiden holds, symbolizing fertility and abundanc.'
                                  }
+    constellation_id = {'Andromeda': 'and', 'Aquila': 'aql',
+                        'Aries': 'ari', 'Aquarius': 'aqr',
+                        'Canis Major': 'cmi', 'Cancer': 'cnc',
+                        'Capricorn': 'cap', 'Cassiopeia': 'cas',
+                        'Cygnus': 'cyg', 'Gemini': 'gem', 'Leo': 'leo',
+                        'Libra': 'lib', 'Lyra': 'lyr',
+                        'Orion': 'ori', 'Pisces': 'psc',
+                        'Sagittarius': 'sgr', 'Scorpius': 'sco',
+                        'Taurus': 'tau', 'Ursa Major': 'uma',
+                        'Ursa Minor': 'umi', 'Virgo': 'vir'}
     userpass = "b281ad5e-c956-4711-8ac6-0bbfb76a8b2b:847b1b172cbe4d8cd8829a449ad070291b7ae02c8f758f9336126428cf41c030f1229b0da20ef11e18705de4a80839ddd0f4f413f379ed63c2d3b908758b49c4a89254efe5e66a75b74f634f70f0ae0aefee602cd0e56adc41cbccad5746ccc0149119580909962d9eb143965e99c488"
     authString = base64.b64encode(userpass.encode()).decode()
 
