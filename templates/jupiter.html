@@ -1,36 +1,7 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Jupiter - The Giant Planet</title>
-    <style>
-        body {
-            font-size:20px;
-        }
-
-        h1 {
-            font-size: 40px;
-        }
-
-        p, li {
-            font-size: 20px;
-        }
-    </style>
-</head>
-<body>
-
-    <h1>Jupiter</h1>
-
-    <p>Jupiter is, by far, the largest planet in the solar system – more than twice as massive as all the other planets combined.</p>
-
-    <ul>
-        <li>- 95 Moons.</li>
-        <li>- 3 Missions on Deck.</li>
-        <li>- One day on Jupiter goes by in just 10 hours.</li>
-        <li>- One year on Jupiter is the same as 11.8 Earth years.</li>
-    </ul>
-
-    <p><strong>Jupiter</strong>— is the fifth planet from our Sun and is, by far, the largest planet in the solar system – more than twice as massive as all the other planets combined. Jupiter's stripes and swirls are actually cold, windy clouds of ammonia and water, floating in an atmosphere of hydrogen and helium. Jupiter’s iconic Great Red Spot is a giant storm bigger than Earth that has raged for hundreds of years. Jupiter is named for the king of the ancient Roman gods.</p>
-<img src="../static/assets/jupiter.jpg" alt="jupiter">
-</body>
-</html>
+{% block content %}
+      {% if current_user.is_authenticated %}
+        {% include 'views/jupiter-authenticated.html' %}
+      {% else %}
+        {% include 'views/jupiter-unauthenticated.html' %}
+      {% endif %}
+{% endblock %}

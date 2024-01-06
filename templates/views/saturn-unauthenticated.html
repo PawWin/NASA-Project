@@ -1,0 +1,35 @@
+{% extends 'views/base-unauthenticated.html' %}
+
+{% block header %}
+  <h1>{% block title %}Saturn - The Ringed Planet{% endblock %}</h1>
+{% endblock %}
+{% block icon %}
+  <link rel="icon" type="image/x-icon" href="../static/assets/planet.svg">
+{% endblock %}
+
+
+{% block content %}
+    <div class="planets-container">
+        <div class="planets-1">
+            <h1>Saturn</h1>
+
+            <p>Saturn's beautiful rings are relatively young. They may have formed in the era of the dinosaurs here on Earth.</p>
+
+            <ul>
+                <li>- 146 Moons.</li>
+                <li>- 4 Missions.</li>
+                <li>- One day on Saturn goes by in just 10.7 hours.</li>
+                <li>- One year on Saturn is the same as 29 Earth years.</li>
+            </ul>
+        </div>
+        <div class="planets-2">
+           <img src="../static/assets/saturn.jpg" alt="saturn">
+        </div>
+        <div class="planets-3">
+            <p><strong>Saturn</strong>— is the sixth planet from the Sun and the second largest planet in our solar system. Adorned with a dazzling system of icy rings, Saturn is unique among the planets. It is not the only planet to have rings, but none are as spectacular or as complex as Saturn's. Like fellow gas giant Jupiter, Saturn is a massive ball made mostly of hydrogen and helium. The farthest planet from Earth discovered by the unaided human eye, Saturn has been known since ancient times. The planet is named for the Roman god of agriculture and wealth, who was also the father of Jupiter.</p>
+        </div>
+
+
+    </div>
+{% endblock %}
+
