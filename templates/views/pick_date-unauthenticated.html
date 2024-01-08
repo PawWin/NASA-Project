@@ -1,7 +1,7 @@
 {% extends 'views/base-unauthenticated.html' %}
 
 {% block header %}
-  <h1>{% block title %}Pick date{% endblock %}</h1>
+  <h1>{% block title %}Pick the date{% endblock %}</h1>
 {% endblock %}
 {% block icon %}
   <link rel="icon" type="image/x-icon" href="../static/assets/planet.svg">
@@ -11,7 +11,7 @@
 {% block content %}
     <br>
     <h2>Pick the date:</h2>
-    <form method=post name="test">
+    <form method=post name="date">
         {{ form.hidden_tag()}}
         {{ form.selected_date }}
         {{ form.submit()}}

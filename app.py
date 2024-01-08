@@ -26,7 +26,9 @@ from astropy.coordinates import Longitude
 from sunpy.coordinates import HeliocentricEarthEcliptic, get_body_heliographic_stonyhurst, get_horizons_coord
 from sunpy.time import parse_time
 
+
 api_key = "FDlAcufYBrWHbobPQfofRn7Tm79SeoJotLOcpnjy"
+
 
 @app.route('/')
 def base():
@@ -369,13 +371,11 @@ def pick_date():
 
 @app.route('/near-earth-asteroids/<selected_date>')
 def near_earth(selected_date):
-    start_date = "2015-09-01"
+    start_date = selected_date
 
     start_date_obj = datetime.strptime(start_date, '%Y-%m-%d')
-    end_date_obj = start_date_obj + timedelta(days=7)
-    end_date = end_date_obj.strftime('%Y-%m-%d')
 
-    url = f"https://api.nasa.gov/neo/rest/v1/feed?start_date={start_date}&end_date={end_date}&api_key={api_key}"
+    url = f"https://api.nasa.gov/neo/rest/v1/feed?start_date={start_date}&api_key={api_key}"
     response = requests.get(url)
 
     neo_data = response.json()["near_earth_objects"]
@@ -396,32 +396,34 @@ def near_earth(selected_date):
     asteroid_area = np.pi * (max_diameter / 2.0) ** 2
 
     if max_diameter <= 2:
-        object_to_scale = "fa solid fa-building fa-fade"
+        object_to_scale = "fa solid fa-building"
         compared_object_data = ["Burj Khalifa", f"{burj_khalifa_height} km"]
         scale = max_diameter / burj_khalifa_height
         icon_size = round(scale * 10.0, 2)
+
         plt.figure(figsize=(6, 6))
         plt.pie([burj_khalifa_height, max_diameter],
                 labels=['Burj Khalifa', largest_hazardous_neo['name']],
                 autopct='%1.1f%%', startangle=140)
-        plt.title(f"Comparing the asteroid's diameter to Burj Khalifa's height")
         plt.axis('equal')
+
         buffer = BytesIO()
         plt.savefig(buffer, format="png")
         buffer.seek(0)
         comparison_diagram = base64.b64encode(buffer.read()).decode()
         buffer.close()
     else:
-        object_to_scale = "fa solid fa-city fa-fade"
+        object_to_scale = "fa solid fa-city"
         compared_object_data = ["Averaged sized city: Siemianowice", f"{example_city_area} km2"]
         scale = asteroid_area / example_city_area
         icon_size = round(scale * 10.0, 2)
+
         plt.figure(figsize=(6, 6))
         plt.pie([example_city_area, asteroid_area],
                 labels=['Siemianowice Slaskie', largest_hazardous_neo['name']],
                 autopct='%1.1f%%', startangle=140)
-        plt.title(f"Comparing the asteroid's area to Averaged sized city: Siemianowice area")
         plt.axis('equal')
+
         buffer = BytesIO()
         plt.savefig(buffer, format="png")
         buffer.seek(0)
@@ -503,8 +505,8 @@ def constellations(constellation):
     payload = json.dumps({
         'style': 'navy',
         'observer': {
-            'latitude': 12.775867,
-            'longitude': 23.39733,
+            'latitude': 50.270908,
+            'longitude': 19.039993,
             'date': '2021-01-01',
         },
         'view': {
@@ -526,32 +528,49 @@ def constellations(constellation):
 @app.route('/mercury')
 def mercury():
     return render_template('mercury.html')
+
+
 @app.route('/venus')
 def venus():
     return render_template('venus.html')
+
+
 @app.route('/earth')
 def earth():
     return render_template('Earth.html')
+
+
 @app.route('/mars')
 def mars():
     return render_template('mars.html')
+
+
 @app.route('/jupiter')
 def jupiter():
     return render_template('jupiter.html')
+
+
 @app.route('/saturn')
 def saturn():
     return render_template('saturn.html')
+
+
 @app.route('/uranus')
 def uranus():
     return render_template('uranus.html')
+
+
 @app.route('/neptune')
 def neptune():
     return render_template('neptune.html')
+
+
 
 @app.route('/gallery', methods=['GET', 'POST'])
 @login_required
 def gallery():
     return render_template('gallery.html')
+
 
 if __name__ == "__main__":
     with app.app_context():

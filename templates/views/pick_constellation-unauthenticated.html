@@ -10,10 +10,10 @@
 
 {% block content %}
     <br>
-    <h2>Pick date:</h2>
-    <form method=post name="date">
+    <h2>Pick constellation:</h2>
+    <form method=post name="constellation">
         {{ form.hidden_tag()}}
-        {{ form.selected_date }}
+        {{ form.constellation }}
         {{ form.submit()}}
     </form>
 {% endblock %}
