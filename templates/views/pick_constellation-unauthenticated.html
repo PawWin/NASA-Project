@@ -1,0 +1,20 @@
+{% extends 'views/base-unauthenticated.html' %}
+
+{% block header %}
+  <h1>{% block title %}Pick your constellation{% endblock %}</h1>
+{% endblock %}
+{% block icon %}
+  <link rel="icon" type="image/x-icon" href="../static/assets/planet.svg">
+{% endblock %}
+
+
+{% block content %}
+    <br>
+    <h2>Pick constellation to display:</h2>
+    <form method=post name="test">
+        {{ form.hidden_tag()}}
+        {{ form.constellation(placeholder = "Constellation") }}
+        {{ form.submit()}}
+    </form>
+{% endblock %}
+

@@ -1,17 +1,7 @@
-{% extends 'base.html' %}
-
-{% block header %}
-  <h1>{% block title %}Costellations{% endblock %}</h1>
-{% endblock %}
-{% block icon %}
-  <link rel="icon" type="image/x-icon" href="../static/assets/daily_fact.svg">
-{% endblock %}
-
 {% block content %}
-  <h2>Pick constealltion to display:</h2>
-    <form method=post name="test">
-        {{ form.hidden_tag()}}
-        {{ form.constellation(placeholder = "Constellation") }}
-        {{ form.submit()}}
-    </form>
+      {% if current_user.is_authenticated %}
+        {% include 'views/pick_constellation-authenticated.html' %}
+      {% else %}
+        {% include 'views/pick_constellation-unauthenticated.html' %}
+      {% endif %}
 {% endblock %}

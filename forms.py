@@ -18,7 +18,13 @@ class LoginForm(FlaskForm):
 
 
 class PickConstellationForm(FlaskForm):
-    constellation = SelectField(u'Reports', choices=[('test1', 'test')])
+    constellation = SelectField(u'Reports', choices=[('Andromeda', 'Andromeda'), ('Aquarius', 'Aquarius'), ('Aquila', 'Aquila'),
+                                                     ('Aries', 'Aries'), ('Cancer', 'Cancer'), ('Canis Major', 'Canis Major'),
+                                                     ('Capricorn', 'Capricorn'), ('Cassiopeia', 'Cassiopeia'), ('Cygnus', 'Cygnus'),
+                                                     ('Gemini', 'Gemini'), ('Leo', 'Leo'), ('Libra', 'Libra'), ('Lyra', 'Lyra'),
+                                                     ('Orion', 'Orion'), ('Pisces', 'Pisces'), ('Sagittarius', 'Sagittarius'),
+                                                     ('Scorpion', 'Scorpius'), ('Taurus', 'Taurus'), ('Ursa Major', 'Ursa Major'),
+                                                     ('Ursa Minor', 'Ursa Minor'), ('Virgo', 'Virgo')])
     submit = SubmitField('Submit')
 
 class ImageForm(FlaskForm):

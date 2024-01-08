@@ -468,16 +468,22 @@ def constellations(constellation):
                                  'Ursa Minor': 'Ursa Minor is famous for containing Polaris, the North Star. Many people erroneously think that the North Star is directly over their heads, but that’s only true at the North Pole. For most people in the Northern Hemisphere, it will be dipped into the night sky. Ursa Minor is better known as the Little Dipper. It’s visualized as a baby bear, with an unusually long tail. It can be distinguished from the Big Dipper not only by size, but by the emphasized curvature of the tail. When you’ve found the North Star at the end of the bear’s tail using the Big Dipper, it’s then easy to identify the rest of the constellation.',
                                  'Virgo': 'Virgo, often referred to as the Maiden, is one of the largest constellations in the sky and is best viewed in the spring months. Its origins trace back to ancient Babylonian and Greek civilizations, where it was associated with various goddesses and figures. In Greek mythology, Virgo is often linked to the goddess of justice, Dike, or the harvest goddess, Demeter. One prominent myth tells the tale of Demeters daughter, Persephone, who was abducted by Hades. During her search for Persephone, Demeters grief caused crops to wither and die, leading to famine. As a result, Virgo is sometimes associated with the changing of the seasons and the cycle of growth and harvest. Virgo is distinguished by its bright star Spica, one of the brightest stars in the night sky. Spica is often referred to as the "ear of wheat" that the Maiden holds, symbolizing fertility and abundanc.'
                                  }
-    constellation_id = {'Andromeda': 'and', 'Aquila': 'aql',
-                        'Aries': 'ari', 'Aquarius': 'aqr',
-                        'Canis Major': 'cmi', 'Cancer': 'cnc',
-                        'Capricorn': 'cap', 'Cassiopeia': 'cas',
-                        'Cygnus': 'cyg', 'Gemini': 'gem', 'Leo': 'leo',
-                        'Libra': 'lib', 'Lyra': 'lyr',
-                        'Orion': 'ori', 'Pisces': 'psc',
-                        'Sagittarius': 'sgr', 'Scorpius': 'sco',
-                        'Taurus': 'tau', 'Ursa Major': 'uma',
-                        'Ursa Minor': 'umi', 'Virgo': 'vir'}
+    constellation_id = {'Andromeda': 'and', 'Aquila': 'aql', 'Aries': 'ari', 'Aquarius': 'aqr', 'Canis Major': 'cma',
+                        'Cancer': 'cnc', 'Capricorn': 'cap', 'Cassiopeia': 'cas', 'Cygnus': 'cyg', 'Gemini': 'gem',
+                        'Leo': 'leo', 'Libra': 'lib', 'Lyra': 'lyr', 'Orion': 'ori', 'Pisces': 'psc', 'Sagittarius': 'sgr',
+                        'Scorpius': 'sco', 'Taurus': 'tau', 'Ursa Major': 'uma', 'Ursa Minor': 'umi', 'Virgo': 'vir'}
+    constellation_best_viewed = {'Andromeda': 'October', 'Aquila': 'September',
+                                'Aries': 'December', 'Aquarius': 'October',
+                                'Canis Major': 'February', 'Cancer': 'March',
+                                'Capricorn': 'September', 'Cassiopeia': 'November',
+                                'Cygnus': 'September', 'Gemini': 'February',
+                                'Leo': 'April', 'Libra': 'June',
+                                'Lyra': 'August', 'Orion': 'January',
+                                'Pisces': 'November', 'Sagittarius': 'August',
+                                'Scorpius': 'July', 'Taurus': 'January',
+                                'Ursa Major': 'April', 'Ursa Minor': 'June',
+                                'Virgo': 'May'}
+
     userpass = "b281ad5e-c956-4711-8ac6-0bbfb76a8b2b:847b1b172cbe4d8cd8829a449ad070291b7ae02c8f758f9336126428cf41c030f1229b0da20ef11e18705de4a80839ddd0f4f413f379ed63c2d3b908758b49c4a89254efe5e66a75b74f634f70f0ae0aefee602cd0e56adc41cbccad5746ccc0149119580909962d9eb143965e99c488"
     authString = base64.b64encode(userpass.encode()).decode()
 
@@ -495,13 +501,17 @@ def constellations(constellation):
         'view': {
             'type': 'constellation',
             'parameters': {
-                'constellation': 'leo'
+                'constellation': f'{constellation_id[constellation]}'
             }
         }
     })
-    response = requests.post('https://api.astronomyapi.com/api/v2/studio/star-chart', headers=headers, data=payload)
 
-    return render_template('constellations.html', constellation=constellation)
+    response = requests.post('https://api.astronomyapi.com/api/v2/studio/star-chart', headers=headers, data=payload)
+    constellation_info = {'name': constellation, 'description': constellation_description[constellation],
+                          'picture': response.json()['data']['imageUrl'],
+                          'best viewed' : constellation_best_viewed[constellation]}
+
+    return render_template('constellations.html', constellation_info=constellation_info)
 
 # strony planet
 @app.route('/mercury')
