@@ -1,5 +1,5 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, PasswordField, SubmitField, BooleanField, SelectField
+from wtforms import StringField, PasswordField, SubmitField, BooleanField, SelectField, DateField
 from wtforms.validators import DataRequired, Length, Email, EqualTo
 
 
@@ -27,6 +27,12 @@ class PickConstellationForm(FlaskForm):
                                                      ('Ursa Minor', 'Ursa Minor'), ('Virgo', 'Virgo')])
     submit = SubmitField('Submit')
 
+
 class ImageForm(FlaskForm):
     submit = SubmitField('Submit')
+
+
+class DateSelectForm(FlaskForm):
+    selected_date = DateField('Wybierz datę', validators=[DataRequired()], format='%Y-%m-%d')
+    submit = SubmitField('Wyślij')
 

@@ -358,8 +358,17 @@ def world_map():
                            icons_data=categories_icons)
 
 
-@app.route('/near-earth-asteroids')
-def near_earth():
+@app.route('/near-earth-asteroids-date', methods=['GET', 'POST'])
+def pick_date():
+    form = forms.DateSelectForm()
+    if request.method == 'POST':
+        if form.validate_on_submit():
+            selected_date = request.form.get('selected_date')
+        return redirect(url_for('near_earth', selected_date=selected_date))
+    return render_template('pick-date.html', form=form)
+
+@app.route('/near-earth-asteroids/<selected_date>')
+def near_earth(selected_date):
     start_date = "2015-09-01"
 
     start_date_obj = datetime.strptime(start_date, '%Y-%m-%d')

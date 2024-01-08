@@ -1,0 +1,7 @@
+{% block content %}
+      {% if current_user.is_authenticated %}
+        {% include 'views/pick_date-authenticated.html' %}
+      {% else %}
+        {% include 'views/pick_date-unauthenticated.html' %}
+      {% endif %}
+{% endblock %}

@@ -1,7 +1,7 @@
-{% extends 'views/base-unauthenticated.html' %}
+{% extends 'views/base-authenticated.html' %}
 
 {% block header %}
-  <h1>{% block title %}Pick your constellation{% endblock %}</h1>
+  <h1>{% block title %}Pick the date{% endblock %}</h1>
 {% endblock %}
 {% block icon %}
   <link rel="icon" type="image/x-icon" href="../static/assets/planet.svg">
@@ -17,4 +17,3 @@
         {{ form.submit()}}
     </form>
 {% endblock %}
-
