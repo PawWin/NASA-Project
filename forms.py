@@ -8,13 +8,13 @@ class RegistrationForm(FlaskForm):
     email = StringField('Email', validators=[DataRequired(), Email()])
     password = PasswordField('Password', validators=[DataRequired()])
     confirm_password = PasswordField('Confirm Password', validators=[DataRequired(), EqualTo('password')])
-    submit = SubmitField('Sign Up')
+    submit = SubmitField('Sign Up',render_kw={"class": "btn-register"})
 
 class LoginForm(FlaskForm):
     email = StringField('Email', validators = [DataRequired(), Email()])
     password = PasswordField('Password', validators = [DataRequired()])
     remember = BooleanField('Remember Me')
-    submit = SubmitField('Login')
+    submit = SubmitField('Login',render_kw={"class": "btn-favorite"})
 
 
 class PickConstellationForm(FlaskForm):
@@ -24,15 +24,15 @@ class PickConstellationForm(FlaskForm):
                                                      ('Gemini', 'Gemini'), ('Leo', 'Leo'), ('Libra', 'Libra'), ('Lyra', 'Lyra'),
                                                      ('Orion', 'Orion'), ('Pisces', 'Pisces'), ('Sagittarius', 'Sagittarius'),
                                                      ('Scorpion', 'Scorpius'), ('Taurus', 'Taurus'), ('Ursa Major', 'Ursa Major'),
-                                                     ('Ursa Minor', 'Ursa Minor'), ('Virgo', 'Virgo')])
-    submit = SubmitField('Submit')
+                                                     ('Ursa Minor', 'Ursa Minor'), ('Virgo', 'Virgo')],render_kw={"class": "constellation-list"})
+    submit = SubmitField('Submit',render_kw={"class": "btn-constellation"})
 
 
 class ImageForm(FlaskForm):
-    submit = SubmitField('Submit')
+    submit = SubmitField('Submit',render_kw={"class": "btn-favorite"})
 
 
 class DateSelectForm(FlaskForm):
-    selected_date = DateField('Wybierz datę', validators=[DataRequired()], format='%Y-%m-%d')
-    submit = SubmitField('Wyślij')
+    selected_date = DateField('Wybierz datę', validators=[DataRequired()], format='%Y-%m-%d',render_kw={"class": "pick-field"})
+    submit = SubmitField('Wyślij',render_kw={"class": "btn-favorite"})
 

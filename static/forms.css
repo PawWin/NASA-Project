@@ -91,21 +91,34 @@
 	background-image: url("../static/assets/login_background.jpg") !important;
     background-size: 100% !important;
 }
-
+/* ten prawidłowy css */
+.btn-register{
+    background-color: var(--primary-color);
+    color: var(--white);
+    text-align: center;
+    font-size: 1rem;
+    font-weight: 500;
+    width: 100px !important;
+    height: 50px;
+    border: none;
+    margin-left: 50%;
+}
 .register  {
   font-size: 1.3rem;
-  opacity: 0.6;
+    border: black 1px solid;
 }
 
-.register input {
-  background-color: #ffffff;
-  border-color: black;
-  border-radius: 6px;
-  padding: 0.7rem;
-  padding-left: 2.4rem;
-  font-size: 16px;
-  width: 100%;
-  border: var(--border);
+.register input{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    border: black 1px solid;
+    width: 500px;
+
+
+
+
 }
 
 .login  {
