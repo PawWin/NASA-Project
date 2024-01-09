@@ -6,7 +6,11 @@
 
 {% block content %}
 <p><b>Tu Będzie galeria Zdjęć</b></p>
-
+  <div>
+    {%for img in images %}
+        <img src="{{ img }}" alt="kurwa">
+    {% endfor %}
+  </div>
 
 
 {% endblock %}

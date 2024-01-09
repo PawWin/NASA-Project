@@ -40,8 +40,10 @@ class User(db.Model, UserMixin):
     username = db.Column(db.String(20), unique = True, nullable = False)
     email = db.Column(db.String(120), unique = True, nullable = False)
     password = db.Column(db.String(60), nullable = False)
-
     images = db.relationship('Image', backref='user', lazy=True)
+
+    def get_all_image_links(self):
+        return [image.image_link for image in self.images]
 
 class Image(db.Model):
 
