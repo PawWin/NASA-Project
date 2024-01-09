@@ -1,4 +1,6 @@
+/*
 .forms_cos form{
+
     height: 520px;
     width: 400px;
     background-color: rgba(255,255,255,0.13);
@@ -12,7 +14,7 @@
     box-shadow: 0 0 40px rgba(8,7,16,0.6);
     padding: 50px 35px;
 }
-.forms_cos form *{
+.forms_cos form {
     font-family: 'Poppins',sans-serif;
     color: #ffffff;
     letter-spacing: 0.5px;
@@ -80,7 +82,7 @@
   margin-right: 4px;
 }
 
-/* jebac */
+/* jebac
 .forms_cos{
     display: flex;
     flex-direction: column;
@@ -91,6 +93,7 @@
 	background-image: url("../static/assets/login_background.jpg") !important;
     background-size: 100% !important;
 }
+*/
 /* ten prawidłowy css */
 .btn-register{
     background-color: var(--primary-color);
@@ -100,14 +103,27 @@
     font-weight: 500;
     width: 100px !important;
     height: 50px;
-    border: none;
-    margin-left: 50%;
+    border: none !important;
+    border-radius: 5px;
 }
-.register  {
-  font-size: 1.3rem;
-    border: black 1px solid;
+.register-div{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 50%;
+    padding: 0.2rem;
+    margin: 0.2rem;
+    border-radius: 10px;
 }
-
+.register{
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    flex-wrap: wrap;
+}
 .register input{
     display: flex;
     flex-direction: column;
@@ -115,46 +131,205 @@
     justify-content: center;
     border: black 1px solid;
     width: 500px;
-
-
-
+    height: 60px;
+    padding: 0.2rem;
+    margin: 0.2rem;
+    border-radius: 10px;
 
 }
-
-.login  {
-  position: absolute;
-  width:50%;
-  top:70%;
-  left:25%;
-  font-size: 1.3rem;
-  transform: translateY(-50%);
-  opacity: 0.6;
-}
-
-.login input {
-  background-color: #ffffff;
-  border-color: black;
-  border-radius: 6px;
-  padding: 0.7rem;
-  padding-left: 2.4rem;
-  font-size: 16px;
-  width: 100%;
-  border: var(--border);
-}
-
-
-.login  {
-  font-size: 1.3rem;
-  opacity: 0.6;
+.login-div{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 50%;
+    padding: 0.2rem;
+    margin: 0.2rem;
+    border-radius: 10px;
 }
 
 .login input {
-  background-color: #ffffff;
-  border-color: black;
-  border-radius: 6px;
-  padding: 0.7rem;
-  padding-left: 2.4rem;
-  font-size: 16px;
-  width: 100%;
-  border: var(--border);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    border: black 1px solid;
+    width: 500px;
+    height: 60px;
+    padding: 0.2rem;
+    margin: 0.2rem;
+    border-radius: 10px;
+}
+
+.btn-login{
+    background-color: var(--primary-color);
+    color: var(--white);
+    text-align: center;
+    font-size: 1rem;
+    font-weight: 500;
+    width: 100px !important;
+    height: 50px;
+    border: none !important;
+    border-radius: 5px;
+}
+.btn-checkbox{
+    background-color: var(--primary-color);
+    color: var(--white);
+    text-align: center;
+    font-size: 1rem;
+    font-weight: 500;
+    width: 20px !important;
+    height: 20px !important;
+    border: none;
+    border-radius: 5px;
+}
+.login p{
+    width: 24%;
+    text-align: right;
+}
+.login {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    flex-wrap: wrap;
+}
+.profile-page{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    background-size: 100% !important;
+}
+.profile-page p{
+    font-size: 1.5rem;
+    font-weight: 600;
+    margin-bottom: 1rem;
+    color: black;
+    flex: 1;
+    text-align: center;
+    margin: 1rem;
+}
+.logout input{
+  background-color: var(--primary-color);
+    color: var(--white);
+    text-align: center;
+    font-size: 1rem;
+    font-weight: 500;
+    width: 100px !important;
+    height: 50px;
+    border: none !important;
+    border-radius: 5px;
+}
+
+@media screen and (max-width: 720px) {
+    .register-div{
+        width: 100%;
+        height: 50%;
+        padding: 0.2rem;
+        margin: 0.2rem;
+        border-radius: 10px;
+    }
+    .register input{
+        width: 100%;
+        height: 60px;
+        padding: 0.2rem;
+        margin: 0.2rem;
+        border-radius: 10px;
+    }
+    .login-div{
+        width: 100%;
+        height: 50%;
+        padding: 0.2rem;
+        margin: 0.2rem;
+        border-radius: 10px;
+    }
+    .login input {
+        width: 100%;
+        height: 60px;
+        padding: 0.2rem;
+        margin: 0.2rem;
+        border-radius: 10px;
+    }
+    .login p{
+        width: 100%;
+        text-align: center;
+    }
+    .login {
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        flex-wrap: wrap;
+    }
+    .btn-register{
+        background-color: var(--primary-color);
+        color: var(--white);
+        text-align: center;
+        font-size: 1rem;
+        font-weight: 500;
+        width: 100px !important;
+        height: 50px;
+        border: none !important;
+        border-radius: 5px;
+    }
+    .btn-login{
+        background-color: var(--primary-color);
+        color: var(--white);
+        text-align: center;
+        font-size: 1rem;
+        font-weight: 500;
+        width: 100px !important;
+        height: 50px;
+        border: none !important;
+        border-radius: 5px;
+    }
+    .btn-checkbox{
+        background-color: var(--primary-color);
+        color: var(--white);
+        text-align: center;
+        font-size: 1rem;
+        font-weight: 500;
+        width: 20px !important;
+        height: 20px !important;
+        border: none;
+        border-radius: 5px;
+    }
+    .register{
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        flex-wrap: wrap;
+    }
+    .profile-page{
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        width: 100%;
+        background-size: 100% !important;
+    }
+    .profile-page p{
+        font-size: 1.5rem;
+        font-weight: 600;
+        margin-bottom: 1rem;
+        color: black;
+        flex: 1;
+        text-align: center;
+        margin: 1rem;
+    }
+    .logout input{
+      background-color: var(--primary-color);
+        color: var(--white);
+        text-align: center;
+        font-size: 1rem;
+        font-weight: 500;
+        width: 100px !important;
+        height: 50px;
+        border: none !important;
+        border-radius: 5px;
+    }
 }
