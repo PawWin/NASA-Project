@@ -5,12 +5,14 @@
 {% endblock %}
 
 {% block content %}
-<p><b>Tu Będzie galeria Zdjęć</b></p>
-  <div>
-    {%for img in images %}
-        <img src="{{ img }}" alt="kurwa">
-    {% endfor %}
-  </div>
+<div class="gallery-container">
+    <div class="gallery-images">
+      {%for img in images %}
+        <div class="gallery-images-img">
+          <a href="{{ img }}" target="_blank"><img src="{{ img }}" alt="kurwa"></a>
+        </div>
+      {% endfor %}
+    </div>
 
-
+</div>
 {% endblock %}
