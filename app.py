@@ -309,7 +309,7 @@ def login():
         user = User.query.filter_by(email=forms.LoginForm().email.data).first()
         if user and bcrypt.check_password_hash(user.password, forms.LoginForm().password.data):
             login_user(user, remember=forms.LoginForm().remember.data)
-
+            #print(current_user.get_all_image_links())
             return redirect(url_for('login'))
 
     if (request.method == "POST") & (request.form.get('post_header') == 'log out'):
