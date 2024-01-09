@@ -569,7 +569,7 @@ def neptune():
 @app.route('/gallery', methods=['GET', 'POST'])
 @login_required
 def gallery():
-    return render_template('gallery.html')
+    return render_template('gallery.html', images=current_user.get_all_image_links())
 
 
 if __name__ == "__main__":
