@@ -25,14 +25,14 @@ class PickConstellationForm(FlaskForm):
                                                      ('Orion', 'Orion'), ('Pisces', 'Pisces'), ('Sagittarius', 'Sagittarius'),
                                                      ('Scorpion', 'Scorpius'), ('Taurus', 'Taurus'), ('Ursa Major', 'Ursa Major'),
                                                      ('Ursa Minor', 'Ursa Minor'), ('Virgo', 'Virgo')],render_kw={"class": "constellation-list"})
-    submit = SubmitField('Submit',render_kw={"class": "btn-constellation"})
+    submit = SubmitField('Show',render_kw={"class": "btn-constellation"})
 
 
 class ImageForm(FlaskForm):
-    submit = SubmitField('Submit',render_kw={"class": "btn-favorite"})
+    submit = SubmitField('Add',render_kw={"class": "btn-favorite"})
 
 
 class DateSelectForm(FlaskForm):
     selected_date = DateField('Wybierz datę', validators=[DataRequired()], format='%Y-%m-%d',render_kw={"class": "pick-field"})
-    submit = SubmitField('Wyślij',render_kw={"class": "btn-favorite"})
+    submit = SubmitField('Compare',render_kw={"class": "btn-favorite"})
 

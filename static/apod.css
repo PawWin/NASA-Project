@@ -52,62 +52,6 @@
     font-weight: bold;
 
 }
-.btn-refresh{
-    display: block;
-    background-color: var(--primary-color);
-    color: var(--white);
-    text-align: center;
-    padding: 0.6rem 1.4rem;
-    font-size: 1rem;
-    font-weight: 500;
-    border-radius: 5px;
-    margin: 0.5rem;
-    width: 100px;
-    height: 50px;
-    float: right;
-}
-.btn-favorite{
-    display: block;
-    background-color: var(--primary-color);
-    color: var(--white);
-    text-align: center;
-    font-size: 1rem;
-    font-weight: 500;
-    border-radius: 5px;
-    width: 100px;
-    height: 50px;
-    align-items: center;
-    border: none;
-    margin-left: 50px;
-}
-.btn-constellation{
-    display: block;
-    background-color: var(--primary-color);
-    color: var(--white);
-    text-align: center;
-    font-size: 1rem;
-    font-weight: 500;
-    border-radius: 5px;
-    margin: 0.5rem;
-    width: 100px;
-    height: 50px;
-    margin-left: 100px;
-    border: none;
-}
-
-.constellation-list{
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    padding: 1rem;
-    margin: 1rem;
-    border-radius: 10px;
-    width: 100%;
-    height:60px;
-    float: left;
-}
-
 
 @media (max-width:720px){
     .apod{
@@ -130,49 +74,6 @@
         width: 100%;
         height: 100%;
     }
-    .btn-refresh{
-        display: block;
-        background-color: var(--primary-color);
-        color: var(--white);
-        text-align: center;
-        padding: 0.6rem 1.4rem;
-        font-size: 1rem;
-        font-weight: 500;
-        border-radius: 5px;
-        margin: 0.5rem;
-        width: 100px;
-        height: 50px;
-        float: right;
-    }
-    .btn-favorite{
-        display: block;
-        background-color: var(--primary-color);
-        color: var(--white);
-        text-align: center;
-        font-size: 1rem;
-        font-weight: 500;
-        border-radius: 5px;
-        width: 100px;
-        height: 50px;
-        align-items: center;
-        border: none;
-        margin-left: 50px;
-    }
-    .btn-constellation{
-        display: block;
-        background-color: var(--primary-color);
-        color: var(--white);
-        text-align: center;
-        font-size: 1rem;
-        font-weight: 500;
-        border-radius: 5px;
-        margin: 0.5rem;
-        width: 100px;
-        height: 50px;
-        margin-left: 100px;
-        border: none;
-    }
-
 }
 
 @media (max-width: 1100px) {
@@ -195,47 +96,5 @@
         margin: 0.5rem;
         width: 100%;
         height: 100%;
-    }
-    .btn-refresh{
-        display: block;
-        background-color: var(--primary-color);
-        color: var(--white);
-        text-align: center;
-        padding: 0.6rem 1.4rem;
-        font-size: 1rem;
-        font-weight: 500;
-        border-radius: 5px;
-        margin: 0.5rem;
-        width: 100px;
-        height: 50px;
-        float: right;
-    }
-    .btn-favorite{
-        display: block;
-        background-color: var(--primary-color);
-        color: var(--white);
-        text-align: center;
-        font-size: 1rem;
-        font-weight: 500;
-        border-radius: 5px;
-        width: 100px;
-        height: 50px;
-        align-items: center;
-        border: none;
-        margin-left: 50px;
-    }
-    .btn-constellation{
-        display: block;
-        background-color: var(--primary-color);
-        color: var(--white);
-        text-align: center;
-        font-size: 1rem;
-        font-weight: 500;
-        border-radius: 5px;
-        margin: 0.5rem;
-        width: 100px;
-        height: 50px;
-        margin-left: 100px;
-        border: none;
     }
 }

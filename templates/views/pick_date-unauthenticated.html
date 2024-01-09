@@ -9,14 +9,22 @@
 
 
 {% block content %}
-    <br>
-    <h2> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Pick the date:</h2>
-    <div class="pick-date-dive">
-        <form method=post name="date">
-            {{ form.hidden_tag()}}
-            {{ form.selected_date }}
-            {{ form.submit()}}
-        </form>
+    <div class="pick">
+        <div id="pick-text-container">
+            <h2>Near earth objects</h2>
+            <p>NASA's NEOWISE API provides real-time access to data about near-Earth objects (NEOs), allowing users to monitor, analyze, and study these celestial bodies. The API offers comprehensive information, including observations, orbital parameters, and physical properties of NEOs. It serves as a valuable resource for researchers, organizations, and the public interested in planetary defense, scientific research, and educational outreach related to asteroids and comets. On our website you can pick your chosen date and compare the biggest dangerous Neo object that day and compare it to objects on earth like Burj Khalifa (tallest skyscrapper) or to averaged sized city</p>
+            <h2> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Pick date:</h2>
+            <div class="pick-date-dive">
+                <form method=post name="date">
+                    {{ form.hidden_tag()}}
+                    {{ form.selected_date }}
+                    {{ form.submit()}}
+                </form>
+        </div>
+        </div>
+        <div id="pick-img-container">
+            <img src="../static/assets/asteroids.jpg" alt="Opis obrazu">
+        </div>
     </div>
 {% endblock %}
 

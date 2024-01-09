@@ -15,7 +15,8 @@
         <div id="apod_right">
             <h2>{{ title }}</h2>
             <p>{{ explanation }}</p>
-            <button onclick="window.location.href=`{{ url_for('apod')}}`" class="btn-refresh">Refresh</button>
+            <button onclick="window.location.href=`{{ url_for('apod')}}`" class="btn-favorite">Refresh</button>
+            <br>
             <form method="POST" action="">
               {{ image_form.hidden_tag() }}
                 {{ image_form.submit() }}
