@@ -1,0 +1,25 @@
+{% extends 'views/base-authenticated.html' %}
+
+{% block header %}
+  <h1>{% block title %}World Map{% endblock %}</h1>
+{% endblock %}
+
+{% block icon %}
+  <link rel="icon" type="image/x-icon" href="../static/assets/planet.svg">
+{% endblock %}
+
+{% block content %}
+    <div class="map-view">
+        <div id="map-container">
+            {{ map_html|safe }}
+        </div>
+    </div>
+    <ul class="icon-list">
+        {% for category, properties in icons_data.items() %}
+            <li>
+                <i class="fa-solid fa-{{ properties[1] }}" title="{{ category }}"></i>
+                <span>{{ properties[2] }}</span>
+            </li>
+        {% endfor %}
+    </ul>
+{% endblock %}
