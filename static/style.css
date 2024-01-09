@@ -69,7 +69,20 @@ body{
   flex: 1 0 auto;
 }
 
-
+.pick-field{
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+    margin: 15px;
+    justify-content: center;
+}
+.pick-date-dive{
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    margin: 1rem;
+        justify-content: center;
+}
 @media (max-width:720px){
     #base_main{
       display: flex;

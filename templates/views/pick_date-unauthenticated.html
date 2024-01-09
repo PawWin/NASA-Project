@@ -10,11 +10,13 @@
 
 {% block content %}
     <br>
-    <h2>Pick the date:</h2>
-    <form method=post name="date">
-        {{ form.hidden_tag()}}
-        {{ form.selected_date }}
-        {{ form.submit()}}
-    </form>
+    <h2> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Pick the date:</h2>
+    <div class="pick-date-dive">
+        <form method=post name="date">
+            {{ form.hidden_tag()}}
+            {{ form.selected_date }}
+            {{ form.submit()}}
+        </form>
+    </div>
 {% endblock %}
 
