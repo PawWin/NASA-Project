@@ -13,8 +13,8 @@ class RegistrationForm(FlaskForm):
 class LoginForm(FlaskForm):
     email = StringField('Email', validators = [DataRequired(), Email()])
     password = PasswordField('Password', validators = [DataRequired()])
-    remember = BooleanField('Remember Me')
-    submit = SubmitField('Login',render_kw={"class": "btn-favorite"})
+    remember = BooleanField('Remember Me',render_kw={"class": "btn-checkbox"})
+    submit = SubmitField('Login',render_kw={"class": "btn-login"})
 
 
 class PickConstellationForm(FlaskForm):

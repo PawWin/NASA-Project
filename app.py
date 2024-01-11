@@ -318,7 +318,7 @@ def login():
 
     return render_template('login.html',
                            login_form=forms.LoginForm(),
-                           register_form=forms.RegistrationForm())
+                           register_form=forms.RegistrationForm(),user=current_user)
 
 
 @app.route('/world-map')
