@@ -29,7 +29,10 @@ The experience involved gaining proficiency in web development, understanding th
 
 ## Screenshots
 
-![App Video](/images/NasaProjectPresentation.mp4)
+
+
+https://github.com/PawWin/NASA-Project/assets/146736355/e38d1074-14eb-4bc8-b163-9fd67b91cc8d
+
 
 
 ## Built with
