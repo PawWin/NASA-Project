@@ -1,0 +1,7 @@
+{% block content %}
+      {% if current_user.is_authenticated %}
+        {% include 'views/mars-authenticated.html' %}
+      {% else %}
+        {% include 'views/mars-unauthenticated.html' %}
+      {% endif %}
+{% endblock %}

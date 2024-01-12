@@ -1,0 +1,7 @@
+{% block content %}
+      {% if current_user.is_authenticated %}
+        {% include 'views/world_map-authenticated.html' %}
+      {% else %}
+        {% include 'views/world_map-unauthenticated.html' %}
+      {% endif %}
+{% endblock %}

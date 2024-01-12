@@ -1,0 +1,36 @@
+{% extends 'views/base-authenticated.html' %}
+
+{% block header %}
+  <h1>{% block title %}Uranus - The Tilted Planet{% endblock %}</h1>
+{% endblock %}
+{% block icon %}
+  <link rel="icon" type="image/x-icon" href="../static/assets/planet.svg">
+{% endblock %}
+
+
+{% block content %}
+    <div class="planets-container">
+        <div class="planets-1">
+            <h1>Uranus</h1>
+
+            <p>A unique tilt makes Uranus appear to spin on its side.</p>
+
+            <ul>
+                <li>- 27 Moons.</li>
+                <li>- 1 Mission.</li>
+                <li>- One day on Uranus lasts a little over 17 hours.</li>
+                <li>- One year on Uranus is the same as 84 years on Earth.</li>
+
+            </ul>
+        </div>
+        <div class="planets-2">
+           <img src="../static/assets/uranus.jpg" alt="uranus">
+        </div>
+        <div class="planets-3">
+           <p> <strong>Uranus</strong>— is a very cold and windy planet. It is surrounded by faint rings and more than two dozen small moons as it rotates at a nearly 90-degree angle from the plane of its orbit. This unique tilt makes Uranus appear to spin on its side. Uranus is blue-green in color due to large amounts of methane, which absorbs red light but allows blues to be reflected back into space. The atmosphere is mostly hydrogen and helium but also includes large amounts of water, ammonia, and methane.</p>
+        </div>
+
+
+    </div>
+{% endblock %}
+

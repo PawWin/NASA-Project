@@ -1,0 +1,7 @@
+{% block content %}
+      {% if current_user.is_authenticated %}
+        {% include 'views/base-authenticated.html' %}
+      {% else %}
+        {% include 'views/base-unauthenticated.html' %}
+      {% endif %}
+{% endblock %}

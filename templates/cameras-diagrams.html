@@ -1,0 +1,7 @@
+{% block content %}
+      {% if current_user.is_authenticated %}
+        {% include 'views/cameras_diagram-authenticated.html' %}
+      {% else %}
+        {% include 'views/cameras_diagram-unauthenticated.html' %}
+      {% endif %}
+{% endblock %}

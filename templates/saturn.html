@@ -1,0 +1,7 @@
+{% block content %}
+      {% if current_user.is_authenticated %}
+        {% include 'views/saturn-authenticated.html' %}
+      {% else %}
+        {% include 'views/saturn-unauthenticated.html' %}
+      {% endif %}
+{% endblock %}

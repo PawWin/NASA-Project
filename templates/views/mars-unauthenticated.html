@@ -1,0 +1,37 @@
+{% extends 'views/base-unauthenticated.html' %}
+
+{% block header %}
+  <h1>{% block title %}Mars - Our Friendly Neighbour{% endblock %}</h1>
+{% endblock %}
+{% block icon %}
+  <link rel="icon" type="image/x-icon" href="../static/assets/planet.svg">
+{% endblock %}
+
+
+{% block content %}
+    <div class="planets-container">
+        <div class="planets-1">
+           <h1>Mars</h1>
+
+            <p>Mars, the fourth planet from the Sun, is the only planet we know of inhabited entirely by robots. It's dry, rocky, and bitterly cold. Mars is one of Earth's two closest planetary neighbors, with Venus being the other. Despite its inhospitable conditions for humans, robotic explorers, including NASA's Perseverance rover, are serving as pathfinders to eventually get humans to the surface of the Red Planet.</p>
+
+
+            <ul>
+                <li>- 2 Surface Rovers (+1 Helicopter).</li>
+                <li>- 8 Spacecraft in Orbit.</li>
+                <li>- day on Mars lasts 24.6 hours.</li>
+                <li>- year on Mars is 687 Earth days.</li>
+
+            </ul>
+        </div>
+        <div class="planets-2">
+           <img src="../static/assets/mars.webp" alt="mars" alt="Mercury" >
+        </div>
+        <div class="planets-3">
+            <p><strong>Mars:</strong>— is no place for the faint-hearted. It’s dry, rocky, and bitterly cold. The fourth planet from the Sun, Mars is one of Earth's two closest planetary neighbors (Venus is the other). Mars is one of the easiest planets to spot in the night sky – it looks like a bright red point of light. Despite being inhospitable to humans, robotic explorers – like NASA's Perseverance rover – are serving as pathfinders to eventually get humans to the surface of the Red Planet.</p>
+        </div>
+
+
+    </div>
+{% endblock %}
+

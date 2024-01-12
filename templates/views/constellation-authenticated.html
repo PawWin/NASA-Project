@@ -1,0 +1,24 @@
+{% extends 'views/base-authenticated.html' %}
+
+{% block header %}
+  <h1>{% block title %}Constellation{% endblock %}</h1>
+{% endblock %}
+{% block icon %}
+  <link rel="icon" type="image/x-icon" href="../static/assets/planet.svg">
+{% endblock %}
+
+
+{% block content %}
+    <div class="constellation">
+        <div id="constellation_left">
+
+            <img src="{{ constellation_info['picture'] }}" alt="Constellation">
+        </div>
+        <div id="constellation_right">
+            <h2>{{ constellation_info['name'] }}</h2>
+            <p style="text-align: left;height: 30px;"><strong style="text-align: left">Best viewed in:  {{ constellation_info['best viewed'] }}</strong></p>
+            <p>{{ constellation_info['description'] }}</p>
+        </div>
+    </div>
+{% endblock %}
+

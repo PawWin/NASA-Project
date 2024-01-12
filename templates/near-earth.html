@@ -1,0 +1,7 @@
+{% block content %}
+      {% if current_user.is_authenticated %}
+        {% include 'views/near_earth-authenticated.html' %}
+      {% else %}
+        {% include 'views/near_earth-unauthenticated.html' %}
+      {% endif %}
+{% endblock %}

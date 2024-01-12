@@ -1,0 +1,7 @@
+{% block content %}
+      {% if current_user.is_authenticated %}
+        {% include 'views/neptune-authenticated.html' %}
+      {% else %}
+        {% include 'views/neptune-unauthenticated.html' %}
+      {% endif %}
+{% endblock %}

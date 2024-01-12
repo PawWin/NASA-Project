@@ -1,0 +1,33 @@
+{% extends 'views/base-unauthenticated.html' %}
+
+{% block header %}
+  <h1>{% block title %}Login and Register{% endblock %}</h1>
+{% endblock %}
+
+{% block content %}
+<div class="register-div">
+    <h2> &nbsp;Register:</h2>
+  <form method="POST" action="" class="register">
+    {{ register_form.hidden_tag() }}
+      {{ register_form.username( placeholder = "Username") }}
+      {{ register_form.email( placeholder = "Email") }}
+      {{ register_form.password( placeholder = "Password") }}
+      {{ register_form.confirm_password( placeholder = "Confirm Password") }}
+      {{ register_form.submit() }}
+  </form>
+</div>
+<div class="login-div">
+  <h2> &nbsp;Login:</h2>
+    <form method="POST" action="" class="login">
+      {{ login_form.hidden_tag() }}
+        {{ login_form.email(placeholder = "Email") }}
+        {{ login_form.password(placeholder = "Password") }}
+        <p>Remember Me</p>
+        {{ login_form.remember(placeholder = "Remember Me")}}
+        {{ login_form.submit() }}
+    </form>
+</div>
+
+{% endblock %}
+
+

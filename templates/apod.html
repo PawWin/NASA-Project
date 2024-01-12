@@ -1,0 +1,7 @@
+{% block content %}
+      {% if current_user.is_authenticated %}
+        {% include 'views/apod-authenticated.html' %}
+      {% else %}
+        {% include 'views/apod-unauthenticated.html' %}
+      {% endif %}
+{% endblock %}

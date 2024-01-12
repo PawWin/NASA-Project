@@ -1,0 +1,17 @@
+{% extends 'views/base-authenticated.html' %}
+
+{% block header %}
+  <h1>{% block title %}Login and Register{% endblock %}</h1>
+{% endblock %}
+
+{% block content %}
+<div class="profile-page">
+  <p>Hi! {{user.username }} </p>
+
+  <form method="post" class="logout">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+    <input type="hidden" name="post_header" value="log out">
+    <input type="submit"  value="Logout">
+  </form>
+</div>
+{% endblock %}

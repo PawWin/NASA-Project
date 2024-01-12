@@ -1,0 +1,28 @@
+{% extends 'views/base-authenticated.html' %}
+
+{% block header %}
+  <h1>{% block title %}Pick your constellation{% endblock %}</h1>
+{% endblock %}
+{% block icon %}
+  <link rel="icon" type="image/x-icon" href="../static/assets/planet.svg">
+{% endblock %}
+
+
+{% block content %}
+    <div class="pick">
+        <div id="pick-text-container">
+            <h2>Constellations</h2>
+            <p>Constellations are star patterns recognized by ancient civilizations like the Babylonians and Greeks. These celestial designs, often depicting mythological figures, served as navigational guides and cultural inspirations throughout history. For example, Orion, a prominent winter constellation, symbolizes a Greek hunter and showcases the dual nature of constellations: cultural symbols that also aid modern astronomy. While stars within constellations vary in distance, their enduring patterns bridge ancient legends with today's understanding of the cosmos. On our website you can choose constellation you are interested in and see her cosmos map</p>
+            <h2>Pick constellation to display:</h2>
+            <form method=post name="test">
+                {{ form.hidden_tag()}}
+                {{ form.constellation(placeholder = "Constellation") }}
+                {{ form.submit()}}
+            </form>
+        </div>
+        <div id="pick-img-container">
+            <img src="../static/assets/constellation.png" alt="Opis obrazu">
+        </div>
+    </div>
+{% endblock %}
+

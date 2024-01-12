@@ -1,0 +1,18 @@
+{% extends 'views/base-authenticated.html' %}
+
+{% block header %}
+  <h1>{% block title %}Galeria{% endblock %}</h1>
+{% endblock %}
+
+{% block content %}
+<div class="gallery-container">
+    <div class="gallery-images">
+      {%for img in images %}
+        <div class="gallery-images-img">
+          <a href="{{ img }}" target="_blank"><img src="{{ img }}" alt="Something went wrong, but it is not us. If you want to resolve it, call us: 202-384-4861"></a>
+        </div>
+      {% endfor %}
+    </div>
+
+</div>
+{% endblock %}

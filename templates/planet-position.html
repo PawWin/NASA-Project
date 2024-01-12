@@ -1,0 +1,7 @@
+{% block content %}
+      {% if current_user.is_authenticated %}
+        {% include 'views/planet_position-authenticated.html' %}
+      {% else %}
+        {% include 'views/planet_position-unauthenticated.html' %}
+      {% endif %}
+{% endblock %}

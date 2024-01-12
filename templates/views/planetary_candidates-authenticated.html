@@ -1,0 +1,28 @@
+{% extends 'views/base-authenticated.html' %}
+
+{% block header %}
+  <h1>{% block title %}Planetary Candidates{% endblock %}</h1>
+{% endblock %}
+{% block icon %}
+  <link rel="icon" type="image/x-icon" href="../static/assets/chart_icon.svg">
+{% endblock %}
+
+
+{% block content %}
+    <div class="diagrams_container">
+        <div id="diagrams_container_left">
+            <h2>All planetary candidates</h2>
+            <p>The condition "all planetary candidates smaller than 2 times the Earth's radius (2Re) with an equilibrium temperature between 180 and 303 K" refers to the search for planets outside the solar system that are potentially scalable to the development of life, at least in the form we know. Here are some things to explain this condition:
+<br><br>
+1. **Size less than 2 times the radius of the Earth (2Re):** The idea is to look for planets that are slightly larger than Earth or have a similar size. This matters because planets of similar size may have similar surface and atmospheric conditions.
+<br><br>
+2. **Equilibrium temperature between 180 and 303 K:** The equilibrium temperature is the theoretical temperature that a planet would reach if it were a perfectly absorbing and emitting body charged with electromagnetic radiation (a so-called black body) and were located at a distance from the star enabling this temperature to be maintained. The temperature range of 180 to 303 K covers the region where liquid water can exist, which is one of the key ingredients of life as we know it.
+<br><br>
+Generally, what is sought is Earth-sized planets located in their star's habitable zone, where conditions allow liquid water to exist on the surface. This criterion aims to identify potential places where life, at least in the form we know, could exist.</p>
+        </div>
+        <div id="diagrams_container_right">
+            <img src="data:image/png;base64,{{ planets_data }}" alt="Planetary Candidates">
+        </div>
+    </div>
+{% endblock %}
+

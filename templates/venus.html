@@ -1,0 +1,7 @@
+{% block content %}
+      {% if current_user.is_authenticated %}
+        {% include 'views/venus-authenticated.html' %}
+      {% else %}
+        {% include 'views/venus-unauthenticated.html' %}
+      {% endif %}
+{% endblock %}

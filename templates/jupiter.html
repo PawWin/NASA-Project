@@ -1,0 +1,7 @@
+{% block content %}
+      {% if current_user.is_authenticated %}
+        {% include 'views/jupiter-authenticated.html' %}
+      {% else %}
+        {% include 'views/jupiter-unauthenticated.html' %}
+      {% endif %}
+{% endblock %}
