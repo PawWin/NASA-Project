@@ -29,7 +29,7 @@ The experience involved gaining proficiency in web development, understanding th
 
 ## Screenshots
 
-![App Video](\images\NasaPresentation.mp4)
+![App Video](/images/NasaPresentation.mp4)
 
 
 ## Built with
