@@ -564,7 +564,9 @@ def uranus():
 def neptune():
     return render_template('neptune.html')
 
-
+@app.route('/about')
+def about():
+    return render_template('about.html')
 
 @app.route('/gallery', methods=['GET', 'POST'])
 @login_required
