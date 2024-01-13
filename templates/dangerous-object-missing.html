@@ -1,0 +1,7 @@
+{% block content %}
+      {% if current_user.is_authenticated %}
+        {% include 'views/dangerous-object-missing-authenticated.html' %}
+      {% else %}
+        {% include 'views/dangerous-object-missing-unauthenticated.html' %}
+      {% endif %}
+{% endblock %}

@@ -1,14 +1,11 @@
 import requests
 import random
 import numpy as np
-import json
 from datetime import datetime, timedelta
 import json
 
-from flask import Flask, render_template, request
-from flask import Flask, render_template
 from config import app, db, bcrypt, User, Image
-from flask import Flask, render_template, request, redirect, url_for
+from flask import render_template, request, redirect, url_for
 from flask_login import login_user, current_user, logout_user, login_required
 from sqlalchemy.exc import IntegrityError
 
@@ -23,11 +20,13 @@ import folium
 
 import astropy.units as u
 from astropy.coordinates import Longitude
-from sunpy.coordinates import HeliocentricEarthEcliptic, get_body_heliographic_stonyhurst, get_horizons_coord
+from sunpy.coordinates import HeliocentricEarthEcliptic, get_body_heliographic_stonyhurst
 from sunpy.time import parse_time
 
 
-api_key = "FDlAcufYBrWHbobPQfofRn7Tm79SeoJotLOcpnjy"
+api_keys = json.loads(open('api_key.txt', 'r').read())
+api_key = api_keys['api_key']
+api_key2 = base64.b64encode(api_keys['api_key2'].encode()).decode()
 
 
 @app.route('/')
@@ -46,17 +45,19 @@ def apod():
 
     response = requests.get(f"https://api.nasa.gov/planetary/apod?api_key={api_key}&date={random_date.date()}")
 
-    apod_data = response.json()
-    title = apod_data['title']
-    explanation = apod_data['explanation']
-    hd_url = apod_data['hdurl']
-    if forms.ImageForm().validate_on_submit():
-        image_form = forms.ImageForm()
-        image_link = hd_url
-        image = Image(user_id=current_user.id, image_link=image_link)
-        db.session.add(image)
-        db.session.commit()
-    return render_template('apod.html', title=title, explanation=explanation, hd_url=hd_url, image_form=forms.ImageForm())
+    if response.status_code == 200:
+        apod_data = response.json()
+        title = apod_data['title']
+        explanation = apod_data['explanation']
+        hd_url = apod_data['hdurl']
+        if forms.ImageForm().validate_on_submit():
+            image_link = hd_url
+            image = Image(user_id=current_user.id, image_link=image_link)
+            db.session.add(image)
+            db.session.commit()
+        return render_template('apod.html', title=title, explanation=explanation, hd_url=hd_url, image_form=forms.ImageForm())
+    else:
+        return render_template('responsemissing.html')
 
 
 @app.route('/planetary-candidates')
@@ -71,28 +72,31 @@ def planetary_candidates_chart():
     }
     response = requests.get(api_url, params=query_params)
 
-    data = response.json()
-    radii = []
-    equilibrium_temperatures = []
+    if response.status_code == 200:
+        data = response.json()
+        radii = []
+        equilibrium_temperatures = []
 
-    for planet in data:
-        radii.append(planet["koi_prad"])
-        equilibrium_temperatures.append(planet["koi_teq"])
+        for planet in data:
+            radii.append(planet["koi_prad"])
+            equilibrium_temperatures.append(planet["koi_teq"])
 
-    plt.figure(figsize=(10, 6))
-    plt.scatter(equilibrium_temperatures, radii, alpha=0.5)
-    plt.xlabel('Equilibrium temperature (K)')
-    plt.ylabel('Radius of the planet (R_earth)')
-    plt.title('Radius of the planet relative to the Equilibrium Temperature')
-    plt.grid(True)
+        plt.figure(figsize=(10, 6))
+        plt.scatter(equilibrium_temperatures, radii, alpha=0.5)
+        plt.xlabel('Equilibrium temperature (K)')
+        plt.ylabel('Radius of the planet (R_earth)')
+        plt.title('Radius of the planet relative to the Equilibrium Temperature')
+        plt.grid(True)
 
-    buffer = BytesIO()
-    plt.savefig(buffer, format="png")
-    buffer.seek(0)
-    planets_data = base64.b64encode(buffer.read()).decode()
-    buffer.close()
+        buffer = BytesIO()
+        plt.savefig(buffer, format="png")
+        buffer.seek(0)
+        planets_data = base64.b64encode(buffer.read()).decode()
+        buffer.close()
 
-    return render_template('planetary-candidates.html', planets_data=planets_data)
+        return render_template('planetary-candidates.html', planets_data=planets_data)
+    else:
+        return render_template('responsemissing.html')
 
 
 @app.route('/cameras')
@@ -104,49 +108,53 @@ def cameras_diagrams_chart():
     url = f"https://api.nasa.gov/mars-photos/api/v1/rovers/curiosity/photos?sol={random_sol}&api_key={api_key}"
 
     response = requests.get(url)
-    data = response.json()
 
-    photos = data.get('photos', [])
-    cameras = {}
+    if response.status_code == 200:
+        data = response.json()
 
-    for photo in photos:
-        camera_name = photo['camera']['name']
-        if camera_name in cameras:
-            cameras[camera_name] += 1
-        else:
-            cameras[camera_name] = 1
+        photos = data.get('photos', [])
+        cameras = {}
 
-    camera_names = list(cameras.keys())
-    photo_counts = list(cameras.values())
+        for photo in photos:
+            camera_name = photo['camera']['name']
+            if camera_name in cameras:
+                cameras[camera_name] += 1
+            else:
+                cameras[camera_name] = 1
 
-    manifest_url = f"https://api.nasa.gov/mars-photos/api/v1/manifests/curiosity?api_key={api_key}"
-    manifest_response = requests.get(manifest_url)
+        camera_names = list(cameras.keys())
+        photo_counts = list(cameras.values())
 
-    manifest_data = manifest_response.json()
-    sol_info = manifest_data['photo_manifest']['photos'][random_sol]
-    earth_date = sol_info['earth_date']
+        manifest_url = f"https://api.nasa.gov/mars-photos/api/v1/manifests/curiosity?api_key={api_key}"
+        manifest_response = requests.get(manifest_url)
 
-    plt.figure(figsize=(12, 6))
-    plt.bar(camera_names, photo_counts)
-    plt.xlabel("Camera name")
-    plt.ylabel("Number of photos")
-    plt.title(f"Number of photos from different Mars Rover Curiosity cameras(sol {random_sol}, date: {earth_date})")
-    plt.xticks(rotation=45)
-    plt.tight_layout()
+        manifest_data = manifest_response.json()
+        sol_info = manifest_data['photo_manifest']['photos'][random_sol]
+        earth_date = sol_info['earth_date']
 
-    buffer = BytesIO()
-    plt.savefig(buffer, format="png")
-    buffer.seek(0)
-    cameras_data = base64.b64encode(buffer.read()).decode()
-    buffer.close()
+        plt.figure(figsize=(12, 6))
+        plt.bar(camera_names, photo_counts)
+        plt.xlabel("Camera name")
+        plt.ylabel("Number of photos")
+        plt.title(f"Number of photos from different Mars Rover Curiosity cameras(sol {random_sol}, date: {earth_date})")
+        plt.xticks(rotation=45)
+        plt.tight_layout()
 
-    return render_template('cameras-diagrams.html', cameras_data=cameras_data)
+        buffer = BytesIO()
+        plt.savefig(buffer, format="png")
+        buffer.seek(0)
+        cameras_data = base64.b64encode(buffer.read()).decode()
+        buffer.close()
+
+        return render_template('cameras-diagrams.html', cameras_data=cameras_data)
+    else:
+        return render_template('responsemissing.html')
 
 
 @app.route('/near-earth')
 def near_earth_objects_chart():
     start_date = datetime(random.randint(2015, 2022), random.randint(1, 12), random.randint(1, 30))
-    end_date = start_date + timedelta(days=7)  # Data 7 dni później
+    end_date = start_date + timedelta(days=7)
 
     start_date_str = start_date.strftime('%Y-%m-%d')
     end_date_str = end_date.strftime('%Y-%m-%d')
@@ -154,39 +162,41 @@ def near_earth_objects_chart():
     url = f"https://api.nasa.gov/neo/rest/v1/feed?start_date={start_date_str}&end_date={end_date_str}&api_key={api_key}"
     response = requests.get(url)
 
-    data = response.json()
-    neo_data = data['near_earth_objects'][start_date_str]
-    neo_types = {}
+    if response.status_code == 200:
+        data = response.json()
+        neo_data = data['near_earth_objects'][start_date_str]
+        neo_types = {}
 
-    for neo in neo_data:
-        if 'neo_reference_id' in neo and 'name' in neo and 'is_potentially_hazardous_asteroid' in neo:
-            neo_type = "Potentially Hazardous" if neo['is_potentially_hazardous_asteroid'] else "Non-Hazardous"
-            if neo_type in neo_types:
-                neo_types[neo_type] += 1
-            else:
-                neo_types[neo_type] = 1
+        for neo in neo_data:
+            if 'neo_reference_id' in neo and 'name' in neo and 'is_potentially_hazardous_asteroid' in neo:
+                neo_type = "Potentially Hazardous" if neo['is_potentially_hazardous_asteroid'] else "Non-Hazardous"
+                if neo_type in neo_types:
+                    neo_types[neo_type] += 1
+                else:
+                    neo_types[neo_type] = 1
 
-    labels = neo_types.keys()
-    sizes = neo_types.values()
+        labels = neo_types.keys()
+        sizes = neo_types.values()
 
-    plt.figure(figsize=(8, 8))
-    plt.pie(sizes, labels=labels, autopct='%1.1f%%', startangle=140)
-    plt.title(f"Dangerous and not dangerous Near Earth Object (NEO) from {start_date_str} to {end_date_str}")
-    plt.axis('equal')
+        plt.figure(figsize=(8, 8))
+        plt.pie(sizes, labels=labels, autopct='%1.1f%%', startangle=140)
+        plt.title(f"Dangerous and not dangerous Near Earth Object (NEO) from {start_date_str} to {end_date_str}")
+        plt.axis('equal')
 
-    buffer = BytesIO()
-    plt.savefig(buffer, format="png")
-    buffer.seek(0)
-    near_earth_data = base64.b64encode(buffer.read()).decode()
-    buffer.close()
+        buffer = BytesIO()
+        plt.savefig(buffer, format="png")
+        buffer.seek(0)
+        near_earth_data = base64.b64encode(buffer.read()).decode()
+        buffer.close()
 
-    return render_template('near-earth.html', near_earth_data=near_earth_data)
+        return render_template('near-earth.html', near_earth_data=near_earth_data)
+    else:
+        return render_template('responsemissing.html')
 
 
 @app.route('/planet-position')
 def planets_position_chart():
     obstime = parse_time('now')
-
 
     hee_frame = HeliocentricEarthEcliptic(obstime=obstime)
 
@@ -336,28 +346,32 @@ def world_map():
     mymap = folium.Map(location=[0, 0], zoom_start=2)
 
     response = requests.get(url)
-    data = response.json()
 
-    for event in data['events']:
-        if event['geometries'][0]['type'] == 'Point':
-            latitude = event['geometries'][0]['coordinates'][1]
-            longitude = event['geometries'][0]['coordinates'][0]
-            event_name = event['title']
-            event_date = event['geometries'][0]['date']
-            folium.Marker(location=[latitude, longitude], popup=f"{event_name} ({event_date}),",
-                          icon=folium.Icon(color=categories_icons[event['categories'][0]['title']][0],
-                                           icon=categories_icons[event['categories'][0]['title']][1],
-                                           prefix='fa')).add_to(mymap)
+    if response.status_code == 200:
+        data = response.json()
 
-    map_html = mymap.get_root().render()
+        for event in data['events']:
+            if event['geometries'][0]['type'] == 'Point':
+                latitude = event['geometries'][0]['coordinates'][1]
+                longitude = event['geometries'][0]['coordinates'][0]
+                event_name = event['title']
+                event_date = event['geometries'][0]['date']
+                folium.Marker(location=[latitude, longitude], popup=f"{event_name} ({event_date}),",
+                              icon=folium.Icon(color=categories_icons[event['categories'][0]['title']][0],
+                                               icon=categories_icons[event['categories'][0]['title']][1],
+                                               prefix='fa')).add_to(mymap)
 
-    for cat in data['events']:
-        if cat['categories'][0]['title'] in categories_icons:
-            categories_icons[cat['categories'][0]['title']][2] += 1
+        map_html = mymap.get_root().render()
+
+        for cat in data['events']:
+            if cat['categories'][0]['title'] in categories_icons:
+                categories_icons[cat['categories'][0]['title']][2] += 1
 
 
-    return render_template('world_map.html', map_html=map_html,
-                           icons_data=categories_icons)
+        return render_template('world_map.html', map_html=map_html,
+                               icons_data=categories_icons)
+    else:
+        return render_template('responsemissing.html')
 
 
 @app.route('/near-earth-asteroids-date', methods=['GET', 'POST'])
@@ -369,80 +383,84 @@ def pick_date():
         return redirect(url_for('near_earth', selected_date=selected_date))
     return render_template('pick-date.html', form=form)
 
+
 @app.route('/near-earth-asteroids/<selected_date>')
 def near_earth(selected_date):
     start_date = selected_date
 
-    start_date_obj = datetime.strptime(start_date, '%Y-%m-%d')
-
     url = f"https://api.nasa.gov/neo/rest/v1/feed?start_date={start_date}&api_key={api_key}"
     response = requests.get(url)
 
-    neo_data = response.json()["near_earth_objects"]
+    if response.status_code == 200:
+        neo_data = response.json()["near_earth_objects"]
 
-    largest_hazardous_neo = None
-    max_diameter = 0
+        largest_hazardous_neo = None
+        max_diameter = 0
 
-    for date, neo_list in neo_data.items():
-        for neo in neo_list:
-            if neo["is_potentially_hazardous_asteroid"]:
-                diameter = neo["estimated_diameter"]["kilometers"]["estimated_diameter_max"]
-                if diameter > max_diameter:
-                    max_diameter = diameter
-                    largest_hazardous_neo = neo
+        for date, neo_list in neo_data.items():
+            for neo in neo_list:
+                if neo["is_potentially_hazardous_asteroid"]:
+                    diameter = neo["estimated_diameter"]["kilometers"]["estimated_diameter_max"]
+                    if diameter > max_diameter:
+                        max_diameter = diameter
+                        largest_hazardous_neo = neo
 
-    example_city_area = 25.0
-    burj_khalifa_height = 0.828
-    asteroid_area = np.pi * (max_diameter / 2.0) ** 2
+        if largest_hazardous_neo is not None:
+            example_city_area = 25.0
+            burj_khalifa_height = 0.828
+            asteroid_area = np.pi * (max_diameter / 2.0) ** 2
 
-    if max_diameter <= 2:
-        object_to_scale = "fa solid fa-building"
-        compared_object_data = ["Burj Khalifa", f"{burj_khalifa_height} km"]
-        scale = max_diameter / burj_khalifa_height
-        icon_size = round(scale * 10.0, 2)
+            if max_diameter <= 2:
+                object_to_scale = "fa solid fa-building"
+                compared_object_data = ["Burj Khalifa", f"{burj_khalifa_height} km"]
+                scale = max_diameter / burj_khalifa_height
+                icon_size = round(scale * 10.0, 2)
 
-        plt.figure(figsize=(6, 6))
-        plt.pie([burj_khalifa_height, max_diameter],
-                labels=['Burj Khalifa', largest_hazardous_neo['name']],
-                autopct='%1.1f%%', startangle=140)
-        plt.axis('equal')
+                plt.figure(figsize=(6, 6))
+                plt.pie([burj_khalifa_height, max_diameter],
+                        labels=['Burj Khalifa', largest_hazardous_neo['name']],
+                        autopct='%1.1f%%', startangle=140)
+                plt.axis('equal')
 
-        buffer = BytesIO()
-        plt.savefig(buffer, format="png")
-        buffer.seek(0)
-        comparison_diagram = base64.b64encode(buffer.read()).decode()
-        buffer.close()
+                buffer = BytesIO()
+                plt.savefig(buffer, format="png")
+                buffer.seek(0)
+                comparison_diagram = base64.b64encode(buffer.read()).decode()
+                buffer.close()
+            else:
+                object_to_scale = "fa solid fa-city"
+                compared_object_data = ["Averaged sized city: Siemianowice", f"{example_city_area} km2"]
+                scale = asteroid_area / example_city_area
+                icon_size = round(scale * 10.0, 2)
+
+                plt.figure(figsize=(6, 6))
+                plt.pie([example_city_area, asteroid_area],
+                        labels=['Siemianowice Slaskie', largest_hazardous_neo['name']],
+                        autopct='%1.1f%%', startangle=140)
+                plt.axis('equal')
+
+                buffer = BytesIO()
+                plt.savefig(buffer, format="png")
+                buffer.seek(0)
+                comparison_diagram = base64.b64encode(buffer.read()).decode()
+                buffer.close()
+
+            neo_postprocess_data = {'name': largest_hazardous_neo['name'], 'area': round(asteroid_area,2),
+                                    'diameter': round(max_diameter,2),
+                                    'distance': round(float(largest_hazardous_neo['close_approach_data'][0]['miss_distance']['kilometers']),2),
+                                    'velocity': round(float(largest_hazardous_neo['close_approach_data'][0]['relative_velocity']['kilometers_per_hour']),2),
+                                    'date': largest_hazardous_neo['close_approach_data'][0]['close_approach_date_full']}
+
+            return render_template('near-earth-asteroids.html',
+                                   icon_size=icon_size,
+                                   object_to_scale=object_to_scale,
+                                   neo_postprocess_data=neo_postprocess_data,
+                                   compared_object_data=compared_object_data,
+                                   comparison_diagram=comparison_diagram)
+        else:
+            return render_template('dangerous-object-missing.html')
     else:
-        object_to_scale = "fa solid fa-city"
-        compared_object_data = ["Averaged sized city: Siemianowice", f"{example_city_area} km2"]
-        scale = asteroid_area / example_city_area
-        icon_size = round(scale * 10.0, 2)
-
-        plt.figure(figsize=(6, 6))
-        plt.pie([example_city_area, asteroid_area],
-                labels=['Siemianowice Slaskie', largest_hazardous_neo['name']],
-                autopct='%1.1f%%', startangle=140)
-        plt.axis('equal')
-
-        buffer = BytesIO()
-        plt.savefig(buffer, format="png")
-        buffer.seek(0)
-        comparison_diagram = base64.b64encode(buffer.read()).decode()
-        buffer.close()
-
-
-    neo_postprocess_data = {'name': largest_hazardous_neo['name'], 'area': round(asteroid_area,2),
-                            'diameter': round(max_diameter,2),
-                            'distance': round(float(largest_hazardous_neo['close_approach_data'][0]['miss_distance']['kilometers']),2),
-                            'velocity': round(float(largest_hazardous_neo['close_approach_data'][0]['relative_velocity']['kilometers_per_hour']),2),
-                            'date': largest_hazardous_neo['close_approach_data'][0]['close_approach_date_full']}
-
-    return render_template('near-earth-asteroids.html',
-                           icon_size=icon_size,
-                           object_to_scale=object_to_scale,
-                           neo_postprocess_data=neo_postprocess_data,
-                           compared_object_data=compared_object_data,
-                           comparison_diagram=comparison_diagram)
+        return render_template('responsemissing.html')
 
 
 @app.route('/pick-constelation', methods=['GET', 'POST'])
@@ -495,11 +513,8 @@ def constellations(constellation):
                                 'Ursa Major': 'April', 'Ursa Minor': 'June',
                                 'Virgo': 'May'}
 
-    userpass = "b281ad5e-c956-4711-8ac6-0bbfb76a8b2b:847b1b172cbe4d8cd8829a449ad070291b7ae02c8f758f9336126428cf41c030f1229b0da20ef11e18705de4a80839ddd0f4f413f379ed63c2d3b908758b49c4a89254efe5e66a75b74f634f70f0ae0aefee602cd0e56adc41cbccad5746ccc0149119580909962d9eb143965e99c488"
-    authString = base64.b64encode(userpass.encode()).decode()
-
     headers = {
-        'Authorization': f'Basic {authString}',
+        'Authorization': f'Basic {api_key2}',
         'Content-Type': 'application/json'
     }
     payload = json.dumps({
@@ -518,13 +533,17 @@ def constellations(constellation):
     })
 
     response = requests.post('https://api.astronomyapi.com/api/v2/studio/star-chart', headers=headers, data=payload)
-    constellation_info = {'name': constellation, 'description': constellation_description[constellation],
-                          'picture': response.json()['data']['imageUrl'],
-                          'best viewed' : constellation_best_viewed[constellation]}
 
-    return render_template('constellations.html', constellation_info=constellation_info)
+    if response.status_code == 200:
+        constellation_info = {'name': constellation, 'description': constellation_description[constellation],
+                              'picture': response.json()['data']['imageUrl'],
+                              'best viewed' : constellation_best_viewed[constellation]}
 
-# strony planet
+        return render_template('constellations.html', constellation_info=constellation_info)
+    else:
+        return render_template('responsemissing.html')
+
+
 @app.route('/mercury')
 def mercury():
     return render_template('mercury.html')
@@ -565,7 +584,6 @@ def neptune():
     return render_template('neptune.html')
 
 
-
 @app.route('/gallery', methods=['GET', 'POST'])
 @login_required
 def gallery():
@@ -576,5 +594,3 @@ if __name__ == "__main__":
     with app.app_context():
         db.create_all()
     app.run(debug=True)
-
-

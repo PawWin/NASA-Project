@@ -1,0 +1,7 @@
+{% block content %}
+      {% if current_user.is_authenticated %}
+        {% include 'views/responsemissing-authenticated.html' %}
+      {% else %}
+        {% include 'views/responsemissing-unauthenticated.html' %}
+      {% endif %}
+{% endblock %}
