@@ -1,0 +1,52 @@
+{% extends 'views/base-authenticated.html' %}
+
+{% block header %}
+  <h1>{% block title %}Galeria{% endblock %}</h1>
+{% endblock %}
+
+{% block content %}
+<div class="about-container">
+    <h1 class="header-h1">Nasa Project</h1>
+    <p  class="about-p">This project was our first big project on University od Economics in Katowice, it revolves around leveraging APIs provided by NASA. The main features include the ability to display photos and descriptions from NASA's Astronomy Picture of the Day (APOD), a map showing cosmic catastrophes with their precise locations, an option to check the largest asteroid of the day and its scale compared to various objects on Earth. Users can explore the sky map with any constellation and its description, along with charts containing information about exoplanets, photos from the Mars rover, and real-time positions of planets relative to Earth. Additionally, users can create accounts on the website, allowing them to add their favorite photos to a personal gallery.</p>
+    <h2 class="about-h2">Features</h2>
+    <ul class="about-ul" >
+        <li >Ability to display photos and descriptions from NASA's Astronomy Picture of the Day (APOD)</li>
+        <li >Map showing cosmic catastrophes with their precise locations</li>
+        <li >Option to check the largest asteroid of the day and its scale compared to various objects on Earth</li>
+        <li >Sky map with any constellation and its description</li>
+        <li >Charts containing information about exoplanets, photos from the Mars rover, and real-time positions of planets relative to Earth</li>
+        <li >Accounst creation and gallery with favorite photos</li>
+    </ul>
+    <h2 class="about-h2">Lessons Learned</h2>
+    <p class="about-p">While creating the application, we learned:</p>
+    <ul class="about-ul">
+        <li >How to create web pages</li>
+        <li >Work with the Flask framework</li>
+        <li >Utilize APIs</li>
+        <li >Collaborate in group projects</li>
+        <li >Follow agile methodologies for developing more advanced projects in Python</li>
+    </ul>
+    <p class="about-p">The experience involved gaining proficiency in web development, understanding the intricacies of the Flask framework, and effectively interacting with external APIs to fetch and display relevant data. Collaborating in a group project taught us valuable teamwork skills, such as effective communication, task distribution, and version control. Following agile methodologies allowed us to manage the project in an iterative and flexible manner, adapting to changing requirements and continuously improving the application. The use of Python as the primary programming language provided a solid foundation for building sophisticated features and functionalities. Overall, the project not only enhanced our technical skills but also emphasized the importance of teamwork and agile practices in the development process.</p>
+    <h2 class="about-h2">Built with</h2>
+    <ul class="about-ul">
+        <li >Python</li>
+        <li >Flask</li>
+        <li >Sunpy</li>
+        <li >Astropy</li>
+        <li >SqlAlchemy</li>
+        <li >Folium</li>
+        <li >Matplotlib</li>
+        <li >Numpy</li>
+        <li >CSS</li>
+        <li >HTML</li>
+        <li >JavaScript</li>
+    </ul>
+    <h2 class="about-h2">Authors</h2>
+    <ul class="about-ul">
+        <li ><a href="https://github.com/OskarBelza">@OskarBelza</a></li>
+        <li ><a href="https://github.com/PawWin">@PawWin</a></li>
+        <li ><a href="https://github.com/Balon02">@Balon02</a></li>
+        <li ><a href="https://github.com/GrzegorzDrozdz">@GrzegorzDrozdz</a></li>
+    </ul>
+</div>
+{% endblock %}
